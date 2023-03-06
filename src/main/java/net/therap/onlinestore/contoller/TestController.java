@@ -1,7 +1,14 @@
 package net.therap.onlinestore.contoller;
 
+import net.therap.onlinestore.entity.User;
+import net.therap.onlinestore.entity.UserType;
+import net.therap.onlinestore.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 
 /**
  * @author nadimmahmud
@@ -10,8 +17,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class TestController {
 
+    @Autowired
+    private UserService userService;
+
     @GetMapping("/")
-    public String showHome(){
-        return "index";
+    public String showHome() throws Exception {
+
+        //System.out.println(userService.findAll());
+
+        return "home";
     }
 }

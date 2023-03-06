@@ -7,8 +7,8 @@ package net.therap.onlinestore.entity;
 public enum UserType {
 
     ADMIN("Admin"),
-    SHOP_KEEPER("Shop Keeper"),
-    DELIVERY_MAN("Delivery Man"),
+    SHOPKEEPER("Shop Keeper"),
+    DELIVERYMAN("Delivery Man"),
     CUSTOMER("Customer");
 
     private final String label;

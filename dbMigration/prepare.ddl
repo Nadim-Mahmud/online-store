@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS online_store.user
+CREATE TABLE IF NOT EXISTS online_store.store_user
 (
     id            INT                NOT NULL PRIMARY KEY,
     first_name    VARCHAR(45)        NOT NULL,
@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS online_store.item
 (
     id            INT           NOT NULL PRIMARY KEY,
     name          VARCHAR(45)   NOT NULL,
-    price         DOUBLE        NOT NULL,
+    price         DOUBLE PRECISION,
     availability  VARCHAR(45)   NOT NULL,
     category_id   INT           NOT NULL,
     description   VARCHAR(3000) NOT NULL,
@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS online_store.item
     version       INT         DEFAULT 0,
     created_at    DATE,
     updated_at    DATE,
-    FOREIGN KEY (category_id) REFERENCES category (id)
+    FOREIGN KEY (category_id) REFERENCES online_store.category (id)
 );
 
 CREATE TABLE IF NOT EXISTS online_store.tag_item
@@ -77,8 +77,8 @@ CREATE TABLE IF NOT EXISTS online_store.order_table
     version       INT         DEFAULT 0,
     created_at    DATE,
     updated_at    DATE,
-    FOREIGN KEY (address_id) REFERENCES address (id),
-    FOREIGN KEY (user_id) REFERENCES user (id)
+    FOREIGN KEY (address_id) REFERENCES online_store.address (id),
+    FOREIGN KEY (user_id) REFERENCES online_store.store_user (id)
 );
 
 CREATE TABLE IF NOT EXISTS online_store.order_item
@@ -92,6 +92,6 @@ CREATE TABLE IF NOT EXISTS online_store.order_item
     version       INT         DEFAULT 0,
     created_at    DATE,
     updated_at    DATE,
-    FOREIGN KEY (item_id) REFERENCES item (id) ON DELETE CASCADE,
-    FOREIGN KEY (order_id) REFERENCES order_table (id) ON DELETE CASCADE
+    FOREIGN KEY (item_id) REFERENCES online_store.item (id) ON DELETE CASCADE,
+    FOREIGN KEY (order_id) REFERENCES online_store.order_table (id) ON DELETE CASCADE
 );

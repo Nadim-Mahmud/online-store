@@ -20,8 +20,8 @@ import java.util.List;
  * @since 3/4/23
  */
 @Entity
-@Table(name = "user")
-@SQLDelete(sql = "UPDATE user SET access_status = 'DELETED' WHERE id = ? AND version = ?", check = ResultCheckStyle.COUNT)
+@Table(name = "store_user")
+@SQLDelete(sql = "UPDATE store_user SET access_status = 'DELETED' WHERE id = ? AND version = ?", check = ResultCheckStyle.COUNT)
 @Where(clause = "access_status <> 'DELETED'")
 @NamedQueries({
         @NamedQuery(name = "User.findAll", query = "SELECT u FROM User u")
@@ -52,7 +52,6 @@ public class User extends Persistent implements Serializable {
     private String email;
 
     @Size(min = 1, max = 15, message = "{input.cell}")
-    @Email(message = "{input.email}")
     @Column(name = "cell")
     private String cell;
 
@@ -145,6 +144,16 @@ public class User extends Persistent implements Serializable {
 
     public void setOrderList(List<Order> orderList) {
         this.orderList = orderList;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", email='" + email + '\'' +
+                ", type=" + type +
+                '}';
     }
 
     public boolean isNew() {

@@ -37,5 +37,4 @@ public class UserService extends BaseService {
 
         return user;
     }
-
 }
