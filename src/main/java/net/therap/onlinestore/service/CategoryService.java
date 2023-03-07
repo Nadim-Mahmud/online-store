@@ -2,6 +2,7 @@ package net.therap.onlinestore.service;
 
 import net.therap.onlinestore.entity.Category;
 import net.therap.onlinestore.entity.Item;
+import net.therap.onlinestore.entity.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,4 +40,11 @@ public class CategoryService extends BaseService {
         return category;
     }
 
+    public boolean isExistingCategory(Category category) {
+        return !entityManager.createNamedQuery("User.getCategoryByNameAndId", Category.class)
+                .setParameter("name", category.getName())
+                .setParameter("id", category.getId())
+                .getResultList()
+                .isEmpty();
+    }
 }

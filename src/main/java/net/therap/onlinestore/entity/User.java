@@ -23,8 +23,7 @@ import java.util.List;
 @NamedQueries({
         @NamedQuery(name = "User.findAll", query = "SELECT u FROM User u"),
         @NamedQuery(name = "User.findByUserType", query = "SELECT u FROM User u WHERE u.type = :userType"),
-        @NamedQuery(name = "User.isDuplicateEmail", query = "SELECT u FROM User u WHERE email = :email AND id != :id")
-
+        @NamedQuery(name = "User.getUserByNameAndId", query = "SELECT u FROM User u WHERE email = :email AND id != :id")
 })
 public class User extends Persistent implements Serializable {
 

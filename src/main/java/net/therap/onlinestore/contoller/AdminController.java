@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
 
-import static net.therap.onlinestore.constatnt.Constants.*;
+import static net.therap.onlinestore.constant.Constants.*;
 
 /**
  * @author nadimmahmud

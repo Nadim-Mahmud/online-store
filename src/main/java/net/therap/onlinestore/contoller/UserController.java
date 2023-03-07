@@ -24,14 +24,12 @@ import javax.validation.Valid;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.stream.Collectors;
 
 import static java.util.Objects.nonNull;
-import static net.therap.onlinestore.constatnt.Constants.*;
+import static net.therap.onlinestore.constant.Constants.*;
 
 /**
  * @author nadimmahmud

@@ -4,14 +4,13 @@ import net.therap.onlinestore.entity.User;
 import net.therap.onlinestore.entity.UserType;
 
 import javax.servlet.*;
-import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Objects;
 
-import static net.therap.onlinestore.constatnt.Constants.*;
+import static net.therap.onlinestore.constant.Constants.*;
 
 /**
  * @author nadimmahmud

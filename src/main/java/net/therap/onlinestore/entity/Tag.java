@@ -20,7 +20,8 @@ import java.util.List;
 @SQLDelete(sql = "UPDATE tag SET access_status = 'DELETED' WHERE id = ? AND version = ?", check = ResultCheckStyle.COUNT)
 @Where(clause = "access_status <> 'DELETED'")
 @NamedQueries({
-        @NamedQuery(name = "Tag.findAll", query = "SELECT t FROM Tag t")
+        @NamedQuery(name = "Tag.findAll", query = "SELECT t FROM Tag t"),
+        @NamedQuery(name = "User.getTagByNameAndId", query = "SELECT t FROM Tag t WHERE t.name = :name AND id != :id")
 })
 public class Tag extends Persistent implements Serializable {
 

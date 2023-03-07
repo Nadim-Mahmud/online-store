@@ -38,4 +38,12 @@ public class TagService extends BaseService {
 
         return tag;
     }
+
+    public boolean isExistingTag(Tag tag){
+        return !entityManager.createNamedQuery("User.getTagByNameAndId", Tag.class)
+                .setParameter("name", tag.getName())
+                .setParameter("id", tag.getId())
+                .getResultList()
+                .isEmpty();
+    }
 }

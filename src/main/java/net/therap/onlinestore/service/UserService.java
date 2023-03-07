@@ -29,7 +29,7 @@ public class UserService extends BaseService {
     }
 
     public boolean isDuplicateEmail(User user){
-        return !entityManager.createNamedQuery("User.isDuplicateEmail", User.class)
+        return !entityManager.createNamedQuery("User.getUserByNameAndId", User.class)
                 .setParameter("email", user.getEmail())
                 .setParameter("id", user.getId())
                 .getResultList()

@@ -20,7 +20,8 @@ import java.util.List;
 @SQLDelete(sql = "UPDATE category SET access_status = 'DELETED' WHERE id = ? AND version = ?", check = ResultCheckStyle.COUNT)
 @Where(clause = "access_status <> 'DELETED'")
 @NamedQueries({
-        @NamedQuery(name = "Category.findAll", query = "SELECT c FROM Category c")
+        @NamedQuery(name = "Category.findAll", query = "SELECT c FROM Category c"),
+        @NamedQuery(name = "User.getCategoryByNameAndId", query = "SELECT c FROM Category c WHERE c.name = :name AND id != :id")
 })
 public class Category extends Persistent implements Serializable {
 

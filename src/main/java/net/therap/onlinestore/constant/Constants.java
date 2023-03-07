@@ -1,4 +1,4 @@
-package net.therap.onlinestore.constatnt;
+package net.therap.onlinestore.constant;
 
 /**
  * @author nadimmahmud
@@ -24,6 +24,7 @@ public interface Constants {
     String ITEM_LIST = "itemList";
     String TAG = "tag";
     String TAG_LIST = "tagList";
+    String AVAILABILITY_LIST = "availabilityList";
     String UPDATE_PAGE = "updatePage";
     String NAV_ITEM = "navItem";
     String USER_TYPE = "userType";
