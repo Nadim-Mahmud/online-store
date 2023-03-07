@@ -1,6 +1,5 @@
 package net.therap.onlinestore.entity;
 
-import net.therap.onlinestore.util.Encryption;
 import org.hibernate.annotations.ResultCheckStyle;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
@@ -10,8 +9,6 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +21,10 @@ import java.util.List;
 @SQLDelete(sql = "UPDATE store_user SET access_status = 'DELETED' WHERE id = ? AND version = ?", check = ResultCheckStyle.COUNT)
 @Where(clause = "access_status <> 'DELETED'")
 @NamedQueries({
-        @NamedQuery(name = "User.findAll", query = "SELECT u FROM User u")
+        @NamedQuery(name = "User.findAll", query = "SELECT u FROM User u"),
+        @NamedQuery(name = "User.findByUserType", query = "SELECT u FROM User u WHERE u.type = :userType"),
+        @NamedQuery(name = "User.isDuplicateEmail", query = "SELECT u FROM User u WHERE email = :email AND id != :id")
+
 })
 public class User extends Persistent implements Serializable {
 
@@ -51,7 +51,6 @@ public class User extends Persistent implements Serializable {
     @Column(name = "email")
     private String email;
 
-    @Size(min = 1, max = 15, message = "{input.cell}")
     @Column(name = "cell")
     private String cell;
 
@@ -59,6 +58,10 @@ public class User extends Persistent implements Serializable {
     @Size(min = 1, max = 45, message = "{input.text}")
     @Column(name = "password")
     private String password;
+
+    @Column(name = "password")
+    @Transient
+    private String confirmPassword;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "type")
@@ -118,8 +121,16 @@ public class User extends Persistent implements Serializable {
         return password;
     }
 
-    public void setPassword(String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        this.password = Encryption.getPBKDF2(password);
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
 
     public UserType getType() {
@@ -152,7 +163,8 @@ public class User extends Persistent implements Serializable {
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", email='" + email + '\'' +
-                ", type=" + type +
+                ", password='" + password + '\'' +
+                ", confirmPassword='" + confirmPassword + '\'' +
                 '}';
     }
 

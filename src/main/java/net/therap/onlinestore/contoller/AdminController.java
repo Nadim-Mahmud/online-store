@@ -1,6 +1,5 @@
 package net.therap.onlinestore.contoller;
 
-import net.therap.onlinestore.entity.User;
 import net.therap.onlinestore.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,7 +15,7 @@ import static net.therap.onlinestore.constatnt.Constants.*;
  * @since 3/6/23
  */
 @Controller
-@RequestMapping(ADMIN_URL)
+@RequestMapping(ADMIN_BASE_URL)
 public class AdminController {
 
     private static final String HOME_VIEW = "home";

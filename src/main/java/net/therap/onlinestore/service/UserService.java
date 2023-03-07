@@ -1,6 +1,7 @@
 package net.therap.onlinestore.service;
 
 import net.therap.onlinestore.entity.User;
+import net.therap.onlinestore.entity.UserType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,9 +18,24 @@ public class UserService extends BaseService {
         return entityManager.createNamedQuery("User.findAll", User.class).getResultList();
     }
 
+    public List<User> finByUserType(UserType userType) {
+        return entityManager.createNamedQuery("User.findByUserType", User.class)
+                .setParameter("userType", userType)
+                .getResultList();
+    }
+
     public User findById(int id) {
         return entityManager.find(User.class, id);
     }
+
+    public boolean isDuplicateEmail(User user){
+        return !entityManager.createNamedQuery("User.isDuplicateEmail", User.class)
+                .setParameter("email", user.getEmail())
+                .setParameter("id", user.getId())
+                .getResultList()
+                .isEmpty();
+    }
+
 
     @Transactional
     public void delete(int id) throws Exception {

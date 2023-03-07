@@ -11,8 +11,7 @@ Date: 12/7/22
     <c:set var="adminCnst" value="ADMIN" scope="page"/>
     <c:set var="shopkeeperCnst" value="SHOPKEEPER" scope="page"/>
     <c:set var="deliveryManCnst" value="DELIVERYMAN" scope="page"/>
-    <c:set var="navShopkeeper" value="shopkeeper" scope="page"/>
-    <c:set var="navDeliveryMan" value="deliveryMan" scope="page"/>
+    <c:set var="navUser" value="user" scope="page"/>
     <c:set var="navItemList" value="item" scope="page"/>
     <c:set var="navCategory" value="category" scope="page"/>
     <c:set var="navTag" value="tag" scope="page"/>
@@ -30,13 +29,8 @@ Date: 12/7/22
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <c:if test="${activeUser.type == adminCnst}">
                     <li class="nav-item">
-                        <a class="nav-link active underline-hover" aria-current="page" href="/admin/shopkeeper">
-                                ${navItem == navShopkeeper ? '<b>Shopkeeper</b>' : 'Shopkeeper'}
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active underline-hover" aria-current="page" href="/admin/delivery-man">
-                                ${navItem == navDeliveryMan ? '<b>Delivery Man</b>' : 'Delivery Man'}
+                        <a class="nav-link active underline-hover" aria-current="page" href="/admin/shopkeeper/list">
+                                ${navItem == navUser ? '<b>User</b>' : 'User'}
                         </a>
                     </li>
                     <li class="nav-item">
