@@ -58,6 +58,9 @@
                 <fmt:message key="label.category"/>
             </th>
             <th scope="col" class="text-center">
+                <fmt:message key="label.tag.list"/>
+            </th>
+            <th scope="col" class="text-center">
                 <fmt:message key="label.availability"/>
             </th>
             <th scope="col" class="text-center">
@@ -82,6 +85,16 @@
                 </td>
                 <td class="text-center">
                     <c:out value="${item.category.name}"/>
+                </td>
+                <td class="text-center">
+                    <c:if test="${item.tagList.size() == 0}">
+                        <fmt:message key="label.empty"/>
+                    </c:if>
+                    <ul>
+                        <c:forEach items="${item.tagList}" var="tag">
+                            <li><c:out value="${tag.name}"/></li>
+                        </c:forEach>
+                    </ul>
                 </td>
                 <td class="text-center">
                     <c:out value="${item.availability.label}"/>

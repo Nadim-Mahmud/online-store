@@ -5,6 +5,8 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -19,7 +21,8 @@ import java.util.List;
 @SQLDelete(sql = "UPDATE item SET access_status = 'DELETED' WHERE id = ? AND version = ?", check = ResultCheckStyle.COUNT)
 @Where(clause = "access_status <> 'DELETED'")
 @NamedQueries({
-        @NamedQuery(name = "Item.findAll", query = "SELECT i FROM Item i")
+        @NamedQuery(name = "Item.findAll", query = "SELECT i FROM Item i"),
+        @NamedQuery(name = "User.getItemsByNameAndId", query = "SELECT i FROM Item i WHERE i.name = :name AND i.id != :id")
 })
 public class Item extends Persistent implements Serializable {
 
@@ -37,6 +40,8 @@ public class Item extends Persistent implements Serializable {
     private String name;
 
     @NotNull(message = "{input.number}")
+    @Min(value = 1, message = "{input.price}")
+    @Max(value = 100000, message = "{input.price}")
     @Column(name = "price")
     private double price;
 
@@ -55,7 +60,12 @@ public class Item extends Persistent implements Serializable {
     @Column(name = "description")
     private String description;
 
-    @ManyToMany(mappedBy = "itemList")
+    @ManyToMany(cascade = {CascadeType.MERGE})
+    @JoinTable(
+            name = "tag_item",
+            joinColumns = @JoinColumn(name = "item_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
     private List<Tag> tagList;
 
     public Item() {
@@ -125,5 +135,18 @@ public class Item extends Persistent implements Serializable {
 
     public boolean isNew() {
         return id == 0;
+    }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", availability=" + availability +
+                ", category=" + category +
+                ", description='" + description + '\'' +
+                ", tagList=" + tagList +
+                '}';
     }
 }

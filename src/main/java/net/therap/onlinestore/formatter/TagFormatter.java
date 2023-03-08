@@ -1,34 +1,33 @@
-package net.therap.onlinestore.validator;
+package net.therap.onlinestore.formatter;
 
 import net.therap.onlinestore.entity.Category;
 import net.therap.onlinestore.entity.Tag;
 import net.therap.onlinestore.service.CategoryService;
 import net.therap.onlinestore.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.Formatter;
 import org.springframework.stereotype.Component;
-import org.springframework.validation.Errors;
-import org.springframework.validation.Validator;
+
+import java.text.ParseException;
+import java.util.Locale;
 
 /**
  * @author nadimmahmud
  * @since 3/7/23
  */
 @Component
-public class TagValidator implements Validator {
+public class TagFormatter implements Formatter<Tag> {
 
     @Autowired
     private TagService tagService;
 
     @Override
-    public boolean supports(Class<?> clazz) {
-        return Tag.class.equals(clazz);
+    public Tag parse(String id, Locale locale) throws ParseException {
+        return tagService.findById(Integer.parseInt(id));
     }
 
     @Override
-    public void validate(Object target, Errors errors) {
-
-        if (tagService.isExistingTag((Tag) target)) {
-            errors.rejectValue("name", "input.item.duplicate");
-        }
+    public String print(Tag tag, Locale locale) {
+        return tag.getName();
     }
 }

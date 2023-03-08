@@ -3,8 +3,11 @@ package net.therap.onlinestore.contoller;
 import net.therap.onlinestore.entity.Item;
 import net.therap.onlinestore.entity.Availability;
 import net.therap.onlinestore.formatter.CategoryFormatter;
+import net.therap.onlinestore.formatter.TagFormatter;
 import net.therap.onlinestore.service.CategoryService;
 import net.therap.onlinestore.service.ItemService;
+import net.therap.onlinestore.service.TagService;
+import net.therap.onlinestore.validator.ItemValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
@@ -50,7 +53,16 @@ public class ItemController {
     private CategoryService categoryService;
 
     @Autowired
+    private TagService tagService;
+
+    @Autowired
     private CategoryFormatter categoryFormatter;
+
+    @Autowired
+    private TagFormatter tagFormatter;
+
+    @Autowired
+    private ItemValidator itemValidator;
 
     @Autowired
     private MessageSource messageSource;
@@ -61,6 +73,8 @@ public class ItemController {
         webDataBinder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
         webDataBinder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
         webDataBinder.addCustomFormatter(categoryFormatter);
+        webDataBinder.addCustomFormatter(tagFormatter);
+        webDataBinder.addValidators(itemValidator);
     }
 
     @GetMapping(ITEM_URL)
@@ -116,6 +130,7 @@ public class ItemController {
 
     private void setupReferenceDataItemForm(ModelMap modelMap) {
         modelMap.put(CATEGORY_LIST, categoryService.findAll());
+        modelMap.put(ALL_TAG_LIST, tagService.findAll());
         modelMap.put(AVAILABILITY_LIST, Availability.values());
         modelMap.put(NAV_ITEM, ITEM);
     }

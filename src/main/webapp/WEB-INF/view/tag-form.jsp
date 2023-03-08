@@ -29,7 +29,7 @@
                 </h5>
                 <form:form action="save" modelAttribute="tag" method="post">
                     <div class="mb-3">
-                        <label for="name" class="form-label">
+                        <label for="name" class="form-label required-fields">
                             <fmt:message key="label.name"/>
                         </label>
                         <form:input path="name" class="form-control"/>

@@ -11,11 +11,13 @@ Date: 12/7/22
     <c:set var="adminCnst" value="ADMIN" scope="page"/>
     <c:set var="shopkeeperCnst" value="SHOPKEEPER" scope="page"/>
     <c:set var="deliveryManCnst" value="DELIVERYMAN" scope="page"/>
+    <c:set var="customerCnst" value="CUSTOMER" scope="page"/>
     <c:set var="navUser" value="user" scope="page"/>
     <c:set var="navItemList" value="item" scope="page"/>
     <c:set var="navCategory" value="category" scope="page"/>
     <c:set var="navTag" value="tag" scope="page"/>
     <c:set var="navNotification" value="notification" scope="page"/>
+    <c:set var="navOrder" value="oder" scope="page"/>
 
     <div class="container-fluid m-0">
         <a href="/" class="navbar-brand">
@@ -50,16 +52,41 @@ Date: 12/7/22
                     </li>
                 </c:if>
                 <c:if test="${activeUser.type == shopkeeperCnst}">
-                <li class="nav-item">
-                    <a class="nav-link active underline-hover" aria-current="page" href="/shopkeeper/notification">
-                            ${navItem ==  navNotification ? '<b>Notification</b>' : 'Notification'}
-                    </a>
-                    </c:if>
-                    <c:if test="${activeUser.type == deliveryManCnst}">
-                    <a class="nav-link active underline-hover" aria-current="page" href="/delivery-man/notification">
-                            ${navItem ==  navNotification? '<b>Notification</b>' : 'Notification'}
-                    </a>
-                    </c:if>
+                    <li class="nav-item">
+                        <a class="nav-link active underline-hover" aria-current="page" href="/shopkeeper/notification">
+                                ${navItem ==  navNotification ? '<b>Notification</b>' : 'Notification'}
+                        </a>
+                    </li>
+                </c:if>
+                <c:if test="${activeUser.type == deliveryManCnst}">
+                    <li class="nav-item">
+                        <a class="nav-link active underline-hover" aria-current="page"
+                           href="/delivery-man/notification">
+                                ${navItem ==  navNotification? '<b>Notification</b>' : 'Notification'}
+                        </a>
+                    </li>
+                </c:if>
+                <c:if test="${activeUser.type == shopkeeperCnst}">
+                    <li class="nav-item">
+                        <a class="nav-link active underline-hover" aria-current="page" href="/shopkeeper/notification">
+                                ${navItem ==  navNotification ? '<b>Notification</b>' : 'Notification'}
+                        </a>
+                    </li>
+                </c:if>
+                <c:if test="${activeUser.type == customerCnst}">
+                    <li>
+                        <a class="nav-link active underline-hover" aria-current="page"
+                           href="/customer-man/order">
+                                ${navItem ==  navOrder? '<b>Order</b>' : 'Order'}
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link active underline-hover" aria-current="page"
+                           href="/customer-man/notification">
+                                ${navItem ==  navNotification? '<b>Notification</b>' : 'Notification'}
+                        </a>
+                    </li>
+                </c:if>
             </ul>
             <span class="navbar-text">
                 <c:if test="${activeUser != null}">

@@ -10,6 +10,7 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author nadimmahmud
@@ -38,12 +39,7 @@ public class Tag extends Persistent implements Serializable {
     @Column(name = "name")
     private String name;
 
-    @ManyToMany
-    @JoinTable(
-            name = "tag_item",
-            joinColumns = @JoinColumn(name = "tag_id"),
-            inverseJoinColumns = @JoinColumn(name = "item_id")
-    )
+    @ManyToMany(mappedBy = "tagList")
     private List<Item> itemList;
 
     public Tag() {
@@ -76,5 +72,18 @@ public class Tag extends Persistent implements Serializable {
 
     public boolean isNew() {
         return id == 0;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Tag)) return false;
+        Tag tag = (Tag) o;
+        return getId() == tag.getId();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }

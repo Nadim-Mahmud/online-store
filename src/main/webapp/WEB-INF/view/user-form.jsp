@@ -30,28 +30,28 @@
                 </h5>
                 <form:form action="/admin/user/save" modelAttribute="user" method="post">
                     <div class="mb-3">
-                        <label for="firstName" class="form-label">
+                        <label for="firstName" class="form-label required-fields">
                             <fmt:message key="label.firstName"/>
                         </label>
                         <form:input path="firstName" class="form-control"/>
                         <form:errors path="firstName" cssClass="text-danger"/>
                     </div>
                     <div class="mb-3">
-                        <label for="lastName" class="form-label">
+                        <label for="lastName" class="form-label required-fields">
                             <fmt:message key="label.lastName"/>
                         </label>
                         <form:input path="lastName" class="form-control"/>
                         <form:errors path="lastName" cssClass="text-danger"/>
                     </div>
                     <div class="mb-3">
-                        <label for="email" class="form-label">
+                        <label for="email" class="form-label required-fields">
                             <fmt:message key="label.email"/>
                         </label>
                         <form:input type="email" path="email" class="form-control"/>
                         <form:errors path="email" cssClass="text-danger"/>
                     </div>
                     <div class="mb-3">
-                        <label for="cell" class="form-label">
+                        <label for="cell" class="form-label required-fields">
                             <fmt:message key="label.cell"/>
                         </label>
                         <form:input path="cell" class="form-control"/>
@@ -67,14 +67,14 @@
                     </div>
                     <c:if test="${updatePage == null}">
                         <div class="mb-3">
-                            <label for="password" class="form-label">
+                            <label for="password" class="form-label required-fields">
                                 <fmt:message key="label.password"/>
                             </label>
                             <form:input type="password" path="password" class="form-control"/>
                             <form:errors path="password" cssClass="text-danger"/>
                         </div>
                         <div class="mb-3">
-                            <label for="confirmPassword" class="form-label">
+                            <label for="confirmPassword" class="form-label required-fields">
                                 <fmt:message key="label.password.confirmPassword"/>
                             </label>
                             <form:input type="password" path="confirmPassword" class="form-control"/>

@@ -29,26 +29,33 @@
                 </h5>
                 <form:form action="save" modelAttribute="item" method="post">
                     <div class="mb-3">
-                        <label for="name" class="form-label">
+                        <label for="name" class="form-label required-fields">
                             <fmt:message key="label.name"/>
                         </label>
                         <form:input path="name" class="form-control"/>
                         <form:errors path="name" cssClass="text-danger"/>
                     </div>
                     <div class="mb-3">
-                        <label for="name" class="form-label">
+                        <label for="name" class="form-label required-fields">
                             <fmt:message key="label.price"/>
                         </label>
                         <form:input path="price" class="form-control"/>
                         <form:errors path="price" cssClass="text-danger"/>
                     </div>
                     <div class="mb-3">
-                        <label for="category" class="form-label">
+                        <label for="category" class="form-label required-fields">
                             <fmt:message key="label.category"/>
                         </label>
                         <form:select path="category" class="form-select">
                             <form:options items="${categoryList}" itemLabel="name" itemValue="id"/>
                         </form:select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="tagList" class="form-label">
+                            <fmt:message key="label.tag.list.colon"/>
+                        </label>
+                        <form:checkboxes path="tagList" items="${allTagList}" itemLabel="name"
+                                         itemValue="id" class="form-check-input ms-2 me-2"/>
                     </div>
                     <div class="mb-3">
                         <label for="availability" class="form-label">
@@ -60,7 +67,7 @@
                         <form:errors path="availability" cssClass="text-danger"/>
                     </div>
                     <div class="mb-3">
-                        <label for="description" class="form-label">
+                        <label for="description" class="form-label required-fields">
                             <fmt:message key="label.description"/>
                         </label>
                         <form:textarea path="description" class="form-control"/>

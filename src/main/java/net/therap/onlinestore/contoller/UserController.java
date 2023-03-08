@@ -20,7 +20,6 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.text.SimpleDateFormat;
@@ -40,7 +39,9 @@ import static net.therap.onlinestore.constant.Constants.*;
 @SessionAttributes(USER)
 public class UserController {
 
-    private static final String USER_REDIRECT_URL = "admin/shopkeeper/list";
+    private static final String SHOPKEEPER_REDIRECT_URL = "admin/shopkeeper/list";
+    private static final String DELIVERYMAN_REDIRECT_URL = "admin/deliveryMan/list";
+    private static final String CUSTOMER_REDIRECT_URL = "admin/customer/list";
     private static final String USER_URL = "{user-type}/list";
     private static final String USER_VIEW = "user-list";
     private static final String USER_FORM_URL = "user/form";
@@ -68,18 +69,16 @@ public class UserController {
     }
 
     @GetMapping(USER_URL)
-    String showUserList(@PathVariable(USER_TYPE_PATH_VAR) String userType, ModelMap modelMap){
+    String showUserList(@PathVariable(USER_TYPE_PATH_VAR) String userType, ModelMap modelMap) {
         List<User> userList;
 
-        if(DELIVERYMAN.equals(userType)){
+        if (DELIVERYMAN.equals(userType)) {
             userList = userService.finByUserType(UserType.DELIVERYMAN);
             modelMap.put(USER_TYPE, DELIVERYMAN);
-        }
-        else if (CUSTOMER.equals(userType)){
+        } else if (CUSTOMER.equals(userType)) {
             userList = userService.finByUserType(UserType.CUSTOMER);
             modelMap.put(USER_TYPE, CUSTOMER);
-        }
-        else {
+        } else {
             userList = userService.finByUserType(UserType.SHOPKEEPER);
             modelMap.put(USER_TYPE, SHOPKEEPER);
         }
@@ -92,7 +91,7 @@ public class UserController {
 
     @GetMapping(USER_FORM_URL)
     String userForm(@RequestParam(value = USER_ID_PARAM, required = false) String userId,
-                          ModelMap modelMap
+                    ModelMap modelMap
     ) throws NoSuchAlgorithmException, InvalidKeySpecException {
         User user = nonNull(userId) ? userService.findById(Integer.parseInt(userId)) : new User();
         modelMap.put(USER, user);
@@ -114,21 +113,21 @@ public class UserController {
             return USER_FORM_VIEW;
         }
 
-        if(UserType.ADMIN.equals(user.getType())){
+        if (UserType.ADMIN.equals(user.getType())) {
             throw new AccessDeniedException();
         }
 
-        if(user.isNew()){
+        if (user.isNew()) {
             user.setPassword(Encryption.getPBKDF2(user.getPassword()));
         }
 
         userService.saveOrUpdate(user);
         sessionStatus.setComplete();
-
         redirectAttributes.addFlashAttribute(SUCCESS, messageSource.getMessage(
                 (user.getId() == 0) ? "success.add" : "success.update", null, Locale.getDefault()));
 
-        return REDIRECT + USER_REDIRECT_URL;
+        return REDIRECT + (UserType.SHOPKEEPER.equals(user.getType()) ? SHOPKEEPER_REDIRECT_URL :
+                ((UserType.DELIVERYMAN.equals(user.getType())) ? DELIVERYMAN_REDIRECT_URL : CUSTOMER_REDIRECT_URL));
     }
 
     private void setupReferenceDataUserForm(ModelMap modelMap, User user) throws NoSuchAlgorithmException, InvalidKeySpecException {

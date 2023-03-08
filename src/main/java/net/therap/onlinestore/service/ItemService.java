@@ -1,5 +1,6 @@
 package net.therap.onlinestore.service;
 
+import net.therap.onlinestore.entity.Category;
 import net.therap.onlinestore.entity.Item;
 import net.therap.onlinestore.entity.User;
 import org.springframework.stereotype.Service;
@@ -40,4 +41,11 @@ public class ItemService extends BaseService {
         return item;
     }
 
+    public boolean isExistingItem(Item item){
+        return !entityManager.createNamedQuery("User.getItemsByNameAndId", Item.class)
+                .setParameter("name", item.getName())
+                .setParameter("id", item.getId())
+                .getResultList()
+                .isEmpty();
+    }
 }

@@ -10,6 +10,7 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author nadimmahmud
@@ -71,5 +72,18 @@ public class Category extends Persistent implements Serializable {
 
     public boolean isNew() {
         return id == 0;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Category)) return false;
+        Category category = (Category) o;
+        return getId() == category.getId();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }

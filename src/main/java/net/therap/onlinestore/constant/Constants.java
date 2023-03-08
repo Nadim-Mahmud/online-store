@@ -24,6 +24,7 @@ public interface Constants {
     String ITEM_LIST = "itemList";
     String TAG = "tag";
     String TAG_LIST = "tagList";
+    String ALL_TAG_LIST = "allTagList";
     String AVAILABILITY_LIST = "availabilityList";
     String UPDATE_PAGE = "updatePage";
     String NAV_ITEM = "navItem";
@@ -32,4 +33,5 @@ public interface Constants {
     String FAILED = "failed";
     String HOME_URL = "/";
     String ADMIN_BASE_URL = "admin/*";
+    String CUSTOMER_BASE_URL = "customer/*";
 }
