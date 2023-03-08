@@ -2,7 +2,7 @@ package net.therap.onlinestore.contoller;
 
 import net.therap.onlinestore.entity.User;
 import net.therap.onlinestore.entity.UserType;
-import net.therap.onlinestore.exception.AccessDeniedException;
+import net.therap.onlinestore.exception.IllegalAccessException;
 import net.therap.onlinestore.helper.UserTypeHelper;
 import net.therap.onlinestore.service.UserService;
 import net.therap.onlinestore.util.Encryption;
@@ -62,9 +62,7 @@ public class UserController {
 
     @InitBinder({USER, DELIVERYMAN})
     public void initBinder(WebDataBinder webDataBinder) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_PATTERN);
         webDataBinder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
-        webDataBinder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
         webDataBinder.addValidators(userValidator);
     }
 
@@ -114,7 +112,7 @@ public class UserController {
         }
 
         if (UserType.ADMIN.equals(user.getType())) {
-            throw new AccessDeniedException();
+            throw new IllegalAccessException();
         }
 
         if (user.isNew()) {

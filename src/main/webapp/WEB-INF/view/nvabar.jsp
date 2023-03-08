@@ -6,7 +6,7 @@ Date: 12/7/22
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <fmt:setLocale value="en"/>
-<fmt:setBundle basename="net.therap.estaurant" var="lang"/>
+<fmt:setBundle basename="net.therap.onlinestore" var="lang"/>
 <nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top bg-light px-4 mb-1 shadow-sm">
     <c:set var="adminCnst" value="ADMIN" scope="page"/>
     <c:set var="shopkeeperCnst" value="SHOPKEEPER" scope="page"/>
@@ -76,13 +76,13 @@ Date: 12/7/22
                 <c:if test="${activeUser.type == customerCnst}">
                     <li>
                         <a class="nav-link active underline-hover" aria-current="page"
-                           href="/customer-man/order">
+                           href="/customer/order">
                                 ${navItem ==  navOrder? '<b>Order</b>' : 'Order'}
                         </a>
                     </li>
                     <li>
                         <a class="nav-link active underline-hover" aria-current="page"
-                           href="/customer-man/notification">
+                           href="/custome/notification">
                                 ${navItem ==  navNotification? '<b>Notification</b>' : 'Notification'}
                         </a>
                     </li>

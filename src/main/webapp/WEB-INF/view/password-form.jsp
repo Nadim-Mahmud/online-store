@@ -10,7 +10,7 @@
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <title>
-        <fmt:message key="category.form.page.title"/>
+        <fmt:message key="password.update.page.title"/>
     </title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -21,23 +21,38 @@
 <body>
 <%@ include file="nvabar.jsp" %>
 <div class="container">
+    <c:set var="br" value="<br>" scope="page"/>
     <div class="container col-md-5 mt-2">
         <div class="card">
             <div class="card-body">
                 <h5 class="text-center mb-3">
-                    <fmt:message key="category.form.title"/>
+                    <fmt:message key="password.update.form.title"/>
                 </h5>
-                <form:form action="save" modelAttribute="category" method="post">
+                <form:form action="/update-password/update" modelAttribute="password" method="post">
                     <div class="mb-3">
-                        <label for="name" class="form-label required-fields">
-                            <fmt:message key="label.name"/>
+                        <label for="oldPassword" class="form-label required-fields">
+                            <fmt:message key="label.password.old"/>
                         </label>
-                        <form:input path="name" class="form-control"/>
-                        <form:errors path="name" cssClass="text-danger"/>
+                        <form:input type="password" path="oldPassword" class="form-control"/>
+                        <form:errors path="oldPassword" cssClass="text-danger"/>
+                    </div>
+                    <div class="mb-3">
+                        <label for="newPassword" class="form-label required-fields">
+                            <fmt:message key="label.password.new"/>
+                        </label>
+                        <form:input type="password" path="newPassword" class="form-control"/>
+                        <form:errors path="newPassword" cssClass="text-danger"/>
+                    </div>
+                    <div class="mb-3">
+                        <label for="confirmPassword" class="form-label required-fields">
+                            <fmt:message key="label.password.confirm"/>
+                        </label>
+                        <form:input type="password" path="confirmPassword" class="form-control"/>
+                        <form:errors path="confirmPassword" cssClass="text-danger"/>
                     </div>
                     <div class="d-grid gap-2">
                         <button type="submit" class="btn btn-primary btn-sm">
-                            <fmt:message key="button.save"/>
+                            <fmt:message key="button.update"/>
                         </button>
                     </div>
                 </form:form>

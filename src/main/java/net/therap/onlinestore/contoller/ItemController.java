@@ -1,7 +1,7 @@
 package net.therap.onlinestore.contoller;
 
-import net.therap.onlinestore.entity.Item;
 import net.therap.onlinestore.entity.Availability;
+import net.therap.onlinestore.entity.Item;
 import net.therap.onlinestore.formatter.CategoryFormatter;
 import net.therap.onlinestore.formatter.TagFormatter;
 import net.therap.onlinestore.service.CategoryService;
@@ -69,9 +69,7 @@ public class ItemController {
 
     @InitBinder
     public void initBinder(WebDataBinder webDataBinder) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_PATTERN);
         webDataBinder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
-        webDataBinder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
         webDataBinder.addCustomFormatter(categoryFormatter);
         webDataBinder.addCustomFormatter(tagFormatter);
         webDataBinder.addValidators(itemValidator);

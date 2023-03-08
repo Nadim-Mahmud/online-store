@@ -5,7 +5,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <fmt:setLocale value="en"/>
-<fmt:setBundle basename="net.therap.estaurant" var="lang"/>
+<fmt:setBundle basename="net.therap.onlinestore" var="lang"/>
 <html>
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
@@ -27,7 +27,7 @@
                 <h5 class="text-center mb-3">
                     <fmt:message key="item.form.title"/>
                 </h5>
-                <form:form action="save" modelAttribute="item" method="post">
+                <form:form action="/admin/item/save" modelAttribute="item" method="post">
                     <div class="mb-3">
                         <label for="name" class="form-label required-fields">
                             <fmt:message key="label.name"/>
@@ -63,7 +63,6 @@
                         </label>
                         <form:radiobuttons path="availability" items="${availabilityList}" itemLabel="label"
                                            class="form-check-input me-2 ms-2"/>
-                        <br>
                         <form:errors path="availability" cssClass="text-danger"/>
                     </div>
                     <div class="mb-3">

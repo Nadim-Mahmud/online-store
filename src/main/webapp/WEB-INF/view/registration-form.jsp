@@ -10,7 +10,7 @@
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <title>
-        <fmt:message key="user.form.page.title"/>
+        <fmt:message key="registration.form.page.title"/>
     </title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -26,9 +26,9 @@
         <div class="card">
             <div class="card-body">
                 <h5 class="text-center mb-3">
-                    <fmt:message key="user.form.title"/>
+                    <fmt:message key="registration.form.page.title"/>
                 </h5>
-                <form:form action="/admin/user/save" modelAttribute="user" method="post">
+                <form:form action="/registration/save" modelAttribute="customer" method="post">
                     <div class="mb-3">
                         <label for="firstName" class="form-label required-fields">
                             <fmt:message key="label.firstName"/>
@@ -58,29 +58,19 @@
                         <form:errors path="cell" cssClass="text-danger"/>
                     </div>
                     <div class="mb-3">
-                        <label for="type" class="form-label">
-                            <fmt:message key="user.type"/>
+                        <label for="password" class="form-label required-fields">
+                            <fmt:message key="label.password"/>
                         </label>
-                        <form:select path="type" class="form-select">
-                            <form:options items="${userTypeList}" itemLabel="label"/>
-                        </form:select>
+                        <form:input type="password" path="password" class="form-control"/>
+                        <form:errors path="password" cssClass="text-danger"/>
                     </div>
-                    <c:if test="${updatePage == null}">
-                        <div class="mb-3">
-                            <label for="password" class="form-label required-fields">
-                                <fmt:message key="label.password"/>
-                            </label>
-                            <form:input type="password" path="password" class="form-control"/>
-                            <form:errors path="password" cssClass="text-danger"/>
-                        </div>
-                        <div class="mb-3">
-                            <label for="confirmPassword" class="form-label required-fields">
-                                <fmt:message key="label.password.confirmPassword"/>
-                            </label>
-                            <form:input type="password" path="confirmPassword" class="form-control"/>
-                            <form:errors path="confirmPassword" cssClass="text-danger"/>
-                        </div>
-                    </c:if>
+                    <div class="mb-3">
+                        <label for="confirmPassword" class="form-label required-fields">
+                            <fmt:message key="label.password.confirmPassword"/>
+                        </label>
+                        <form:input type="password" path="confirmPassword" class="form-control"/>
+                        <form:errors path="confirmPassword" cssClass="text-danger"/>
+                    </div>
                     <div class="d-grid gap-2">
                         <button type="submit" class="btn btn-primary btn-sm">
                             <fmt:message key="button.save"/>

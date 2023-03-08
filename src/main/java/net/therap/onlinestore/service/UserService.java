@@ -1,11 +1,16 @@
 package net.therap.onlinestore.service;
 
+import net.therap.onlinestore.command.Credentials;
 import net.therap.onlinestore.entity.User;
 import net.therap.onlinestore.entity.UserType;
+import net.therap.onlinestore.util.Encryption;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author nadimmahmud
@@ -28,7 +33,32 @@ public class UserService extends BaseService {
         return entityManager.find(User.class, id);
     }
 
-    public boolean isDuplicateEmail(User user){
+    public User findByEmail(String email) {
+
+        try {
+            return entityManager.createNamedQuery("User.findByEmail", User.class)
+                    .setParameter("email", email)
+                    .getSingleResult();
+        } catch (Exception ex) {
+            return new User();
+        }
+    }
+
+    public boolean isValidCredential(Credentials credentials) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        User user;
+
+        try {
+            user = entityManager.createNamedQuery("User.findByEmail", User.class)
+                    .setParameter("email", credentials.getEmail())
+                    .getSingleResult();
+        } catch (Exception ex) {
+            return false;
+        }
+
+        return Objects.nonNull(user) && user.getPassword().equals(Encryption.getPBKDF2(credentials.getPassword()));
+    }
+
+    public boolean isDuplicateEmail(User user) {
         return !entityManager.createNamedQuery("User.getUserByNameAndId", User.class)
                 .setParameter("email", user.getEmail())
                 .setParameter("id", user.getId())

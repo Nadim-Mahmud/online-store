@@ -22,6 +22,7 @@ import java.util.List;
 @Where(clause = "access_status <> 'DELETED'")
 @NamedQueries({
         @NamedQuery(name = "User.findAll", query = "SELECT u FROM User u"),
+        @NamedQuery(name = "User.findByEmail", query = "SELECT u FROM User u WHERE email= :email"),
         @NamedQuery(name = "User.findByUserType", query = "SELECT u FROM User u WHERE u.type = :userType"),
         @NamedQuery(name = "User.getUserByNameAndId", query = "SELECT u FROM User u WHERE email = :email AND id != :id")
 })
@@ -58,7 +59,6 @@ public class User extends Persistent implements Serializable {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "password")
     @Transient
     private String confirmPassword;
 

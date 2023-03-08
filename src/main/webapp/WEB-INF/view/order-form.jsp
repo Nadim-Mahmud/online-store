@@ -5,7 +5,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <fmt:setLocale value="en"/>
-<fmt:setBundle basename="net.therap.estaurant" var="lang"/>
+<fmt:setBundle basename="net.therap.onlinestore" var="lang"/>
 <html>
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
@@ -27,11 +27,25 @@
                 <h5 class="text-center mb-3">
                     <fmt:message key="order.form.title"/>
                 </h5>
-                <form:form action="/customer/order/" modelAttribute="OrderItem" method="post">
+                <div class="d-flex justify-content-end">
+                    <button class="btn btn-sm btn-success" onclick="findItemsByCategory()">
+                        <fmt:message key="button.add.item"/>
+                    </button>
+                </div>
+                <form:form action="/customer/order/" modelAttribute="orderItem" method="post">
                     <div class="d-flex justify-content-end">
                         <button type="submit" class="btn btn-sm btn-success">
                             <fmt:message key="button.add.item"/>
                         </button>
+                    </div>
+                    <div class="mb-3">
+                        <label for="item.category" class="form-label">
+                            <fmt:message key="label.select.category"/>
+                        </label>
+                        <form:select path="item.category" class="form-select">
+                            <form:options items="${categoryList}" itemLabel="name" itemValue="id"/>
+                        </form:select>
+                        <form:errors path="item.category" cssClass="text-danger"/>
                     </div>
                     <div class="mb-3">
                         <label for="item" class="form-label">
@@ -50,14 +64,14 @@
                         <form:errors path="quantity" cssClass="text-danger"/>
                     </div>
                 </form:form>
-                <c:if test="${orderLineItemList.size() == 0}">
+                <c:if test="${orderItemList.size() == 0}">
                     <div>
                         <p class="text-center mb-3"><br>
                             <fmt:message key="message.empty.item"/>
                         </p>
                     </div>
                 </c:if>
-                <c:if test="${orderLineItemList.size() != 0}">
+                <c:if test="${orderItemList.size() != 0}">
                     <div>
                         <h6 class="text-center mb-3">
                             <br>
@@ -82,7 +96,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <c:forEach items="${OrderItemList}" var="orderItem" varStatus="orderItemStat">
+                        <c:forEach items="${orderItemList}" var="orderItem" varStatus="orderItemStat">
                             <tr>
                                 <td>
                                     <c:out value="${orderItemStat.count}"/>
@@ -94,7 +108,7 @@
                                     <c:out value="${orderItem.quantity}"/>
                                 </td>
                                 <td>
-                                    <c:url var="removeUrl" value="/waiter/new-order/items/remove">
+                                    <c:url var="removeUrl" value="/customer/items/remove">
                                         <c:param name="orderLineItemId" value="${orderItem.item.id}"/>
                                     </c:url>
                                     <form:form class="text-center my-0 mx-2 p-0" action="${removeUrl}" method="post">
@@ -119,6 +133,8 @@
         </div>
     </div>
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<script src="${pageContext.request.contextPath}/assets/js/ajax.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
         crossorigin="anonymous">
