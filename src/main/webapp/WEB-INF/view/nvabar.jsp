@@ -19,6 +19,8 @@ Date: 12/7/22
     <c:set var="navCategory" value="category" scope="page"/>
     <c:set var="navTag" value="tag" scope="page"/>
     <c:set var="navNotification" value="notification" scope="page"/>
+    <c:set var="navReadyOrder" value="readyOrder" scope="page"/>
+    <c:set var="navDeliveryList" value="deliveryList" scope="page"/>
 
     <div class="container-fluid m-0">
         <a href="/" class="navbar-brand">
@@ -62,8 +64,14 @@ Date: 12/7/22
                 <c:if test="${activeUser.type == deliveryManCnst}">
                     <li class="nav-item">
                         <a class="nav-link active underline-hover" aria-current="page"
-                           href="/delivery-man/notification">
-                                ${navItem ==  navNotification? '<b>Notification</b>' : 'Notification'}
+                           href="/delivery/ready-order">
+                                ${navItem ==  navReadyOrder? '<b>Ready orders</b>' : 'Ready orders'}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active underline-hover" aria-current="page"
+                           href="/delivery/delivery-list">
+                                ${navItem ==  navDeliveryList? '<b>Delivery list</b>' : 'Delivery list'}
                         </a>
                     </li>
                 </c:if>

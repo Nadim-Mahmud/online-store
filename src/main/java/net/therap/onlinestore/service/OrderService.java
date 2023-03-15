@@ -29,6 +29,12 @@ public class OrderService extends BaseService {
                 .getResultList();
     }
 
+    public List<Order> findOrdersNotDeliveredByDeliveryMan(User deliveryMan) {
+        return entityManager.createNamedQuery("Order.findOrdersNotDeliveredByDeliveryMan", Order.class)
+                .setParameter("deliveryManId", deliveryMan.getId())
+                .getResultList();
+    }
+
     public Order findById(int id) {
         return entityManager.find(Order.class, id);
     }
@@ -38,6 +44,7 @@ public class OrderService extends BaseService {
 
         return OrderStatus.PICKED.equals(order.getStatus()) || OrderStatus.DELIVERED.equals(order.getStatus());
     }
+
 
     @Transactional
     public void cancel(int orderId) throws Exception {

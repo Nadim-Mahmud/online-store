@@ -2,6 +2,7 @@ package net.therap.onlinestore.contoller;
 
 import net.therap.onlinestore.entity.*;
 import net.therap.onlinestore.formatter.ItemFormatter;
+import net.therap.onlinestore.helper.AccessCheck;
 import net.therap.onlinestore.service.CategoryService;
 import net.therap.onlinestore.service.ItemService;
 import net.therap.onlinestore.service.OrderService;
@@ -28,7 +29,7 @@ import static net.therap.onlinestore.constant.Constants.*;
  * @since 3/8/23
  */
 @Controller
-@RequestMapping(CUSTOMER_BASE_URL)
+@RequestMapping({CUSTOMER_BASE_URL, SHOPKEEPER_BASE_URL, DELIVERY_BASE_URL})
 @SessionAttributes(ORDER)
 public class OrderController {
 
@@ -47,6 +48,14 @@ public class OrderController {
     private static final String ORDER_LIST_URL = "order-list";
     private static final String ORDER_LIST_VIEW = "order-list";
     private static final String ORDER_CANCEL_URL = "order/cancel";
+    private static final String ORDER_READY = "order/ready";
+
+    private static final String ACCEPT_READY_ORDER = "ready-order/accept";
+    private static final String REDIRECT_READY_ORDER_URL = "delivery/ready-order";
+    private static final String DELIVER_ACCEPTED_ORDER = "delivered";
+    private static final String REDIRECT_DELIVERY_ORDER_URL = "delivery/delivery-list";
+
+    private static final String REDIRECT_SHOPKEEPER_NOTIFICATION_URL = "shopkeeper/notification";
 
     @Autowired
     private MessageSource messageSource;
@@ -162,8 +171,48 @@ public class OrderController {
         return ORDER_LIST_VIEW;
     }
 
+    @PostMapping(ORDER_READY)
+    public String markOrderReady(@SessionAttribute(ACTIVE_USER) User user,
+                                 @RequestParam(ORDER_ID_PARAM) int orderId) throws Exception {
+        Order order = orderService.findById(orderId);
+        order.setStatus(OrderStatus.READY);
+        AccessCheck.check(user, AccessType.UPDATE, order);
+        orderService.saveOrUpdate(order);
+
+        return REDIRECT + REDIRECT_SHOPKEEPER_NOTIFICATION_URL;
+    }
+
+    @PostMapping(ACCEPT_READY_ORDER)
+    public String getAcceptReadyOrder(@SessionAttribute(ACTIVE_USER) User user,
+                                      @RequestParam(ORDER_ID_PARAM) int orderId,
+                                      RedirectAttributes redirectAttributes) throws Exception {
+        Order order = orderService.findById(orderId);
+        order.setStatus(OrderStatus.PICKED);
+        order.setUser(user);
+        AccessCheck.check(user, AccessType.UPDATE, order);
+        orderService.saveOrUpdate(order);
+
+        return REDIRECT + REDIRECT_READY_ORDER_URL;
+    }
+
+    @PostMapping(DELIVER_ACCEPTED_ORDER)
+    public String markOrderDelivered(@SessionAttribute(ACTIVE_USER) User user,
+                                     @RequestParam(ORDER_ID_PARAM) int orderId) throws Exception {
+        Order order = orderService.findById(orderId);
+        order.setStatus(OrderStatus.DELIVERED);
+        AccessCheck.check(user, AccessType.UPDATE, order);
+        orderService.saveOrUpdate(order);
+
+        return REDIRECT + REDIRECT_DELIVERY_ORDER_URL;
+    }
+
     @PostMapping(ORDER_CANCEL_URL)
-    public String cancelOrder(@RequestParam(ORDER_ID_PARAM) int orderId, RedirectAttributes redirectAttributes) throws Exception {
+    public String cancelOrder(@SessionAttribute(ACTIVE_USER) User user,
+                              @RequestParam(ORDER_ID_PARAM) int orderId,
+                              RedirectAttributes redirectAttributes) throws Exception {
+        Order order = orderService.findById(orderId);
+
+        AccessCheck.check(user, AccessType.UPDATE, order);
 
         if (orderService.isOrderOnProcess(orderId)) {
             redirectAttributes.addFlashAttribute(FAILED, messageSource.getMessage("fail.cancel.inUse", null, Locale.getDefault()));
@@ -172,6 +221,6 @@ public class OrderController {
             redirectAttributes.addFlashAttribute(SUCCESS, messageSource.getMessage("success.cancel", null, Locale.getDefault()));
         }
 
-        return REDIRECT + REDIRECT_ORDER_LIST_URL;
+        return REDIRECT + (UserType.SHOPKEEPER.equals(user.getType()) ? REDIRECT_SHOPKEEPER_NOTIFICATION_URL : REDIRECT_ORDER_LIST_URL);
     }
 }

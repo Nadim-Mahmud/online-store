@@ -8,7 +8,7 @@
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <title>
-        <fmt:message key="shopkeeper.notification.page.title"/>
+        <fmt:message key="order.ready.page.title"/>
     </title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -37,7 +37,7 @@
             </div>
             <div class="card-body">
                 <h5 class="text-center mb-3">
-                    <fmt:message key="shopkeeper.notification.title"/>
+                    <fmt:message key="order.ready.title"/>
                 </h5>
             </div>
             <table class="table align-middle text-center">
@@ -80,28 +80,16 @@
                         </td>
                         <td>
                             <div class="d-flex justify-content-center my-1">
-                                <c:url var="readyUrl" value="/shopkeeper/order/ready">
+                                <c:url var="delivered" value="/delivery/delivered">
                                     <c:param name="orderId" value="${order.id}"/>
                                 </c:url>
-                                <form:form class="text-center my-0 mx-2 p-0" action="${readyUrl}" method="post">
-                                    <button class="btn btn-outline-success center btn-sm"
-                                            onclick="return confirm('Is this order ready?')">
-                                        <fmt:message key="button.ready"/>
-                                    </button>
-                                </form:form>
-                                <c:url var="cancelUrl" value="/shopkeeper/order/cancel">
-                                    <c:param name="orderId" value="${order.id}"/>
-                                </c:url>
-                                <form:form class="text-center my-0 mx-2 p-0" action="${cancelUrl}" method="post">
+                                <form:form class="text-center my-0 mx-2 p-0" action="${delivered}" method="post">
                                     <button class="btn btn-outline-danger center btn-sm"
-                                            onclick="return confirm('Want to cancel this order?')">
-                                        <fmt:message key="button.cancel"/>
+                                            onclick="return confirm('Mark this order delivered?')">
+                                        <fmt:message key="button.delivered"/>
                                     </button>
                                 </form:form>
                             </div>
-                            <c:if test="${order.status != ordered}">
-                                <fmt:message key="label.empty"/>
-                            </c:if>
                         </td>
                     </tr>
                 </c:forEach>

@@ -26,15 +26,8 @@ public class ShopkeeperController {
 
     private static final String HOME_URL = "/";
     private static final String HOME_VIEW = "home";
-
-    private static final String REDIRECT_SHOPKEEPER_NOTIFICATION_URL = "shopkeeper/notification";
     private static final String SHOPKEEPER_NOTIFICATION_URL = "notification";
     private static final String SHOPKEEPER_NOTIFICATION_VIEW = "shopkeeper-notification";
-    private static final String SHOPKEEPER_ACCEPT_FORM_URL = "notification/form";
-    private static final String SHOPKEEPER_ACCEPT_FORM_VIEW = "shopkeeper-order-accept-form";
-    private static final String SHOPKEEPER_ACCEPT_FORM_SAVE_URL = "notification/form/save";
-    private static final String ORDER_LINE_ITEM_ID_PARAM = "orderLineItemId";
-    private static final String MARK_PREPARED_URL = "notification/mark-prepared";
 
     @Autowired
     private ItemService itemService;
@@ -46,7 +39,7 @@ public class ShopkeeperController {
     private OrderService orderService;
 
     @GetMapping(HOME_URL)
-    public String customerHome(HttpSession httpSession, ModelMap modelMap) {
+    public String shopkeeperHome(HttpSession httpSession, ModelMap modelMap) {
         httpSession.setAttribute(ACTIVE_USER, userService.findById(13));
         modelMap.put(ITEM_LIST, itemService.findAll());
 
@@ -54,7 +47,7 @@ public class ShopkeeperController {
     }
 
     @GetMapping(SHOPKEEPER_NOTIFICATION_URL)
-    public String showChefNotification(@SessionAttribute(ACTIVE_USER) User user, ModelMap modelMap) {
+    public String showShopkeeperNotification(@SessionAttribute(ACTIVE_USER) User user, ModelMap modelMap) {
         modelMap.put(ORDER_LIST, orderService.findOrdersByOrderStatus(OrderStatus.ORDERED));
         modelMap.put(NAV_ITEM, NOTIFICATION);
 

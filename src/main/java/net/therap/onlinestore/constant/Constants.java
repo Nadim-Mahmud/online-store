@@ -24,6 +24,8 @@ public interface Constants {
     String ITEM_LIST = "itemList";
     String TAG = "tag";
     String TAG_LIST = "tagList";
+    String READY_ORDER = "readyOrder";
+    String DELIVERY_LIST = "deliveryList";
     String ORDER = "order";
     String ORDER_LIST = "orderList";
     String ORDER_FORM = "orderForm";
@@ -49,4 +51,5 @@ public interface Constants {
     String ADMIN_BASE_URL = "admin/*";
     String CUSTOMER_BASE_URL = "customer/*";
     String SHOPKEEPER_BASE_URL = "shopkeeper/*";
+    String DELIVERY_BASE_URL = "delivery/*";
 }
