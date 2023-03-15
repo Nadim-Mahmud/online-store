@@ -35,7 +35,7 @@ public class OrderItem extends Persistent {
     @Column(name = "accepted_at")
     private Date acceptedAt;
 
-    @Min(value = 1, message = "{input.number}")
+    @Min(value = 1, message = "{input.quantity}")
     @Column(name = "quantity")
     private int quantity;
 
@@ -106,13 +106,24 @@ public class OrderItem extends Persistent {
 
         if (this == o) return true;
         if (!(o instanceof OrderItem)) return false;
-        OrderItem orderLineItem = (OrderItem) o;
+        OrderItem orderItem = (OrderItem) o;
 
-        return getItem().getId() == orderLineItem.getItem().getId();
+        return getItem().getId() == orderItem.getItem().getId();
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(getItem());
+    }
+
+    @Override
+    public String toString() {
+        return "OrderItem{" +
+                "id=" + id +
+                ", acceptedAt=" + acceptedAt +
+                ", quantity=" + quantity +
+                ", item=" + item +
+                ", order=" + order +
+                '}';
     }
 }

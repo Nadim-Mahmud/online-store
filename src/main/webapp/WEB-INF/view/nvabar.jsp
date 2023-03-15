@@ -13,11 +13,12 @@ Date: 12/7/22
     <c:set var="deliveryManCnst" value="DELIVERYMAN" scope="page"/>
     <c:set var="customerCnst" value="CUSTOMER" scope="page"/>
     <c:set var="navUser" value="user" scope="page"/>
+    <c:set var="navOrderForm" value="orderForm" scope="page"/>
+    <c:set var="navOrderList" value="orderList" scope="page"/>
     <c:set var="navItemList" value="item" scope="page"/>
     <c:set var="navCategory" value="category" scope="page"/>
     <c:set var="navTag" value="tag" scope="page"/>
     <c:set var="navNotification" value="notification" scope="page"/>
-    <c:set var="navOrder" value="oder" scope="page"/>
 
     <div class="container-fluid m-0">
         <a href="/" class="navbar-brand">
@@ -66,24 +67,17 @@ Date: 12/7/22
                         </a>
                     </li>
                 </c:if>
-                <c:if test="${activeUser.type == shopkeeperCnst}">
-                    <li class="nav-item">
-                        <a class="nav-link active underline-hover" aria-current="page" href="/shopkeeper/notification">
-                                ${navItem ==  navNotification ? '<b>Notification</b>' : 'Notification'}
-                        </a>
-                    </li>
-                </c:if>
                 <c:if test="${activeUser.type == customerCnst}">
                     <li>
                         <a class="nav-link active underline-hover" aria-current="page"
                            href="/customer/order">
-                                ${navItem ==  navOrder? '<b>Order</b>' : 'Order'}
+                                ${navItem ==  navOrderForm? '<b>New order</b>' : 'New order'}
                         </a>
                     </li>
                     <li>
                         <a class="nav-link active underline-hover" aria-current="page"
-                           href="/custome/notification">
-                                ${navItem ==  navNotification? '<b>Notification</b>' : 'Notification'}
+                           href="/customer/order-list">
+                                ${navItem ==  navOrderList? '<b>Orders</b>' : 'Orders'}
                         </a>
                     </li>
                 </c:if>

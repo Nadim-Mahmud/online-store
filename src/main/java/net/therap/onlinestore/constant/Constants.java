@@ -25,6 +25,8 @@ public interface Constants {
     String TAG = "tag";
     String TAG_LIST = "tagList";
     String ORDER = "order";
+    String ORDER_LIST = "orderList";
+    String ORDER_FORM = "orderForm";
     String ORDER_ITEM = "orderItem";
     String ORDER_ITEM_LIST = "orderItemList";
     String ALL_TAG_LIST = "allTagList";
@@ -35,12 +37,16 @@ public interface Constants {
     String USER_TYPE = "userType";
     String CREDENTIALS = "credentials";
     String PASSWORD = "password";
+    String ADDRESS = "address";
     String PROFILE_UPDATE_PAGE = "profileUpdatePage";
     String LOGIN_PAGE = "loginPage";
     String INVALID_LOGIN = "invalidLogin";
     String SUCCESS = "success";
     String FAILED = "failed";
+    String NOTIFICATION = "notification";
+    String EMPTY_LIST = "emptyList";
     String HOME_URL = "/";
     String ADMIN_BASE_URL = "admin/*";
     String CUSTOMER_BASE_URL = "customer/*";
+    String SHOPKEEPER_BASE_URL = "shopkeeper/*";
 }

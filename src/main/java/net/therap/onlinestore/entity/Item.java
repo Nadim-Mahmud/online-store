@@ -22,7 +22,9 @@ import java.util.List;
 @Where(clause = "access_status <> 'DELETED'")
 @NamedQueries({
         @NamedQuery(name = "Item.findAll", query = "SELECT i FROM Item i"),
-        @NamedQuery(name = "User.getItemsByNameAndId", query = "SELECT i FROM Item i WHERE i.name = :name AND i.id != :id")
+        @NamedQuery(name = "Item.findAvailable", query = "SELECT i FROM Item i WHERE i.availability = 'AVAILABLE'"),
+        @NamedQuery(name = "Item.findItemsByNameAndId", query = "SELECT i FROM Item i WHERE i.name = :name AND i.id != :id"),
+        @NamedQuery(name = "Item.findByCategoryId", query = "SELECT i FROM Item i WHERE i.category.id = :categoryId")
 })
 public class Item extends Persistent implements Serializable {
 

@@ -18,7 +18,9 @@ import java.util.List;
 @SQLDelete(sql = "UPDATE order_table SET access_status = 'DELETED' WHERE id = ? AND version = ?", check = ResultCheckStyle.COUNT)
 @Where(clause = "access_status <> 'DELETED'")
 @NamedQueries({
-        @NamedQuery(name = "Order.findAll", query = "SELECT o FROM Order o")
+        @NamedQuery(name = "Order.findAll", query = "SELECT o FROM Order o"),
+        @NamedQuery(name = "Order.findByOrderStatus", query = "SELECT o FROM Order o WHERE o.status = :orderStatus"),
+        @NamedQuery(name = "Order.findOrdersByCustomer", query = "SELECT o FROM Order o WHERE o.address.user.id = :customerId")
 })
 public class Order extends Persistent implements Serializable {
 
@@ -34,11 +36,11 @@ public class Order extends Persistent implements Serializable {
     @Column(name = "status")
     private OrderStatus status;
 
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "address")
     private Address address;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "order")
     private List<OrderItem> orderItemList;
 
     @ManyToOne
@@ -69,8 +71,30 @@ public class Order extends Persistent implements Serializable {
         return orderItemList;
     }
 
-    public void setOrderItemList(List<OrderItem> orderItemList) {
-        this.orderItemList = orderItemList;
+    public void addOrderItem(OrderItem orderItem) {
+        this.orderItemList.add(orderItem);
+        orderItem.setOrder(this);
+    }
+
+    public void removeOrderItem(OrderItem orderItem) {
+        this.orderItemList.remove(orderItem);
+        orderItem.setOrder(null);
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public boolean isNew() {

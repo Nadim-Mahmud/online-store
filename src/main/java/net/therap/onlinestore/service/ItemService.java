@@ -1,12 +1,9 @@
 package net.therap.onlinestore.service;
 
-import net.therap.onlinestore.entity.Category;
 import net.therap.onlinestore.entity.Item;
-import net.therap.onlinestore.entity.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.Table;
 import java.util.List;
 
 /**
@@ -18,6 +15,17 @@ public class ItemService extends BaseService {
 
     public List<Item> findAll() {
         return entityManager.createNamedQuery("Item.findAll", Item.class).getResultList();
+    }
+
+    public List<Item> findByCategory(int categoryId) {
+        return entityManager.createNamedQuery("Item.findByCategoryId", Item.class)
+                .setParameter("categoryId", categoryId)
+                .getResultList();
+    }
+
+    public List<Item> findAvailableItems() {
+        return entityManager.createNamedQuery("Item.findAvailable", Item.class)
+                .getResultList();
     }
 
     public Item findById(int id) {
@@ -41,8 +49,8 @@ public class ItemService extends BaseService {
         return item;
     }
 
-    public boolean isExistingItem(Item item){
-        return !entityManager.createNamedQuery("User.getItemsByNameAndId", Item.class)
+    public boolean isExistingItem(Item item) {
+        return !entityManager.createNamedQuery("Item.findItemsByNameAndId", Item.class)
                 .setParameter("name", item.getName())
                 .setParameter("id", item.getId())
                 .getResultList()

@@ -1,6 +1,12 @@
+$(function (){
+    $("#item").change(function () {
+       // alert("hadf");
+    })
+})
+
 function findItemsByCategory() {
     let request = $.ajax({
-        url: "category/all",
+        url: "admin/item/1",
         type: "GET",
         dataType: "json"
     });

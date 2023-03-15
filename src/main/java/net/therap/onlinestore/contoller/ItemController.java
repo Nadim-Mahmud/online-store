@@ -23,6 +23,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.validation.Valid;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import static java.util.Objects.nonNull;
@@ -45,6 +46,8 @@ public class ItemController {
     private static final String ITEM_FORM_VIEW = "item-form";
     private static final String ITEM_ID_PARAM = "itemId";
     private static final String ITEM_DELETE_URL = "item/delete";
+    private static final String ITEM_BY_ID = "item/{categoryId}";
+    private static final String CATEGORY_ID = "categoryId";
 
     @Autowired
     private ItemService itemService;
@@ -124,6 +127,12 @@ public class ItemController {
         redirectAttributes.addFlashAttribute(SUCCESS, messageSource.getMessage("success.delete", null, Locale.getDefault()));
 
         return REDIRECT + ITEM_REDIRECT_URL;
+    }
+
+    @GetMapping(ITEM_BY_ID)
+    public String getItemById(@PathVariable(CATEGORY_ID) int categoryId){
+        System.out.println(categoryId);
+        return "home";
     }
 
     private void setupReferenceDataItemForm(ModelMap modelMap) {

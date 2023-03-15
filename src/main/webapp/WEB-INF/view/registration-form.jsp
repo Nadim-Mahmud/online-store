@@ -26,7 +26,7 @@
         <div class="card">
             <div class="card-body">
                 <h5 class="text-center mb-3">
-                    <fmt:message key="registration.form.page.title"/>
+                    <fmt:message key="registration.form.title"/>
                 </h5>
                 <form:form action="/registration/save" modelAttribute="customer" method="post">
                     <div class="mb-3">

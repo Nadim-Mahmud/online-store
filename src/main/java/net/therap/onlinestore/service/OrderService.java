@@ -1,7 +1,6 @@
 package net.therap.onlinestore.service;
 
-import net.therap.onlinestore.entity.Order;
-import net.therap.onlinestore.entity.Tag;
+import net.therap.onlinestore.entity.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,8 +17,38 @@ public class OrderService extends BaseService {
         return entityManager.createNamedQuery("Order.findAll", Order.class).getResultList();
     }
 
+    public List<Order> findOrdersByOrderStatus(OrderStatus orderStatus) {
+        return entityManager.createNamedQuery("Order.findByOrderStatus", Order.class)
+                .setParameter("orderStatus", orderStatus)
+                .getResultList();
+    }
+
+    public List<Order> findOrdersByCustomer(User customer) {
+        return entityManager.createNamedQuery("Order.findOrdersByCustomer", Order.class)
+                .setParameter("customerId", customer.getId())
+                .getResultList();
+    }
+
     public Order findById(int id) {
         return entityManager.find(Order.class, id);
+    }
+
+    public boolean isOrderOnProcess(int orderId) {
+        Order order = entityManager.find(Order.class, orderId);
+
+        return OrderStatus.PICKED.equals(order.getStatus()) || OrderStatus.DELIVERED.equals(order.getStatus());
+    }
+
+    @Transactional
+    public void cancel(int orderId) throws Exception {
+        Order order = entityManager.find(Order.class, orderId);
+        order.setAccessStatus(AccessStatus.DELETED);
+
+        for (OrderItem orderItem : order.getOrderItemList()){
+            orderItem.setAccessStatus(AccessStatus.DELETED);
+        }
+
+        saveOrUpdate(order);
     }
 
     @Transactional

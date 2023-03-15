@@ -27,25 +27,18 @@
                 <h5 class="text-center mb-3">
                     <fmt:message key="order.form.title"/>
                 </h5>
-                <div class="d-flex justify-content-end">
-                    <button class="btn btn-sm btn-success" onclick="findItemsByCategory()">
-                        <fmt:message key="button.add.item"/>
-                    </button>
+                <div class="text-center">
+                    <c:if test="${emptyList != null}">
+                        <p class="text-danger">
+                            <fmt:message key="input.empty.selection"/>
+                        </p>
+                    </c:if>
                 </div>
-                <form:form action="/customer/order/" modelAttribute="orderItem" method="post">
+                <form:form action="/customer/add-item" modelAttribute="orderItem" method="post">
                     <div class="d-flex justify-content-end">
                         <button type="submit" class="btn btn-sm btn-success">
                             <fmt:message key="button.add.item"/>
                         </button>
-                    </div>
-                    <div class="mb-3">
-                        <label for="item.category" class="form-label">
-                            <fmt:message key="label.select.category"/>
-                        </label>
-                        <form:select path="item.category" class="form-select">
-                            <form:options items="${categoryList}" itemLabel="name" itemValue="id"/>
-                        </form:select>
-                        <form:errors path="item.category" cssClass="text-danger"/>
                     </div>
                     <div class="mb-3">
                         <label for="item" class="form-label">
@@ -109,7 +102,7 @@
                                 </td>
                                 <td>
                                     <c:url var="removeUrl" value="/customer/items/remove">
-                                        <c:param name="orderLineItemId" value="${orderItem.item.id}"/>
+                                        <c:param name="orderItemId" value="${orderItem.item.id}"/>
                                     </c:url>
                                     <form:form class="text-center my-0 mx-2 p-0" action="${removeUrl}" method="post">
                                         <button class="btn btn-outline-danger center btn-sm">
@@ -122,13 +115,12 @@
                         </tbody>
                     </table>
                 </c:if>
-                <form:form class="m-0 p - 0 " action="/waiter/new-order/list/save" method="post">
-                    <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-sm btn-primary">
-                            <fmt:message key="button.place.order"/>
-                        </button>
-                    </div>
-                </form:form>
+
+                <div class="d-grid gap-2">
+                    <a class="m-0 p - 0 btn btn-sm btn-primary" href="/customer/order/address">
+                        <fmt:message key="button.next.page"/> &rightarrow;
+                    </a>
+                </div>
             </div>
         </div>
     </div>
