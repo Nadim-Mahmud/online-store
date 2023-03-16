@@ -1,8 +1,8 @@
 package net.therap.onlinestore.filter;
 
-import net.therap.estaurant.constant.Constants;
-import net.therap.estaurant.entity.User;
-import net.therap.estaurant.entity.UserType;
+import net.therap.onlinestore.constant.Constants;
+import net.therap.onlinestore.entity.User;
+import net.therap.onlinestore.entity.UserType;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -21,8 +21,9 @@ public class AuthenticationFilter implements Filter {
 
     private static final String HOME = "/";
     private static final String ADMIN = "/admin/";
-    private static final String CHEF = "/chef/";
-    private static final String WAITER = "/waiter/";
+    private static final String SHOPKEEPER = "/shopkeeper/";
+    private static final String CUSTOMER = "/customer/";
+    private static final String DELIVERY = "/delivery/";
 
 
     @Override
@@ -40,13 +41,14 @@ public class AuthenticationFilter implements Filter {
         if (UserType.ADMIN.equals(user.getType())) {
             httpServletResponse.sendRedirect(ADMIN);
         }
-
-        if (UserType.CHEF.equals(user.getType())) {
-            httpServletResponse.sendRedirect(CHEF);
+        else if (UserType.SHOPKEEPER.equals(user.getType())) {
+            httpServletResponse.sendRedirect(SHOPKEEPER);
         }
-
-        if (UserType.WAITER.equals(user.getType())) {
-            httpServletResponse.sendRedirect(WAITER);
+        else if (UserType.DELIVERYMAN.equals(user.getType())) {
+            httpServletResponse.sendRedirect(DELIVERY);
+        }
+        else if (UserType.CUSTOMER.equals(user.getType())) {
+            httpServletResponse.sendRedirect(CUSTOMER);
         }
     }
 }

@@ -24,8 +24,26 @@ public class OrderService extends BaseService {
     }
 
     public List<Order> findOrdersByCustomer(User customer) {
-        return entityManager.createNamedQuery("Order.findOrdersByCustomer", Order.class)
+        return entityManager.createNamedQuery("Order.findByCustomer", Order.class)
                 .setParameter("customerId", customer.getId())
+                .getResultList();
+    }
+
+    public List<Order> findActiveOrdersByCustomer(User customer) {
+        return entityManager.createNamedQuery("Order.findActiveByCustomer", Order.class)
+                .setParameter("customerId", customer.getId())
+                .getResultList();
+    }
+
+    public List<Order> findDeliveredOrdersByCustomer(User customer) {
+        return entityManager.createNamedQuery("Order.findDeliveredByCustomer", Order.class)
+                .setParameter("customerId", customer.getId())
+                .getResultList();
+    }
+
+    public List<Order> findOrdersByDeliveryMan(User deliveryMan) {
+        return entityManager.createNamedQuery("Order.findByDeliveryMan", Order.class)
+                .setParameter("deliveryManId", deliveryMan.getId())
                 .getResultList();
     }
 
@@ -42,16 +60,22 @@ public class OrderService extends BaseService {
     public boolean isOrderOnProcess(int orderId) {
         Order order = entityManager.find(Order.class, orderId);
 
-        return OrderStatus.PICKED.equals(order.getStatus()) || OrderStatus.DELIVERED.equals(order.getStatus());
+        return OrderStatus.PICKED.equals(order.getStatus());
     }
 
+    public boolean isUserInUse(User user) {
+        List<Order> orderList1 = findOrdersByDeliveryMan(user);
+        List<Order> orderList2 = findOrdersByCustomer(user);
+
+        return orderList1.size() > 0 || orderList2.size() > 0;
+    }
 
     @Transactional
     public void cancel(int orderId) throws Exception {
         Order order = entityManager.find(Order.class, orderId);
         order.setAccessStatus(AccessStatus.DELETED);
 
-        for (OrderItem orderItem : order.getOrderItemList()){
+        for (OrderItem orderItem : order.getOrderItemList()) {
             orderItem.setAccessStatus(AccessStatus.DELETED);
         }
 

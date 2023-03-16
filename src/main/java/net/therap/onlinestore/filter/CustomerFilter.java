@@ -17,7 +17,7 @@ import static net.therap.onlinestore.constant.Constants.ACTIVE_USER;
  * @author nadimmahmud
  * @since 1/8/23
  */
-@WebFilter("/shopkeeper/*")
+@WebFilter("/customer/*")
 public class CustomerFilter implements Filter {
 
     private static final String HOME = "/";
@@ -27,7 +27,7 @@ public class CustomerFilter implements Filter {
         HttpSession httpSession = ((HttpServletRequest) request).getSession();
         User user = (User) httpSession.getAttribute(ACTIVE_USER);
 
-        if (Objects.nonNull(user) && UserType.SHOPKEEPER.equals(user.getType())) {
+        if (Objects.nonNull(user) && UserType.CUSTOMER.equals(user.getType())) {
             request.setAttribute(ACTIVE_USER, user);
             chain.doFilter(request, response);
 

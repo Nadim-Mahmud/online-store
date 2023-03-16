@@ -21,6 +21,7 @@
 <div class="container">
     <c:set var="br" value="<br>" scope="page"/>
     <c:set var="ordered" value="ORDERED" scope="page"/>
+    <c:set var="delivered" value="DELIVERED" scope="page"/>
     <div class="container col-md-10 mt-2">
         <div class="card">
             <div class="text-center">
@@ -100,7 +101,18 @@
                                     </form:form>
                                 </div>
                             </c:if>
-                            <c:if test="${order.status != ordered}">
+                            <c:if test="${order.status == delivered}">
+                                <c:url var="cancelUrl" value="/customer/order/cancel">
+                                    <c:param name="orderId" value="${order.id}"/>
+                                </c:url>
+                                <form:form class="text-center my-0 mx-2 p-0" action="${cancelUrl}" method="post">
+                                    <button class="btn btn-outline-danger center btn-sm"
+                                            onclick="return confirm('Want to delete this order?')">
+                                        <fmt:message key="button.delete"/>
+                                    </button>
+                                </form:form>
+                            </c:if>
+                            <c:if test="${order.status != ordered && order.status != delivered}">
                                 <fmt:message key="label.empty"/>
                             </c:if>
                         </td>

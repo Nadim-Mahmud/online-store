@@ -39,8 +39,7 @@ public class ShopkeeperController {
     private OrderService orderService;
 
     @GetMapping(HOME_URL)
-    public String shopkeeperHome(HttpSession httpSession, ModelMap modelMap) {
-        httpSession.setAttribute(ACTIVE_USER, userService.findById(13));
+    public String shopkeeperHome(ModelMap modelMap) {
         modelMap.put(ITEM_LIST, itemService.findAll());
 
         return HOME_VIEW;

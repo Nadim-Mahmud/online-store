@@ -4,6 +4,7 @@ import net.therap.onlinestore.entity.User;
 import net.therap.onlinestore.entity.UserType;
 
 import javax.servlet.*;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -16,7 +17,7 @@ import static net.therap.onlinestore.constant.Constants.*;
  * @author nadimmahmud
  * @since 1/8/23
  */
-//@WebFilter("/admin/*")
+@WebFilter("/admin/*")
 public class AdminFilter implements Filter {
 
     private static final String HOME = "/";

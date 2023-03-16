@@ -15,6 +15,7 @@ Date: 12/7/22
     <c:set var="navUser" value="user" scope="page"/>
     <c:set var="navOrderForm" value="orderForm" scope="page"/>
     <c:set var="navOrderList" value="orderList" scope="page"/>
+    <c:set var="navOrderHistory" value="orderHistory" scope="page"/>
     <c:set var="navItemList" value="item" scope="page"/>
     <c:set var="navCategory" value="category" scope="page"/>
     <c:set var="navTag" value="tag" scope="page"/>
@@ -86,6 +87,12 @@ Date: 12/7/22
                         <a class="nav-link active underline-hover" aria-current="page"
                            href="/customer/order-list">
                                 ${navItem ==  navOrderList? '<b>Orders</b>' : 'Orders'}
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link active underline-hover" aria-current="page"
+                           href="/customer/order-history">
+                                ${navItem ==  navOrderHistory? '<b>Orders history</b>' : 'Orders history'}
                         </a>
                     </li>
                 </c:if>

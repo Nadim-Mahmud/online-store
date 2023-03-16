@@ -43,13 +43,11 @@ public class OrderController {
     private static final String ORDER_ITEM_ID = "orderItemId";
     private static final String NEXT_PAGE = "order/address";
     private static final String ADDRESS_VIEW = "address-form";
+    private static final String ORDER_DELETE = "order/delete";
 
     private static final String REDIRECT_ORDER_LIST_URL = "customer/order-list";
-    private static final String ORDER_LIST_URL = "order-list";
-    private static final String ORDER_LIST_VIEW = "order-list";
     private static final String ORDER_CANCEL_URL = "order/cancel";
     private static final String ORDER_READY = "order/ready";
-
     private static final String ACCEPT_READY_ORDER = "ready-order/accept";
     private static final String REDIRECT_READY_ORDER_URL = "delivery/ready-order";
     private static final String DELIVER_ACCEPTED_ORDER = "delivered";
@@ -163,14 +161,6 @@ public class OrderController {
         return REDIRECT + REDIRECT_ORDER_LIST_URL;
     }
 
-    @GetMapping(ORDER_LIST_URL)
-    public String showOrderList(@SessionAttribute(ACTIVE_USER) User user,
-                                ModelMap modelMap) {
-        modelMap.put(ORDER_LIST, orderService.findOrdersByCustomer(user));
-
-        return ORDER_LIST_VIEW;
-    }
-
     @PostMapping(ORDER_READY)
     public String markOrderReady(@SessionAttribute(ACTIVE_USER) User user,
                                  @RequestParam(ORDER_ID_PARAM) int orderId) throws Exception {
@@ -211,8 +201,7 @@ public class OrderController {
                               @RequestParam(ORDER_ID_PARAM) int orderId,
                               RedirectAttributes redirectAttributes) throws Exception {
         Order order = orderService.findById(orderId);
-
-        AccessCheck.check(user, AccessType.UPDATE, order);
+        AccessCheck.check(user, AccessType.DELETE, order);
 
         if (orderService.isOrderOnProcess(orderId)) {
             redirectAttributes.addFlashAttribute(FAILED, messageSource.getMessage("fail.cancel.inUse", null, Locale.getDefault()));

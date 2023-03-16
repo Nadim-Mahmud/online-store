@@ -29,8 +29,7 @@ public class AdminController {
     private ItemService itemService;
 
     @GetMapping(HOME_URL)
-    String showHome(HttpSession httpSession, ModelMap modelMap) {
-        httpSession.setAttribute(ACTIVE_USER, userService.findById(10));
+    String showHome(ModelMap modelMap) {
         modelMap.put(ITEM_LIST, itemService.findAll());
 
         return HOME_VIEW;

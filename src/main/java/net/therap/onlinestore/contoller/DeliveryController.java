@@ -39,8 +39,7 @@ public class DeliveryController {
     private OrderService orderService;
 
     @GetMapping(HOME_URL)
-    public String deliveryHome(HttpSession httpSession, ModelMap modelMap) {
-        httpSession.setAttribute(ACTIVE_USER, userService.findById(17));
+    public String deliveryHome(ModelMap modelMap) {
         modelMap.put(ITEM_LIST, itemService.findAll());
 
         return HOME_VIEW;
@@ -50,6 +49,7 @@ public class DeliveryController {
     public String showReadyOrdersList(ModelMap modelMap) {
         modelMap.put(ORDER_LIST, orderService.findOrdersByOrderStatus(OrderStatus.READY));
         modelMap.put(NAV_ITEM, READY_ORDER);
+        modelMap.put(BUTTON, READY_ORDER);
 
         return DELIVERY_ORDER_VIEW;
     }
@@ -58,6 +58,7 @@ public class DeliveryController {
     public String showDeliveryOrderList(@SessionAttribute(ACTIVE_USER) User user, ModelMap modelMap) {
         modelMap.put(ORDER_LIST, orderService.findOrdersNotDeliveredByDeliveryMan(user));
         modelMap.put(NAV_ITEM, DELIVERY_LIST);
+        modelMap.put(BUTTON, DELIVERY_LIST);
 
         return DELIVERY_ORDER_VIEW;
     }

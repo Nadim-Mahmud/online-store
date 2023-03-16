@@ -4,11 +4,11 @@ import net.therap.onlinestore.entity.User;
 import net.therap.onlinestore.entity.UserType;
 import net.therap.onlinestore.exception.IllegalAccessException;
 import net.therap.onlinestore.helper.UserTypeHelper;
+import net.therap.onlinestore.service.OrderService;
 import net.therap.onlinestore.service.UserService;
 import net.therap.onlinestore.util.Encryption;
 import net.therap.onlinestore.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
@@ -22,8 +22,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.validation.Valid;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -56,6 +54,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private OrderService orderService;
 
     @Autowired
     private UserValidator userValidator;
@@ -126,6 +127,22 @@ public class UserController {
 
         return REDIRECT + (UserType.SHOPKEEPER.equals(user.getType()) ? SHOPKEEPER_REDIRECT_URL :
                 ((UserType.DELIVERYMAN.equals(user.getType())) ? DELIVERYMAN_REDIRECT_URL : CUSTOMER_REDIRECT_URL));
+    }
+
+    @PostMapping(USER_DELETE_URL)
+    public String deleteUser(@RequestParam(USER_ID_PARAM) int userId, RedirectAttributes redirectAttributes) throws Exception {
+        User user = userService.findById(userId);
+
+        if (orderService.isUserInUse(user)) {
+            redirectAttributes.addFlashAttribute(FAILED, messageSource.getMessage("fail.delete.inUse", null, Locale.getDefault()));
+        } else {
+            userService.delete(userId);
+            redirectAttributes.addFlashAttribute(SUCCESS, messageSource.getMessage("success.delete", null, Locale.getDefault()));
+        }
+
+        return REDIRECT + (UserType.SHOPKEEPER.equals(user.getType()) ? SHOPKEEPER_REDIRECT_URL :
+                ((UserType.DELIVERYMAN.equals(user.getType())) ? DELIVERYMAN_REDIRECT_URL : CUSTOMER_REDIRECT_URL));
+
     }
 
     private void setupReferenceDataUserForm(ModelMap modelMap, User user) throws NoSuchAlgorithmException, InvalidKeySpecException {

@@ -12,29 +12,29 @@ public class AccessCheck {
 
         if (UserType.DELIVERYMAN.equals(user.getType())) {
 
-            if (!AccessType.UPDATE.equals(access) || !(entity instanceof Order)) {
+            if (!AccessType.UPDATE.equals(access) || !(entity instanceof Order) || AccessType.DELETE.equals(access)) {
                 throw new IllegalAccessException();
             }
 
             Order order = (Order) entity;
 
-            if (!OrderStatus.PICKED.equals(order.getStatus()) || !OrderStatus.DELIVERED.equals(order.getStatus())) {
+            if (!OrderStatus.PICKED.equals(order.getStatus()) && !OrderStatus.DELIVERED.equals(order.getStatus())) {
                 throw new IllegalAccessException();
             }
 
-            if(order.getAddress().getUser().equals(user)){
-
-            }
         } else if (UserType.SHOPKEEPER.equals(user.getType())) {
 
-            if (!AccessType.UPDATE.equals(access) || !(entity instanceof Order)) {
+            if (!(entity instanceof Order)) {
                 throw new IllegalAccessException();
             }
 
             Order order = (Order) entity;
 
-            if (!OrderStatus.READY.equals(order.getStatus())) {
-                throw new IllegalAccessException();
+            if (AccessType.UPDATE.equals(access)) {
+
+                if (!OrderStatus.READY.equals(order.getStatus())) {
+                    throw new IllegalAccessException();
+                }
             }
         }
     }

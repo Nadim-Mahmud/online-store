@@ -47,6 +47,7 @@ public interface Constants {
     String FAILED = "failed";
     String NOTIFICATION = "notification";
     String EMPTY_LIST = "emptyList";
+    String BUTTON = "button";
     String HOME_URL = "/";
     String ADMIN_BASE_URL = "admin/*";
     String CUSTOMER_BASE_URL = "customer/*";

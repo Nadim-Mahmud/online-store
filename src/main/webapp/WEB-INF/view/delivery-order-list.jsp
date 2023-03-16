@@ -80,15 +80,28 @@
                         </td>
                         <td>
                             <div class="d-flex justify-content-center my-1">
-                                <c:url var="delivered" value="/delivery/delivered">
-                                    <c:param name="orderId" value="${order.id}"/>
-                                </c:url>
-                                <form:form class="text-center my-0 mx-2 p-0" action="${delivered}" method="post">
-                                    <button class="btn btn-outline-danger center btn-sm"
-                                            onclick="return confirm('Mark this order delivered?')">
-                                        <fmt:message key="button.delivered"/>
-                                    </button>
-                                </form:form>
+                                <c:if test="${button == navReadyOrder}">
+                                    <c:url var="accept" value="/delivery/ready-order/accept">
+                                        <c:param name="orderId" value="${order.id}"/>
+                                    </c:url>
+                                    <form:form class="text-center my-0 mx-2 p-0" action="${accept}" method="post">
+                                        <button class="btn btn-outline-danger center btn-sm"
+                                                onclick="return confirm('Pick this order?')">
+                                            <fmt:message key="button.pick"/>
+                                        </button>
+                                    </form:form>
+                                </c:if>
+                                <c:if test="${button == navDeliveryList}">
+                                    <c:url var="delivered" value="/delivery/delivered">
+                                        <c:param name="orderId" value="${order.id}"/>
+                                    </c:url>
+                                    <form:form class="text-center my-0 mx-2 p-0" action="${delivered}" method="post">
+                                        <button class="btn btn-outline-danger center btn-sm"
+                                                onclick="return confirm('Mark this order delivered?')">
+                                            <fmt:message key="button.delivered"/>
+                                        </button>
+                                    </form:form>
+                                </c:if>
                             </div>
                         </td>
                     </tr>
