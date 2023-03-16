@@ -22,7 +22,7 @@
 <body>
 <c:set var="available" value="AVAILABLE" scope="page"/>
 <c:set var="color" value="" scope="page"/>
-<jsp:include page="nvabar.jsp"/>
+<jsp:include page="navbar.jsp"/>
 <div class="container">
     <div class="row mt-3">
         <c:forEach items="${itemList}" var="item">

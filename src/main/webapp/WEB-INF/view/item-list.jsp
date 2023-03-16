@@ -21,7 +21,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/style.css">
 </head>
 <body>
-<jsp:include page="nvabar.jsp"/>
+<jsp:include page="navbar.jsp"/>
 <div class="container">
     <div class="d-flex justify-content-end mt-3 mb-1">
         <form:form class="m-0" action="${pageContext.request.contextPath}/admin/item/form" method="get">

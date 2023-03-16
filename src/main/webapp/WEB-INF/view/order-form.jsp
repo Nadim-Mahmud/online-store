@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/style.css">
 </head>
 <body>
-<%@ include file="nvabar.jsp" %>
+<%@ include file="navbar.jsp" %>
 <div class="container">
     <div class="container col-md-5 mt-2">
         <div class="card">
@@ -34,11 +34,25 @@
                         </p>
                     </c:if>
                 </div>
+                <div class="d-flex justify-content-end">
+                    <button class="btn btn-sm btn-success" onclick="findItemsByCategory()">
+                        <fmt:message key="button.add.item"/>
+                    </button>
+                </div>
                 <form:form action="/customer/add-item" modelAttribute="orderItem" method="post">
                     <div class="d-flex justify-content-end">
                         <button type="submit" class="btn btn-sm btn-success">
                             <fmt:message key="button.add.item"/>
                         </button>
+                    </div>
+                    <div class="mb-3">
+                        <label for="item.category" class="form-label">
+                            <fmt:message key="label.select.category"/>
+                        </label>
+                        <form:select path="item.category" class="form-select">
+                            <form:options items="${categoryList}" itemLabel="name" itemValue="id"/>
+                        </form:select>
+                        <form:errors path="item.category" cssClass="text-danger"/>
                     </div>
                     <div class="mb-3">
                         <label for="item" class="form-label">

@@ -24,7 +24,7 @@
 <c:set var="shopkeeper" value="shopkeeper" scope="page"/>
 <c:set var="deliveryMan" value="deliveryMan" scope="page"/>
 <c:set var="customer" value="customer" scope="page"/>
-<jsp:include page="nvabar.jsp"/>
+<jsp:include page="navbar.jsp"/>
 <div class="container">
     <div class="d-flex justify-content-end mt-3 mb-1">
         <form:form class="m-0" action="${pageContext.request.contextPath}/admin/user/form" method="get">

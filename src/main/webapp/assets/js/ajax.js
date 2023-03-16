@@ -1,18 +1,18 @@
 $(function (){
-    $("#item").change(function () {
-       // alert("hadf");
+    $("#item.category").change(function () {
+       alert("hadf");
     })
 })
 
 function findItemsByCategory() {
     let request = $.ajax({
-        url: "admin/item/1",
+        url: "/admin/item/1",
         type: "GET",
-        dataType: "json"
+        dataType: "html"
     });
 
     request.done(function (msg) {
-        $("$itemList").json(msg);
+       console.log(msg);
     })
 
     request.fail(function (jqXHR, textStatus) {

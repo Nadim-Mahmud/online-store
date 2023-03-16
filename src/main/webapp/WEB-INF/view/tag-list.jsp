@@ -22,7 +22,7 @@
 </head>
 <body>
 
-<jsp:include page="nvabar.jsp"/>
+<jsp:include page="navbar.jsp"/>
 <div class="container">
     <div class="d-flex justify-content-end mt-3 mb-1">
         <form:form class="m-0" action="${pageContext.request.contextPath}/admin/tag/form" method="get">

@@ -9,7 +9,6 @@ import net.therap.onlinestore.service.ItemService;
 import net.therap.onlinestore.service.TagService;
 import net.therap.onlinestore.validator.ItemValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
@@ -21,9 +20,6 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 import static java.util.Objects.nonNull;
@@ -46,7 +42,7 @@ public class ItemController {
     private static final String ITEM_FORM_VIEW = "item-form";
     private static final String ITEM_ID_PARAM = "itemId";
     private static final String ITEM_DELETE_URL = "item/delete";
-    private static final String ITEM_BY_ID = "item/{categoryId}";
+    private static final String ITEM_CATEGORY_ID = "item/{categoryId}";
     private static final String CATEGORY_ID = "categoryId";
 
     @Autowired
@@ -129,10 +125,11 @@ public class ItemController {
         return REDIRECT + ITEM_REDIRECT_URL;
     }
 
-    @GetMapping(ITEM_BY_ID)
-    public String getItemById(@PathVariable(CATEGORY_ID) int categoryId){
+    @GetMapping(ITEM_CATEGORY_ID)
+    public String getItemById(@PathVariable(CATEGORY_ID) String categoryId){
         System.out.println(categoryId);
-        return "home";
+        System.out.println("here...");
+        return "nav-bar";
     }
 
     private void setupReferenceDataItemForm(ModelMap modelMap) {

@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/style.css">
 </head>
 <body>
-<%@ include file="nvabar.jsp" %>
+<%@ include file="navbar.jsp" %>
 <div class="container">
     <c:set var="br" value="<br>" scope="page"/>
     <c:set var="ordered" value="ORDERED" scope="page"/>
