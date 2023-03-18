@@ -1,5 +1,6 @@
 package net.therap.onlinestore.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.ResultCheckStyle;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
@@ -135,20 +136,8 @@ public class Item extends Persistent implements Serializable {
         this.tagList = tagList;
     }
 
+    @JsonIgnore
     public boolean isNew() {
         return id == 0;
-    }
-
-    @Override
-    public String toString() {
-        return "Item{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", price=" + price +
-                ", availability=" + availability +
-                ", category=" + category +
-                ", description='" + description + '\'' +
-                ", tagList=" + tagList +
-                '}';
     }
 }

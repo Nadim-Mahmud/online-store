@@ -1,5 +1,6 @@
 package net.therap.onlinestore.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -15,18 +16,22 @@ public class Persistent {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "access_status")
+    @JsonIgnore
     private AccessStatus accessStatus;
 
     @Version
     @Column(name = "version", nullable = false)
+    @JsonIgnore
     protected int version;
 
     @CreationTimestamp
     @Column(name = "created_at")
+    @JsonIgnore
     protected Date createdAt;
 
     @UpdateTimestamp
     @Column(name = "updated_at")
+    @JsonIgnore
     protected Date updatedAt;
 
     public Persistent() {

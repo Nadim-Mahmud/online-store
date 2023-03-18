@@ -97,16 +97,16 @@ public class OrderController {
                                @Valid @ModelAttribute(ORDER_ITEM) OrderItem orderItem,
                                BindingResult bindingResult,
                                ModelMap modelMap) {
-
-        modelMap.put(ITEM_LIST, itemService.findAvailableItems());
-        modelMap.put(ORDER_ITEM_LIST, order.getOrderItemList());
-        modelMap.put(NAV_ITEM, ORDER_FORM);
-
         OrderItemValidator.validate(order.getOrderItemList(), orderItem, bindingResult);
 
         if (!bindingResult.hasErrors()) {
             order.addOrderItem(orderItem);
         }
+
+        modelMap.put(ITEM_LIST, itemService.findAvailableItems());
+        modelMap.put(ORDER_ITEM_LIST, order.getOrderItemList());
+        modelMap.put(NAV_ITEM, ORDER_FORM);
+        modelMap.put(CATEGORY_LIST, categoryService.findAll());
 
         return ORDER_FORM_VIEW;
     }

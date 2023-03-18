@@ -1,5 +1,6 @@
 package net.therap.onlinestore.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.ResultCheckStyle;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
@@ -40,6 +41,7 @@ public class Category extends Persistent implements Serializable {
     private String name;
 
     @OneToMany(mappedBy = "category")
+    @JsonIgnore
     private List<Item> itemList;
 
     public Category() {
@@ -70,6 +72,7 @@ public class Category extends Persistent implements Serializable {
         this.itemList = itemList;
     }
 
+    @JsonIgnore
     public boolean isNew() {
         return id == 0;
     }

@@ -1,18 +1,28 @@
-$(function (){
-    $("#item.category").change(function () {
-       alert("hadf");
+/**
+ * @author nadimmahmud
+ * @since 3/16/23
+ */
+$(function () {
+    $("#category").change(function () {
+        const value = $("#category option:selected").val();
+        findItemsByCategory(value);
     })
 })
 
-function findItemsByCategory() {
+function findItemsByCategory(value) {
     let request = $.ajax({
-        url: "/admin/item/1",
+        url: "/customer/item/" + value,
         type: "GET",
-        dataType: "html"
+        dataType: "json"
     });
 
-    request.done(function (msg) {
-       console.log(msg);
+    request.done(function (data) {
+        $("#item").empty();
+
+        $.each(data, function (key, item) {
+            const option = "<option value='" + item.id + "'>" + item.name + "</option>";
+            $("#item").append(option);
+        })
     })
 
     request.fail(function (jqXHR, textStatus) {

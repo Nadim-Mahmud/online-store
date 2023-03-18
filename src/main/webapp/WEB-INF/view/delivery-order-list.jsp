@@ -53,6 +53,9 @@
                         <fmt:message key="label.address"/>
                     </th>
                     <th scope="col">
+                        <fmt:message key="label.address.note"/>
+                    </th>
+                    <th scope="col">
                         <fmt:message key="label.status"/>
                     </th>
                     <th scope="col">
@@ -74,6 +77,9 @@
                         </td>
                         <td>
                             <c:out value="${order.address.address}"/>
+                        </td>
+                        <td>
+                            <c:out value="${order.address.note}"/>
                         </td>
                         <td class="${order.status == ordered ? 'bg-danger' : 'bg-success'}  p-2 text-dark bg-opacity-10">
                             <c:out value="${order.status.label}"/>
