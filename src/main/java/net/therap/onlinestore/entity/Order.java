@@ -44,7 +44,10 @@ public class Order extends Persistent implements Serializable {
     @JoinColumn(name = "address")
     private Address address;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "order")
+    @Transient
+    private double price;
+
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "order", orphanRemoval = true)
     private List<OrderItem> orderItemList;
 
     @ManyToOne
@@ -99,6 +102,14 @@ public class Order extends Persistent implements Serializable {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 
     public boolean isNew() {

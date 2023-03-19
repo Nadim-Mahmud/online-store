@@ -23,6 +23,12 @@ public class CategoryService extends BaseService {
         return entityManager.find(Category.class, id);
     }
 
+    public boolean isCategoryNotInUse(int id){
+        Category category = entityManager.find(Category.class, id);
+
+        return category.getItemList().isEmpty();
+    }
+
     @Transactional
     public void delete(int id) throws Exception {
         entityManager.remove(entityManager.find(Category.class, id));

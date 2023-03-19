@@ -18,7 +18,6 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.ServletRequest;
 import javax.validation.Valid;
 import java.util.Locale;
 
@@ -60,14 +59,13 @@ public class ProfileController {
         webDataBinder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
     }
 
-
     @InitBinder(PASSWORD)
     public void passwordBinder(WebDataBinder webDataBinder) {
         webDataBinder.addValidators(new PasswordValidator());
     }
 
     @InitBinder(USER)
-    public void profileBinder(WebDataBinder webDataBinder, ServletRequest servletRequest) {
+    public void profileBinder(WebDataBinder webDataBinder) {
         webDataBinder.setDisallowedFields("password", "confirmPassword", "type");
         webDataBinder.addValidators(userValidator);
     }

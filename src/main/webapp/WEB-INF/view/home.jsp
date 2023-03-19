@@ -24,6 +24,31 @@
 <c:set var="color" value="" scope="page"/>
 <jsp:include page="navbar.jsp"/>
 <div class="container">
+    <div class="col-md-4 mt-3">
+        <form action="" method="get">
+            <div class="input-group">
+                <select name="categoryId" id="categoryId" class="form-control">
+                    <option value="" ${categoryId == null ? 'selected' : ''}>-- Select Category --</option>
+                    <c:forEach items="${categoryList}" var="category">
+                        <option value="${category.id}" ${categoryId == category.id ? 'selected' : ''}>
+                            <c:out value="${category.name}"/>
+                        </option>
+                    </c:forEach>
+                </select>
+                <select name="tagId" id="tagId" class="form-control">
+                    <option value="" ${tagId == null ? 'selected' : ''}>-- Select Tag --</option>
+                    <c:forEach items="${tagList}" var="tag">
+                        <option value="${tag.id}" ${tagId == tag.id ? 'selected' : ''}>
+                            <c:out value="${tag.name}"/>
+                        </option>
+                    </c:forEach>
+                </select>
+                <div class="input-group-addon input-group-button">
+                    <button type="submit" class="btn btn-primary">Filter</button>
+                </div>
+            </div>
+        </form>
+    </div>
     <div class="row mt-3">
         <c:forEach items="${itemList}" var="item">
             <div class="col-md-3 p-1">

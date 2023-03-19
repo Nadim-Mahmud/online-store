@@ -20,10 +20,12 @@ public interface Constants {
     String CUSTOMER = "customer";
     String CATEGORY = "category";
     String CATEGORY_LIST = "categoryList";
+    String CATEGORY_ID = "categoryId";
     String ITEM = "item";
     String ITEM_LIST = "itemList";
     String TAG = "tag";
     String TAG_LIST = "tagList";
+    String TAG_ID = "tagId";
     String READY_ORDER = "readyOrder";
     String DELIVERY_LIST = "deliveryList";
     String ORDER = "order";

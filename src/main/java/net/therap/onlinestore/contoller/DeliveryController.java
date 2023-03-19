@@ -2,17 +2,22 @@ package net.therap.onlinestore.contoller;
 
 import net.therap.onlinestore.entity.OrderStatus;
 import net.therap.onlinestore.entity.User;
+import net.therap.onlinestore.service.CategoryService;
 import net.therap.onlinestore.service.ItemService;
 import net.therap.onlinestore.service.OrderService;
-import net.therap.onlinestore.service.UserService;
+import net.therap.onlinestore.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
-import javax.servlet.http.HttpSession;
+import javax.persistence.Table;
 
 import static net.therap.onlinestore.constant.Constants.*;
+import static net.therap.onlinestore.constant.Constants.HOME_URL;
 
 /**
  * @author nadimmahmud
@@ -24,7 +29,6 @@ public class DeliveryController {
 
     private static final String HOME_URL = "/";
     private static final String HOME_VIEW = "home";
-    private static final String REDIRECT_READY_ORDER_URL = "delivery/ready-order";
     private static final String READY_ORDER_URL = "ready-order";
     private static final String DELIVERY_ORDER_VIEW = "delivery-order-list";
     private static final String DELIVERY_ORDER_URL = "delivery-list";
@@ -33,14 +37,21 @@ public class DeliveryController {
     private ItemService itemService;
 
     @Autowired
-    private UserService userService;
-
-    @Autowired
     private OrderService orderService;
 
+    @Autowired
+    private CategoryService categoryService;
+
+    @Autowired
+    private TagService tagService;
+
     @GetMapping(HOME_URL)
-    public String deliveryHome(ModelMap modelMap) {
-        modelMap.put(ITEM_LIST, itemService.findAll());
+    public String showHome(@RequestParam(value = CATEGORY_ID, required = false) String categoryId, @RequestParam(value = TAG_ID, required = false) String tagId, ModelMap modelMap) {
+        modelMap.put(CATEGORY_LIST, categoryService.findAll());
+        modelMap.put(TAG_LIST, tagService.findAll());
+        modelMap.put(ITEM_LIST, itemService.filter(categoryId, tagId));
+        modelMap.put(CATEGORY_ID, categoryId);
+        modelMap.put(TAG_ID, tagId);
 
         return HOME_VIEW;
     }

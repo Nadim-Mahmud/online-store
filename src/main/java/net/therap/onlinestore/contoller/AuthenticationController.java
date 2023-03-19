@@ -2,7 +2,11 @@ package net.therap.onlinestore.contoller;
 
 
 import net.therap.onlinestore.command.Credentials;
+import net.therap.onlinestore.entity.Category;
+import net.therap.onlinestore.entity.Item;
+import net.therap.onlinestore.service.CategoryService;
 import net.therap.onlinestore.service.ItemService;
+import net.therap.onlinestore.service.TagService;
 import net.therap.onlinestore.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
@@ -10,13 +14,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import javax.ws.rs.core.Link;
+
+import java.util.List;
+import java.util.Objects;
 
 import static net.therap.onlinestore.constant.Constants.*;
 
@@ -27,18 +32,11 @@ import static net.therap.onlinestore.constant.Constants.*;
 @Controller
 public class AuthenticationController {
 
-    private static final String HOME = "/";
     private static final String HOME_VIEW = "home";
-
     private static final String LOGIN = "login";
     private static final String LOGIN_URL = "login-page";
     private static final String LOGIN_VIEW = "login-page";
     private static final String LOGOUT_URL = "logout";
-
-    @InitBinder
-    public void initBinder(WebDataBinder webDataBinder) {
-        webDataBinder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
-    }
 
     @Autowired
     private UserService userService;
@@ -46,9 +44,24 @@ public class AuthenticationController {
     @Autowired
     private ItemService itemService;
 
-    @GetMapping(HOME)
-    public String guestHome(ModelMap modelMap) {
-        modelMap.put(ITEM_LIST, itemService.findAll());
+    @Autowired
+    private CategoryService categoryService;
+
+    @Autowired
+    private TagService tagService;
+
+    @InitBinder
+    public void initBinder(WebDataBinder webDataBinder) {
+        webDataBinder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
+    }
+
+    @GetMapping(HOME_URL)
+    public String showHome(@RequestParam(value = CATEGORY_ID, required = false) String categoryId, @RequestParam(value = TAG_ID, required = false) String tagId, ModelMap modelMap) {
+        modelMap.put(CATEGORY_LIST, categoryService.findAll());
+        modelMap.put(TAG_LIST, tagService.findAll());
+        modelMap.put(ITEM_LIST, itemService.filter(categoryId, tagId));
+        modelMap.put(CATEGORY_ID, categoryId);
+        modelMap.put(TAG_ID, tagId);
 
         return HOME_VIEW;
     }

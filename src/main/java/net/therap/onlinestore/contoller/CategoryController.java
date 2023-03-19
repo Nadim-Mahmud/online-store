@@ -4,7 +4,6 @@ import net.therap.onlinestore.entity.Category;
 import net.therap.onlinestore.service.CategoryService;
 import net.therap.onlinestore.validator.CategoryValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
@@ -16,8 +15,6 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Locale;
 
 import static java.util.Objects.nonNull;
@@ -68,7 +65,6 @@ public class CategoryController {
     public String showCategoryForm(@RequestParam(value = CATEGORY_ID_PARAM, required = false) String categoryId,
                                    ModelMap modelMap) {
         Category category = nonNull(categoryId) ? categoryService.findById(Integer.parseInt(categoryId)) : new Category();
-
         modelMap.put(CATEGORY, category);
         modelMap.put(NAV_ITEM, CATEGORY);
 
@@ -101,8 +97,13 @@ public class CategoryController {
     @PostMapping(CATEGORY_DELETE_URL)
     public String deleteCategory(@RequestParam(CATEGORY_ID_PARAM) int categoryId,
                                  RedirectAttributes redirectAttributes) throws Exception {
-        categoryService.delete(categoryId);
-        redirectAttributes.addFlashAttribute(SUCCESS, messageSource.getMessage("success.delete", null, Locale.getDefault()));
+
+        if (categoryService.isCategoryNotInUse(categoryId)) {
+            categoryService.delete(categoryId);
+            redirectAttributes.addFlashAttribute(SUCCESS, messageSource.getMessage("success.delete", null, Locale.getDefault()));
+        } else {
+            redirectAttributes.addFlashAttribute(FAILED, messageSource.getMessage("fail.delete.inUse", null, Locale.getDefault()));
+        }
 
         return REDIRECT + CATEGORY_REDIRECT_URL;
     }

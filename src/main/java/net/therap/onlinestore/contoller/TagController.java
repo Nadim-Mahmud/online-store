@@ -4,7 +4,6 @@ import net.therap.onlinestore.entity.Tag;
 import net.therap.onlinestore.service.TagService;
 import net.therap.onlinestore.validator.TagValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
@@ -16,8 +15,6 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Locale;
 
 import static java.util.Objects.nonNull;
@@ -63,12 +60,11 @@ public class TagController {
 
         return TAG_VIEW;
     }
-    
+
     @GetMapping(TAG_FORM_URL)
     public String showTagForm(@RequestParam(value = TAG_ID_PARAM, required = false) String tagId,
-                                   ModelMap modelMap) {
+                              ModelMap modelMap) {
         Tag tag = nonNull(tagId) ? tagService.findById(Integer.parseInt(tagId)) : new Tag();
-
         modelMap.put(TAG, tag);
         modelMap.put(NAV_ITEM, TAG);
 
@@ -100,7 +96,7 @@ public class TagController {
 
     @PostMapping(TAG_DELETE_URL)
     public String deleteTag(@RequestParam(TAG_ID_PARAM) int tagId,
-                                 RedirectAttributes redirectAttributes) throws Exception {
+                            RedirectAttributes redirectAttributes) throws Exception {
         tagService.delete(tagId);
         redirectAttributes.addFlashAttribute(SUCCESS, messageSource.getMessage("success.delete", null, Locale.getDefault()));
 

@@ -1,6 +1,7 @@
 package net.therap.onlinestore.service;
 
 import net.therap.onlinestore.entity.*;
+import net.therap.onlinestore.helper.OrderHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,44 +14,62 @@ import java.util.List;
 @Service
 public class OrderService extends BaseService {
 
+    private final OrderHelper orderHelper;
+
+    public OrderService() {
+        orderHelper = new OrderHelper();
+    }
+
     public List<Order> findAll() {
         return entityManager.createNamedQuery("Order.findAll", Order.class).getResultList();
     }
 
     public List<Order> findOrdersByOrderStatus(OrderStatus orderStatus) {
-        return entityManager.createNamedQuery("Order.findByOrderStatus", Order.class)
+        List<Order> orderList = entityManager.createNamedQuery("Order.findByOrderStatus", Order.class)
                 .setParameter("orderStatus", orderStatus)
                 .getResultList();
+
+        return orderHelper.calculatePriceOfOrderList(orderList);
     }
 
     public List<Order> findOrdersByCustomer(User customer) {
-        return entityManager.createNamedQuery("Order.findByCustomer", Order.class)
+        List<Order> orderList = entityManager.createNamedQuery("Order.findByCustomer", Order.class)
                 .setParameter("customerId", customer.getId())
                 .getResultList();
+
+        return orderHelper.calculatePriceOfOrderList(orderList);
     }
 
     public List<Order> findActiveOrdersByCustomer(User customer) {
-        return entityManager.createNamedQuery("Order.findActiveByCustomer", Order.class)
+        List<Order> orderList = entityManager.createNamedQuery("Order.findActiveByCustomer", Order.class)
                 .setParameter("customerId", customer.getId())
                 .getResultList();
+
+        return orderHelper.calculatePriceOfOrderList(orderList);
     }
 
     public List<Order> findDeliveredOrdersByCustomer(User customer) {
-        return entityManager.createNamedQuery("Order.findDeliveredByCustomer", Order.class)
+        List<Order> orderList = entityManager.createNamedQuery("Order.findDeliveredByCustomer", Order.class)
                 .setParameter("customerId", customer.getId())
                 .getResultList();
+
+        return orderHelper.calculatePriceOfOrderList(orderList);
     }
 
     public List<Order> findOrdersByDeliveryMan(User deliveryMan) {
-        return entityManager.createNamedQuery("Order.findByDeliveryMan", Order.class)
+        List<Order> orderList = entityManager.createNamedQuery("Order.findByDeliveryMan", Order.class)
                 .setParameter("deliveryManId", deliveryMan.getId())
                 .getResultList();
+
+        return orderHelper.calculatePriceOfOrderList(orderList);
     }
 
     public List<Order> findOrdersNotDeliveredByDeliveryMan(User deliveryMan) {
-        return entityManager.createNamedQuery("Order.findOrdersNotDeliveredByDeliveryMan", Order.class)
+        List<Order> orderList = entityManager.createNamedQuery("Order.findOrdersNotDeliveredByDeliveryMan", Order.class)
                 .setParameter("deliveryManId", deliveryMan.getId())
                 .getResultList();
+
+        return orderHelper.calculatePriceOfOrderList(orderList);
     }
 
     public Order findById(int id) {

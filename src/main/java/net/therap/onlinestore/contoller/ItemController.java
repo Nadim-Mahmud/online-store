@@ -11,8 +11,6 @@ import net.therap.onlinestore.validator.ItemValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.context.MessageSource;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -22,7 +20,6 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -90,7 +87,6 @@ public class ItemController {
     public String showItemForm(@RequestParam(value = ITEM_ID_PARAM, required = false) String itemId,
                                ModelMap modelMap) {
         Item item = nonNull(itemId) ? itemService.findById(Integer.parseInt(itemId)) : new Item();
-
         modelMap.put(ITEM, item);
         setupReferenceDataItemForm(modelMap);
 
@@ -121,8 +117,6 @@ public class ItemController {
     @PostMapping(ITEM_DELETE_URL)
     public String deleteItem(@RequestParam(ITEM_ID_PARAM) int itemId,
                              RedirectAttributes redirectAttributes) throws Exception {
-
-
         itemService.delete(itemId);
         redirectAttributes.addFlashAttribute(SUCCESS, messageSource.getMessage("success.delete", null, Locale.getDefault()));
 
@@ -131,8 +125,7 @@ public class ItemController {
 
     @GetMapping(ITEM_CATEGORY_ID)
     @ResponseBody
-    public List<Item> getItemById(@PathVariable(CATEGORY_ID) int categoryId){
-        System.out.println(itemService.findByCategory(categoryId));
+    public List<Item> getItemById(@PathVariable(CATEGORY_ID) int categoryId) {
         return itemService.findByCategory(categoryId);
     }
 

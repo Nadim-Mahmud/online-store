@@ -43,7 +43,6 @@ public class OrderController {
     private static final String ORDER_ITEM_ID = "orderItemId";
     private static final String NEXT_PAGE = "order/address";
     private static final String ADDRESS_VIEW = "address-form";
-    private static final String ORDER_DELETE = "order/delete";
 
     private static final String REDIRECT_ORDER_LIST_URL = "customer/order-list";
     private static final String ORDER_CANCEL_URL = "order/cancel";
@@ -52,7 +51,6 @@ public class OrderController {
     private static final String REDIRECT_READY_ORDER_URL = "delivery/ready-order";
     private static final String DELIVER_ACCEPTED_ORDER = "delivered";
     private static final String REDIRECT_DELIVERY_ORDER_URL = "delivery/delivery-list";
-
     private static final String REDIRECT_SHOPKEEPER_NOTIFICATION_URL = "shopkeeper/notification";
 
     @Autowired
@@ -138,19 +136,18 @@ public class OrderController {
     }
 
     @PostMapping(ORDER_FORM_SAVE_URL)
-    public String saveOrUpdateResOrder(@SessionAttribute(ACTIVE_USER) User user,
-                                       @SessionAttribute(ORDER) Order order,
-                                       @Valid @ModelAttribute(ADDRESS) Address address,
-                                       BindingResult bindingResult,
-                                       SessionStatus sessionStatus,
-                                       RedirectAttributes redirectAttributes) throws Exception {
+    public String saveOrUpdateOrder(@SessionAttribute(ACTIVE_USER) User user,
+                                    @SessionAttribute(ORDER) Order order,
+                                    @Valid @ModelAttribute(ADDRESS) Address address,
+                                    BindingResult bindingResult,
+                                    SessionStatus sessionStatus,
+                                    RedirectAttributes redirectAttributes) throws Exception {
 
         if (bindingResult.hasErrors()) {
             return ADDRESS_VIEW;
         }
 
         String successMessage = messageSource.getMessage(order.isNew() ? "success.add" : "success.update", null, Locale.getDefault());
-
         address.setUser(user);
         order.setAddress(address);
         order.setStatus(OrderStatus.ORDERED);
@@ -174,8 +171,7 @@ public class OrderController {
 
     @PostMapping(ACCEPT_READY_ORDER)
     public String getAcceptReadyOrder(@SessionAttribute(ACTIVE_USER) User user,
-                                      @RequestParam(ORDER_ID_PARAM) int orderId,
-                                      RedirectAttributes redirectAttributes) throws Exception {
+                                      @RequestParam(ORDER_ID_PARAM) int orderId) throws Exception {
         Order order = orderService.findById(orderId);
         order.setStatus(OrderStatus.PICKED);
         order.setUser(user);

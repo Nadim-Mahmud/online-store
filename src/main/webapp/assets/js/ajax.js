@@ -5,11 +5,11 @@
 $(function () {
     $("#category").change(function () {
         const value = $("#category option:selected").val();
-        findItemsByCategory(value);
+        loadItemsByCategory(value);
     })
 })
 
-function findItemsByCategory(value) {
+function loadItemsByCategory(value) {
     let request = $.ajax({
         url: "/customer/item/" + value,
         type: "GET",
@@ -27,6 +27,7 @@ function findItemsByCategory(value) {
 
     request.fail(function (jqXHR, textStatus) {
             console.log("request failed");
+            $("#item").empty();
         }
     );
 }

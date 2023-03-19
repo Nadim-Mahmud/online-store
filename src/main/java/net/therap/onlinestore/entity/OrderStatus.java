@@ -11,7 +11,6 @@ public enum OrderStatus {
     PICKED("Picked by delivery man"),
     DELIVERED("Delivered");
 
-
     private final String label;
 
     OrderStatus(String label) {

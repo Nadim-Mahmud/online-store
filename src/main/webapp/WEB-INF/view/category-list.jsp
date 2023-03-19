@@ -37,6 +37,11 @@
                 &check; ${success}!
             </p>
         </c:if>
+        <c:if test="${failed != null}">
+            <p class="text-danger">
+                &cross; ${failed}
+            </p>
+        </c:if>
     </div>
     <table class="table table-hover table-sm align-middle text-center">
         <thead class="table-head bg-primary bg-opacity-50">

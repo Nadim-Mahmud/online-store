@@ -115,15 +115,4 @@ public class OrderItem extends Persistent {
     public int hashCode() {
         return Objects.hash(getItem());
     }
-
-    @Override
-    public String toString() {
-        return "OrderItem{" +
-                "id=" + id +
-                ", acceptedAt=" + acceptedAt +
-                ", quantity=" + quantity +
-                ", item=" + item +
-                ", order=" + order +
-                '}';
-    }
 }

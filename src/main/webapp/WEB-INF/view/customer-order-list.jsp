@@ -57,6 +57,9 @@
                         <fmt:message key="label.status"/>
                     </th>
                     <th scope="col">
+                        <fmt:message key="label.price"/>
+                    </th>
+                    <th scope="col">
                         <fmt:message key="label.action"/>
                     </th>
                 </tr>
@@ -78,6 +81,9 @@
                         </td>
                         <td class="${order.status == ordered ? 'bg-danger' : 'bg-success'}  p-2 text-dark bg-opacity-10">
                             <c:out value="${order.status.label}"/>
+                        </td>
+                        <td>
+                            <c:out value="${order.price}"/>
                         </td>
                         <td>
                             <c:if test="${order.status == ordered}">
