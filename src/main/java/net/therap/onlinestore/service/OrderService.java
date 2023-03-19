@@ -72,6 +72,27 @@ public class OrderService extends BaseService {
         return orderHelper.calculatePriceOfOrderList(orderList);
     }
 
+    public List<Order> findDeliveredOrderByUser(User deliveryMan) {
+        List<Order> orderList = entityManager.createNamedQuery("Order.findDeliveredOrderByUser", Order.class)
+                .setParameter("deliveryManId", deliveryMan.getId())
+                .getResultList();
+
+        return orderHelper.calculatePriceOfOrderList(orderList);
+    }
+
+    public boolean isAccessible(User user, Order order) {
+
+        if (order.isNew()) {
+            return true;
+        }
+
+        return !entityManager.createNamedQuery("Order.findOrderByOrderIdAndUserId", Order.class)
+                .setParameter("userId", user.getId())
+                .setParameter("orderId", order.getId())
+                .getResultList()
+                .isEmpty();
+    }
+
     public Order findById(int id) {
         return entityManager.find(Order.class, id);
     }

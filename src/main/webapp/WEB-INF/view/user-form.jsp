@@ -58,7 +58,7 @@
                         <form:errors path="cell" cssClass="text-danger"/>
                     </div>
                     <div class="mb-3">
-                        <label for="type" class="form-label">
+                        <label for="type" class="form-label required-fields">
                             <fmt:message key="user.type"/>
                         </label>
                         <form:select path="type" class="form-select">

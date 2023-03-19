@@ -75,11 +75,17 @@ public class OrderController {
     }
 
     @GetMapping(ORDER_FORM_URL)
-    public String showOrderForm(@SessionAttribute(value = ORDER, required = false) Order order,
+    public String showOrderForm(@SessionAttribute(ACTIVE_USER) User user,
+                                @SessionAttribute(value = ORDER, required = false) Order order,
                                 @RequestParam(value = ORDER_ID_PARAM, required = false) String orderId,
-                                ModelMap modelMap) {
+                                ModelMap modelMap) throws IllegalAccessException {
         order = Objects.nonNull(orderId) ? orderService.findById(Integer.parseInt(orderId)) :
                 (Objects.nonNull(order) ? order : new Order());
+
+        if (!orderService.isAccessible(user, order)) {
+            throw new IllegalAccessException();
+        }
+
         modelMap.put(ORDER, order);
         modelMap.put(ORDER_ITEM_LIST, order.getOrderItemList());
         modelMap.put(ORDER_ITEM, new OrderItem());

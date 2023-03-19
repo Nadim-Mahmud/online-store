@@ -12,6 +12,7 @@ Date: 12/7/22
     <c:set var="shopkeeperCnst" value="SHOPKEEPER" scope="page"/>
     <c:set var="deliveryManCnst" value="DELIVERYMAN" scope="page"/>
     <c:set var="customerCnst" value="CUSTOMER" scope="page"/>
+    <c:set var="orderDelivered" value="DELIVERED" scope="page"/>
     <c:set var="navUser" value="user" scope="page"/>
     <c:set var="navOrderForm" value="orderForm" scope="page"/>
     <c:set var="navOrderList" value="orderList" scope="page"/>
@@ -22,6 +23,7 @@ Date: 12/7/22
     <c:set var="navNotification" value="notification" scope="page"/>
     <c:set var="navReadyOrder" value="readyOrder" scope="page"/>
     <c:set var="navDeliveryList" value="deliveryList" scope="page"/>
+    <c:set var="navDeliveryHistory" value="deliveryHistory" scope="page"/>
 
     <div class="container-fluid m-0">
         <a href="/" class="navbar-brand">
@@ -73,6 +75,12 @@ Date: 12/7/22
                         <a class="nav-link active underline-hover" aria-current="page"
                            href="/delivery/delivery-list">
                                 ${navItem ==  navDeliveryList? '<b>Delivery list</b>' : 'Delivery list'}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active underline-hover" aria-current="page"
+                           href="/delivery/delivery-history">
+                                ${navItem ==  navDeliveryHistory? '<b>Delivery history</b>' : 'Delivery history'}
                         </a>
                     </li>
                 </c:if>

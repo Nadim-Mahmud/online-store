@@ -48,6 +48,7 @@
                     </select>
                 </div>
                 <form:form action="/customer/add-item" modelAttribute="orderItem" method="post">
+                    <input hidden="hidden" name="categoryCapture" id="categoryCapture" value="">
                     <div class="mb-3">
                         <label for="item" class="form-label">
                             <fmt:message key="label.select.item"/>

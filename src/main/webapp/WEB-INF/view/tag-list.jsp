@@ -45,7 +45,7 @@
                 <fmt:message key="label.serial"/>
             </th>
             <th scope="col" class="text-center">
-                <fmt:message key="label.category"/>
+                <fmt:message key="label.tag"/>
             </th>
             <th scope="col" class="text-center">
                 <fmt:message key="label.itemList"/>

@@ -78,7 +78,7 @@
                         <td>
                             <c:out value="${order.address.address}"/>
                         </td>
-                        <td class="${order.status == ordered ? 'bg-danger' : 'bg-success'}  p-2 text-dark bg-opacity-10">
+                        <td class="${order.status == ordered ? 'bg-primary' : 'bg-success'}  p-2 text-dark bg-opacity-10">
                             <c:out value="${order.status.label}"/>
                         </td>
                         <td>

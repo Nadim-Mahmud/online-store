@@ -32,6 +32,8 @@ public class DeliveryController {
     private static final String READY_ORDER_URL = "ready-order";
     private static final String DELIVERY_ORDER_VIEW = "delivery-order-list";
     private static final String DELIVERY_ORDER_URL = "delivery-list";
+    private static final String DELIVERY_HISTORY_URL = "delivery-history";
+    private static final String DELIVERY_HISTORY = "deliveryHistory";
 
     @Autowired
     private ItemService itemService;
@@ -70,6 +72,15 @@ public class DeliveryController {
         modelMap.put(ORDER_LIST, orderService.findOrdersNotDeliveredByDeliveryMan(user));
         modelMap.put(NAV_ITEM, DELIVERY_LIST);
         modelMap.put(BUTTON, DELIVERY_LIST);
+
+        return DELIVERY_ORDER_VIEW;
+    }
+
+    @GetMapping(DELIVERY_HISTORY_URL)
+    public String showDeliveryOrderHistory(@SessionAttribute(ACTIVE_USER) User user, ModelMap modelMap) {
+        modelMap.put(ORDER_LIST, orderService.findDeliveredOrderByUser(user));
+        modelMap.put(NAV_ITEM, DELIVERY_HISTORY);
+        modelMap.put(BUTTON, DELIVERY_HISTORY);
 
         return DELIVERY_ORDER_VIEW;
     }

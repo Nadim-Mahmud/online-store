@@ -1,9 +1,12 @@
 package net.therap.onlinestore.contoller;
 
+import net.therap.onlinestore.entity.AccessType;
 import net.therap.onlinestore.entity.Availability;
 import net.therap.onlinestore.entity.Item;
+import net.therap.onlinestore.entity.User;
 import net.therap.onlinestore.formatter.CategoryFormatter;
 import net.therap.onlinestore.formatter.TagFormatter;
+import net.therap.onlinestore.helper.AccessCheck;
 import net.therap.onlinestore.service.CategoryService;
 import net.therap.onlinestore.service.ItemService;
 import net.therap.onlinestore.service.TagService;
@@ -94,7 +97,8 @@ public class ItemController {
     }
 
     @PostMapping(ITEM_FORM_SAVE_URL)
-    public String saveOrUpdateItem(@Valid @ModelAttribute(ITEM) Item item,
+    public String saveOrUpdateItem(@SessionAttribute(ACTIVE_USER) User user,
+                                   @Valid @ModelAttribute(ITEM) Item item,
                                    BindingResult bindingResult,
                                    ModelMap modelMap,
                                    SessionStatus sessionStatus,
@@ -108,6 +112,7 @@ public class ItemController {
 
         redirectAttributes.addFlashAttribute(SUCCESS, messageSource.getMessage(
                 (item.getId() == 0) ? "success.add" : "success.update", null, Locale.getDefault()));
+        AccessCheck.check(user, AccessType.SAVE, item);
         itemService.saveOrUpdate(item);
         sessionStatus.setComplete();
 
@@ -115,8 +120,10 @@ public class ItemController {
     }
 
     @PostMapping(ITEM_DELETE_URL)
-    public String deleteItem(@RequestParam(ITEM_ID_PARAM) int itemId,
+    public String deleteItem(@SessionAttribute(ACTIVE_USER) User user,
+                             @RequestParam(ITEM_ID_PARAM) int itemId,
                              RedirectAttributes redirectAttributes) throws Exception {
+        AccessCheck.check(user, AccessType.DELETE, itemService.findById(itemId));
         itemService.delete(itemId);
         redirectAttributes.addFlashAttribute(SUCCESS, messageSource.getMessage("success.delete", null, Locale.getDefault()));
 

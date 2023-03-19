@@ -84,7 +84,7 @@
                         <td>
                             <c:out value="${order.address.note}"/>
                         </td>
-                        <td class="${order.status == ordered ? 'bg-danger' : 'bg-success'}  p-2 text-dark bg-opacity-10">
+                        <td class="${order.status == ordered ? 'bg-primary' : 'bg-success'}  p-2 text-dark bg-opacity-10">
                             <c:out value="${order.status.label}"/>
                         </td>
                         <td>
@@ -97,7 +97,7 @@
                                         <c:param name="orderId" value="${order.id}"/>
                                     </c:url>
                                     <form:form class="text-center my-0 mx-2 p-0" action="${accept}" method="post">
-                                        <button class="btn btn-outline-danger center btn-sm"
+                                        <button class="btn btn-outline-primary center btn-sm"
                                                 onclick="return confirm('Pick this order?')">
                                             <fmt:message key="button.pick"/>
                                         </button>
@@ -108,11 +108,14 @@
                                         <c:param name="orderId" value="${order.id}"/>
                                     </c:url>
                                     <form:form class="text-center my-0 mx-2 p-0" action="${delivered}" method="post">
-                                        <button class="btn btn-outline-danger center btn-sm"
+                                        <button class="btn btn-outline-success center btn-sm"
                                                 onclick="return confirm('Mark this order delivered?')">
                                             <fmt:message key="button.delivered"/>
                                         </button>
                                     </form:form>
+                                </c:if>
+                                <c:if test="${order.status == orderDelivered}">
+                                    <fmt:message key="label.empty"/>
                                 </c:if>
                             </div>
                         </td>

@@ -40,8 +40,6 @@ public class Address extends Persistent implements Serializable {
     @Column(name = "address")
     private String address;
 
-    @NotNull(message = "{input.note}")
-    @Size(min = 1, max = 200, message = "{input.note}")
     @Column(name = "note")
     private String note;
 

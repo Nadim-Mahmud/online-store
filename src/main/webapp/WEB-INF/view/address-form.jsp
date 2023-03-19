@@ -29,14 +29,14 @@
                 </h5>
                 <form:form class="m-0 p - 0 " action="/customer/order/save" modelAttribute="address" method="post">
                     <div class="mb-3">
-                        <label for="title" class="form-label">
+                        <label for="title" class="form-label required-fields">
                             <fmt:message key="label.title"/>
                         </label>
                         <form:input path="title" class="form-control"/>
                         <form:errors path="title" cssClass="text-danger"/>
                     </div>
                     <div class="mb-3">
-                        <label for="address" class="form-label">
+                        <label for="address" class="form-label required-fields">
                             <fmt:message key="label.address"/>
                         </label>
                         <form:input path="address" class="form-control"/>

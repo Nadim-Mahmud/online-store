@@ -1,12 +1,17 @@
 package net.therap.onlinestore.helper;
 
 import net.therap.onlinestore.entity.*;
+import net.therap.onlinestore.service.OrderService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * @author nadimmahmud
  * @since 3/15/23
  */
 public class AccessCheck {
+
+    private OrderService orderService;
 
     public static void check(User user, AccessType access, Persistent entity) throws IllegalAccessException {
 
@@ -35,6 +40,13 @@ public class AccessCheck {
                 if (!OrderStatus.READY.equals(order.getStatus())) {
                     throw new IllegalAccessException();
                 }
+            }
+        }
+
+        if (entity instanceof Item) {
+
+            if ((AccessType.SAVE.equals(access) || AccessType.DELETE.equals(access)) && !UserType.ADMIN.equals(user.getType())) {
+                throw new IllegalAccessException();
             }
         }
     }

@@ -51,6 +51,7 @@ public interface Constants {
     String EMPTY_LIST = "emptyList";
     String BUTTON = "button";
     String HOME_URL = "/";
+    String ERROR_CODE = "errorCode";
     String ADMIN_BASE_URL = "admin/*";
     String CUSTOMER_BASE_URL = "customer/*";
     String SHOPKEEPER_BASE_URL = "shopkeeper/*";

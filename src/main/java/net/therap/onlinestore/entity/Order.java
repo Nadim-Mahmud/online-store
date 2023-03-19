@@ -24,7 +24,9 @@ import java.util.List;
         @NamedQuery(name = "Order.findByCustomer", query = "SELECT o FROM Order o WHERE o.address.user.id = :customerId"),
         @NamedQuery(name = "Order.findActiveByCustomer", query = "SELECT o FROM Order o WHERE o.address.user.id = :customerId AND o.status != 'DELIVERED'"),
         @NamedQuery(name = "Order.findDeliveredByCustomer", query = "SELECT o FROM Order o WHERE o.address.user.id = :customerId AND o.status = 'DELIVERED'"),
-        @NamedQuery(name = "Order.findOrdersNotDeliveredByDeliveryMan", query = "SELECT o FROM Order o WHERE o.user.id = :deliveryManId AND o.status != 'DELIVERED'")
+        @NamedQuery(name = "Order.findOrdersNotDeliveredByDeliveryMan", query = "SELECT o FROM Order o WHERE o.user.id = :deliveryManId AND o.status != 'DELIVERED'"),
+        @NamedQuery(name = "Order.findDeliveredOrderByUser", query = "SELECT o FROM Order o WHERE o.user.id = :deliveryManId AND o.status = 'DELIVERED'"),
+        @NamedQuery(name = "Order.findOrderByOrderIdAndUserId", query = "SELECT o FROM Order o WHERE o.address.user.id = :userId AND o.id = :orderId")
 })
 public class Order extends Persistent implements Serializable {
 

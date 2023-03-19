@@ -24,6 +24,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import static java.util.Objects.nonNull;
 import static net.therap.onlinestore.constant.Constants.*;
@@ -65,6 +66,11 @@ public class UserController {
     public void initBinder(WebDataBinder webDataBinder) {
         webDataBinder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
         webDataBinder.addValidators(userValidator);
+        User user = (User) webDataBinder.getTarget();
+
+        if (Objects.nonNull(user) && !user.isNew()) {
+            webDataBinder.setDisallowedFields("password");
+        }
     }
 
     @GetMapping(USER_URL)

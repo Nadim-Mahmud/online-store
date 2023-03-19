@@ -58,11 +58,19 @@ public class ItemService extends BaseService {
 
         if(nonNull(categoryId) && !categoryId.isEmpty()){
             itemListByCategory = findByCategory(Integer.parseInt(categoryId));
+
+            if(isNull(tagId) || tagId.isEmpty()){
+                return itemListByCategory;
+            }
         }
 
         if(nonNull(tagId) && !tagId.isEmpty()){
             Tag tag = tagService.findById(Integer.parseInt(tagId));
             itemListByTag = tag.getItemList();
+
+            if(isNull(categoryId) || categoryId.isEmpty()){
+                return itemListByTag;
+            }
         }
 
         return itemHelper.intersectItemList(itemListByCategory, itemListByTag);
