@@ -12,6 +12,5 @@ import javax.persistence.PersistenceContext;
 @Service
 public class BaseService {
 
-    @PersistenceContext
-    protected EntityManager entityManager;
+
 }

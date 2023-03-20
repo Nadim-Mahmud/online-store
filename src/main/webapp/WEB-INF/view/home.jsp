@@ -24,9 +24,9 @@
 <c:set var="color" value="" scope="page"/>
 <jsp:include page="navbar.jsp"/>
 <div class="container">
-    <div class="d-flex justify-content-between">
-        <div class="col-md-4 mt-3">
-            <form action="" method="get">
+    <div class="d-flex justify-content-between mt-3">
+        <div class="col-md-4">
+            <form class="m-0" action="" method="get">
                 <div class="input-group">
                     <select name="categoryId" id="categoryId" class="form-control">
                         <option value="" ${categoryId == null ? 'selected' : ''}>-- Select Category --</option>
@@ -50,9 +50,10 @@
                 </div>
             </form>
         </div>
-        <div class="col-md-4 mt-3">
-            <form class="d-flex" action="/item/search" method="get">
-                <input name="searchKey" id="searchKey" class="form-control me-2" placeholder="Search" aria-label="Search" value="${searchKey}">
+        <div class="col-md-4">
+            <form class="d-flex m-0" action="/item/search" method="get">
+                <input name="searchKey" id="searchKey" class="form-control me-2" placeholder="Search"
+                       aria-label="Search" value="${searchKey}">
                 <button class="btn btn-primary" type="submit">Search</button>
             </form>
         </div>

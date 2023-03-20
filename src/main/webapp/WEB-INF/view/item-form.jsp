@@ -43,6 +43,13 @@
                         <form:errors path="price" cssClass="text-danger"/>
                     </div>
                     <div class="mb-3">
+                        <label for="imagePath" class="form-label required-fields">
+                            <fmt:message key="label.image"/>
+                        </label>
+                        <form:input type="file" path="imagePath" class="form-control"/>
+                        <form:errors path="imagePath" cssClass="text-danger"/>
+                    </div>
+                    <div class="mb-3">
                         <label for="category" class="form-label required-fields">
                             <fmt:message key="label.category"/>
                         </label>

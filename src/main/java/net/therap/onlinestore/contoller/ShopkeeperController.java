@@ -24,16 +24,14 @@ import static net.therap.onlinestore.constant.Constants.*;
 @RequestMapping(SHOPKEEPER)
 public class ShopkeeperController {
 
-    private static final String SHOPKEEPER_NOTIFICATION_URL = "notification";
-    private static final String SHOPKEEPER_NOTIFICATION_VIEW = "shopkeeper-notification";
+    private static final String SHOPKEEPER_NOTIFICATION_VIEW = "shopkeeper-dashboard";
 
     @Autowired
     private OrderService orderService;
 
-    @GetMapping(SHOPKEEPER_NOTIFICATION_URL)
-    public String showShopkeeperNotification(@SessionAttribute(ACTIVE_USER) User user, ModelMap modelMap) {
+    @GetMapping(HOME_URL)
+    public String showShopkeeperDashBoard(@SessionAttribute(ACTIVE_USER) User user, ModelMap modelMap) {
         modelMap.put(ORDER_LIST, orderService.findOrdersByOrderStatus(OrderStatus.ORDERED));
-        modelMap.put(NAV_ITEM, NOTIFICATION);
 
         return SHOPKEEPER_NOTIFICATION_VIEW;
     }

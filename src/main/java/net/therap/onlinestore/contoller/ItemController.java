@@ -6,7 +6,7 @@ import net.therap.onlinestore.entity.Item;
 import net.therap.onlinestore.entity.User;
 import net.therap.onlinestore.formatter.CategoryFormatter;
 import net.therap.onlinestore.formatter.TagFormatter;
-import net.therap.onlinestore.helper.AccessCheck;
+import net.therap.onlinestore.helper.AccessCheckHelper;
 import net.therap.onlinestore.service.CategoryService;
 import net.therap.onlinestore.service.ItemService;
 import net.therap.onlinestore.service.TagService;
@@ -23,9 +23,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
 import static java.util.Objects.nonNull;
 import static net.therap.onlinestore.constant.Constants.*;
@@ -111,7 +109,7 @@ public class ItemController {
 
         redirectAttributes.addFlashAttribute(SUCCESS, messageSource.getMessage(
                 (item.getId() == 0) ? "success.add" : "success.update", null, Locale.getDefault()));
-        AccessCheck.check(user, AccessType.SAVE, item);
+        AccessCheckHelper.check(user, AccessType.SAVE, item);
         itemService.saveOrUpdate(item);
         sessionStatus.setComplete();
 
@@ -122,7 +120,7 @@ public class ItemController {
     public String deleteItem(@SessionAttribute(ACTIVE_USER) User user,
                              @RequestParam(ITEM_ID_PARAM) int itemId,
                              RedirectAttributes redirectAttributes) throws Exception {
-        AccessCheck.check(user, AccessType.DELETE, itemService.findById(itemId));
+        AccessCheckHelper.check(user, AccessType.DELETE, itemService.findById(itemId));
         itemService.delete(itemId);
         redirectAttributes.addFlashAttribute(SUCCESS, messageSource.getMessage("success.delete", null, Locale.getDefault()));
 

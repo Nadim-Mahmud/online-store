@@ -61,35 +61,33 @@
                     <th scope="col">
                         <fmt:message key="label.price"/>
                     </th>
-                    <th scope="col">
-                        <fmt:message key="label.action"/>
-                    </th>
                 </tr>
                 </thead>
                 <tbody>
                 <c:forEach items="${orderList}" var="order" varStatus="orderStat">
                     <tr>
-                        <td>
-                            <c:out value="${orderStat.count}"/>
-                        </td>
-                        <td class="text-start">
-                            <c:forEach items="${order.orderItemList}" var="orderItem">
-                                <li><c:out value="${orderItem.item.name} x ${orderItem.quantity}"/></li>
-                            </c:forEach>
-                            </ul>
-                        </td>
-                        <td>
-                            <c:out value="${order.address.address}"/>
-                        </td>
-                        <td>
-                            <c:out value="${order.address.note}"/>
-                        </td>
-                        <td class="${order.status == ordered ? 'bg-primary' : 'bg-success'}  p-2 text-dark bg-opacity-10">
-                            <c:out value="${order.status.label}"/>
-                        </td>
-                        <td>
-                            <c:out value="${order.price}"/>
-                        </td>
+                    <td>
+                        <c:out value="${orderStat.count}"/>
+                    </td>
+                    <td class="text-start">
+                        <c:forEach items="${order.orderItemList}" var="orderItem">
+                            <li><c:out value="${orderItem.item.name} x ${orderItem.quantity}"/></li>
+                        </c:forEach>
+                        </ul>
+                    </td>
+                    <td>
+                        <c:out value="${order.address.address}"/>
+                    </td>
+                    <td>
+                        <c:out value="${order.address.note}"/>
+                    </td>
+                    <td class="${order.status == ordered ? 'bg-primary' : 'bg-success'}  p-2 text-dark bg-opacity-10">
+                        <c:out value="${order.status.label}"/>
+                    </td>
+                    <td>
+                        <c:out value="${order.price}"/>
+                    </td>
+                    <c:if test="${order.status != orderDelivered}">
                         <td>
                             <div class="d-flex justify-content-center my-1">
                                 <c:if test="${button == navReadyOrder}">
@@ -114,12 +112,10 @@
                                         </button>
                                     </form:form>
                                 </c:if>
-                                <c:if test="${order.status == orderDelivered}">
-                                    <fmt:message key="label.empty"/>
-                                </c:if>
                             </div>
                         </td>
-                    </tr>
+                        </tr>
+                    </c:if>
                 </c:forEach>
                 </tbody>
             </table>

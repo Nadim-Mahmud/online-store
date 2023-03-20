@@ -5,6 +5,8 @@ import net.therap.onlinestore.helper.OrderHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 
 /**
@@ -12,9 +14,12 @@ import java.util.List;
  * @since 3/5/23
  */
 @Service
-public class OrderService extends BaseService {
+public class OrderService {
 
     private final OrderHelper orderHelper;
+
+    @PersistenceContext
+    protected EntityManager entityManager;
 
     public OrderService() {
         orderHelper = new OrderHelper();
@@ -117,6 +122,13 @@ public class OrderService extends BaseService {
     @Transactional
     public void cancel(int orderId) throws Exception {
         Order order = entityManager.find(Order.class, orderId);
+        order.setStatus(OrderStatus.CANCELED);
+        saveOrUpdate(order);
+    }
+
+    @Transactional
+    public void delete(int orderId) throws Exception {
+        Order order = entityManager.find(Order.class, orderId);
         order.setAccessStatus(AccessStatus.DELETED);
 
         for (OrderItem orderItem : order.getOrderItemList()) {
@@ -124,11 +136,6 @@ public class OrderService extends BaseService {
         }
 
         saveOrUpdate(order);
-    }
-
-    @Transactional
-    public void delete(int id) throws Exception {
-        entityManager.remove(entityManager.find(Order.class, id));
     }
 
     @Transactional

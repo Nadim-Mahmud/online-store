@@ -9,7 +9,8 @@ public enum OrderStatus {
     ORDERED("Ordered"),
     READY("Ready to delivery"),
     PICKED("Picked by delivery man"),
-    DELIVERED("Delivered");
+    DELIVERED("Delivered"),
+    CANCELED("Canceled by shopkeeper");
 
     private final String label;
 

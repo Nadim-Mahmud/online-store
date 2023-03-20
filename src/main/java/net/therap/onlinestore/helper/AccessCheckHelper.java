@@ -8,9 +8,7 @@ import net.therap.onlinestore.service.OrderService;
  * @author nadimmahmud
  * @since 3/15/23
  */
-public class AccessCheck {
-
-    private OrderService orderService;
+public class AccessCheckHelper {
 
     public static void check(User user, AccessType access, Persistent entity) throws IllegalAccessException {
 

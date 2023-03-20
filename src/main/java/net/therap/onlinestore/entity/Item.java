@@ -50,6 +50,10 @@ public class Item extends Persistent implements Serializable {
     @Column(name = "price")
     private double price;
 
+    @NotNull(message = "{input.number}")
+    @Column(name = "image_path")
+    private String imagePath;
+
     @NotNull(message = "{input.select}")
     @Enumerated(EnumType.STRING)
     @Column(name = "availability")
@@ -136,6 +140,14 @@ public class Item extends Persistent implements Serializable {
 
     public void setTagList(List<Tag> tagList) {
         this.tagList = tagList;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 
     @JsonIgnore

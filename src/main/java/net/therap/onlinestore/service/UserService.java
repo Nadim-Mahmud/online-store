@@ -7,6 +7,8 @@ import net.therap.onlinestore.util.Encryption;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.List;
@@ -17,7 +19,10 @@ import java.util.Objects;
  * @since 3/5/23
  */
 @Service
-public class UserService extends BaseService {
+public class UserService {
+
+    @PersistenceContext
+    protected EntityManager entityManager;
 
     public List<User> findAll() {
         return entityManager.createNamedQuery("User.findAll", User.class).getResultList();

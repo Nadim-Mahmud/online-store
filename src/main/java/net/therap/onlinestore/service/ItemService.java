@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,9 +20,12 @@ import static java.util.Objects.nonNull;
  * @since 3/5/23
  */
 @Service
-public class ItemService extends BaseService {
+public class ItemService {
 
     private final ItemHelper itemHelper;
+
+    @PersistenceContext
+    protected EntityManager entityManager;
 
     @Autowired
     TagService tagService;

@@ -2,7 +2,7 @@ package net.therap.onlinestore.contoller;
 
 import net.therap.onlinestore.entity.*;
 import net.therap.onlinestore.formatter.ItemFormatter;
-import net.therap.onlinestore.helper.AccessCheck;
+import net.therap.onlinestore.helper.AccessCheckHelper;
 import net.therap.onlinestore.service.CategoryService;
 import net.therap.onlinestore.service.ItemService;
 import net.therap.onlinestore.service.OrderService;
@@ -46,8 +46,9 @@ public class OrderController {
     private static final String ADDRESS_VIEW = "address-form";
 
     private static final String REDIRECT_ORDER_LIST_URL = "customer/order-list";
-    private static final String ORDER_CANCEL_URL = "order/cancel";
     private static final String ORDER_READY = "order/ready";
+    private static final String ORDER_DELETE_URL = "order/delete";
+    private static final String ORDER_CANCEL_URL = "order/cancel";
     private static final String ACCEPT_READY_ORDER = "ready-order/accept";
     private static final String REDIRECT_READY_ORDER_URL = "delivery/ready-order";
     private static final String DELIVER_ACCEPTED_ORDER = "delivered";
@@ -170,10 +171,10 @@ public class OrderController {
                                  @RequestParam(ORDER_ID_PARAM) int orderId) throws Exception {
         Order order = orderService.findById(orderId);
         order.setStatus(OrderStatus.READY);
-        AccessCheck.check(user, AccessType.UPDATE, order);
+        AccessCheckHelper.check(user, AccessType.UPDATE, order);
         orderService.saveOrUpdate(order);
 
-        return REDIRECT + REDIRECT_SHOPKEEPER_NOTIFICATION_URL;
+        return REDIRECT;
     }
 
     @PostMapping(ACCEPT_READY_ORDER)
@@ -182,7 +183,7 @@ public class OrderController {
         Order order = orderService.findById(orderId);
         order.setStatus(OrderStatus.PICKED);
         order.setUser(user);
-        AccessCheck.check(user, AccessType.UPDATE, order);
+        AccessCheckHelper.check(user, AccessType.UPDATE, order);
         orderService.saveOrUpdate(order);
 
         return REDIRECT + REDIRECT_READY_ORDER_URL;
@@ -193,10 +194,27 @@ public class OrderController {
                                      @RequestParam(ORDER_ID_PARAM) int orderId) throws Exception {
         Order order = orderService.findById(orderId);
         order.setStatus(OrderStatus.DELIVERED);
-        AccessCheck.check(user, AccessType.UPDATE, order);
+        AccessCheckHelper.check(user, AccessType.UPDATE, order);
         orderService.saveOrUpdate(order);
 
         return REDIRECT + REDIRECT_DELIVERY_ORDER_URL;
+    }
+
+    @PostMapping(ORDER_DELETE_URL)
+    public String deleteOrder(@SessionAttribute(ACTIVE_USER) User user,
+                              @RequestParam(ORDER_ID_PARAM) int orderId,
+                              RedirectAttributes redirectAttributes) throws Exception {
+        Order order = orderService.findById(orderId);
+        AccessCheckHelper.check(user, AccessType.DELETE, order);
+
+        if (orderService.isOrderOnProcess(orderId)) {
+            redirectAttributes.addFlashAttribute(FAILED, messageSource.getMessage("fail.delete.inUse", null, Locale.getDefault()));
+        } else {
+            orderService.delete(orderId);
+            redirectAttributes.addFlashAttribute(SUCCESS, messageSource.getMessage("success.delete", null, Locale.getDefault()));
+        }
+
+        return REDIRECT + REDIRECT_ORDER_LIST_URL;
     }
 
     @PostMapping(ORDER_CANCEL_URL)
@@ -204,7 +222,7 @@ public class OrderController {
                               @RequestParam(ORDER_ID_PARAM) int orderId,
                               RedirectAttributes redirectAttributes) throws Exception {
         Order order = orderService.findById(orderId);
-        AccessCheck.check(user, AccessType.DELETE, order);
+        AccessCheckHelper.check(user, AccessType.CANCEL, order);
 
         if (orderService.isOrderOnProcess(orderId)) {
             redirectAttributes.addFlashAttribute(FAILED, messageSource.getMessage("fail.cancel.inUse", null, Locale.getDefault()));
@@ -213,6 +231,6 @@ public class OrderController {
             redirectAttributes.addFlashAttribute(SUCCESS, messageSource.getMessage("success.cancel", null, Locale.getDefault()));
         }
 
-        return REDIRECT + (UserType.SHOPKEEPER.equals(user.getType()) ? REDIRECT_SHOPKEEPER_NOTIFICATION_URL : REDIRECT_ORDER_LIST_URL);
+        return REDIRECT;
     }
 }

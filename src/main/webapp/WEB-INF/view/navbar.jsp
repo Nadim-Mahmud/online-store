@@ -9,7 +9,6 @@ Date: 12/7/22
 <fmt:setBundle basename="net.therap.onlinestore" var="lang"/>
 <nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top bg-light px-4 mb-1 shadow-sm">
     <c:set var="adminCnst" value="ADMIN" scope="page"/>
-    <c:set var="shopkeeperCnst" value="SHOPKEEPER" scope="page"/>
     <c:set var="deliveryManCnst" value="DELIVERYMAN" scope="page"/>
     <c:set var="customerCnst" value="CUSTOMER" scope="page"/>
     <c:set var="orderDelivered" value="DELIVERED" scope="page"/>
@@ -57,17 +56,10 @@ Date: 12/7/22
                         </a>
                     </li>
                 </c:if>
-                <c:if test="${activeUser.type == shopkeeperCnst}">
-                    <li class="nav-item">
-                        <a class="nav-link active underline-hover" aria-current="page" href="/shopkeeper/notification">
-                                ${navItem ==  navNotification ? '<b>Notification</b>' : 'Notification'}
-                        </a>
-                    </li>
-                </c:if>
                 <c:if test="${activeUser.type == deliveryManCnst}">
                     <li class="nav-item">
                         <a class="nav-link active underline-hover" aria-current="page"
-                           href="/delivery/ready-order">
+                           href="/">
                                 ${navItem ==  navReadyOrder? '<b>Ready orders</b>' : 'Ready orders'}
                         </a>
                     </li>

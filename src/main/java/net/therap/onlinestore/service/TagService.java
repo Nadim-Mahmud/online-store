@@ -1,10 +1,11 @@
 package net.therap.onlinestore.service;
 
-import net.therap.onlinestore.entity.Category;
 import net.therap.onlinestore.entity.Tag;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 
 /**
@@ -12,7 +13,10 @@ import java.util.List;
  * @since 3/5/23
  */
 @Service
-public class TagService extends BaseService {
+public class TagService {
+
+    @PersistenceContext
+    protected EntityManager entityManager;
 
     public List<Tag> findAll() {
         return entityManager.createNamedQuery("Tag.findAll", Tag.class).getResultList();
@@ -39,7 +43,7 @@ public class TagService extends BaseService {
         return tag;
     }
 
-    public boolean isExistingTag(Tag tag){
+    public boolean isExistingTag(Tag tag) {
         return !entityManager.createNamedQuery("User.getTagByNameAndId", Tag.class)
                 .setParameter("name", tag.getName())
                 .setParameter("id", tag.getId())

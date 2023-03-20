@@ -8,6 +8,7 @@ public interface Constants {
 
     String REDIRECT = "redirect:/";
     String DATE_PATTERN = "yyyy-MM-dd";
+    String EMAIL_PATTERN = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}";
     String ACTIVE_USER = "activeUser";
     String USER = "user";
     String USER_LIST = "userList";

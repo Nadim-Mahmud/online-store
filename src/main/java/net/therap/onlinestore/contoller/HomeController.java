@@ -19,7 +19,7 @@ import static net.therap.onlinestore.constant.Constants.*;
  * @since 3/20/23
  */
 @Controller
-@RequestMapping({BASE_URL, ADMIN_BASE_URL, CUSTOMER_BASE_URL, SHOPKEEPER_BASE_URL, DELIVERY_BASE_URL})
+@RequestMapping({BASE_URL, ADMIN_BASE_URL, CUSTOMER_BASE_URL})
 public class HomeController {
 
     private static final String HOME_VIEW = "home";

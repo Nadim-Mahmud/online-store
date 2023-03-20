@@ -22,10 +22,8 @@ import static net.therap.onlinestore.constant.Constants.*;
 public class CustomerController {
 
     private static final String ORDER_HISTORY = "orderHistory";
-    private static final String HOME_VIEW = "home";
     private static final String ORDER_LIST_URL = "order-list";
     private static final String ORDER_LIST_VIEW = "customer-order-list";
-    private static final String REDIRECT_ORDER_HISTORY_URL = "customer/order-history";
     private static final String ORDER_HISTORY_URL = "order-history";
 
     @Autowired

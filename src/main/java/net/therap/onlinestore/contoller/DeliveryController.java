@@ -36,7 +36,7 @@ public class DeliveryController {
     @Autowired
     private OrderService orderService;
 
-    @GetMapping(READY_ORDER_URL)
+    @GetMapping(HOME_URL)
     public String showReadyOrdersList(ModelMap modelMap) {
         modelMap.put(ORDER_LIST, orderService.findOrdersByOrderStatus(OrderStatus.READY));
         modelMap.put(NAV_ITEM, READY_ORDER);

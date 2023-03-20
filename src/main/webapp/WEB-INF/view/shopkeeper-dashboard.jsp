@@ -37,7 +37,7 @@
             </div>
             <div class="card-body">
                 <h5 class="text-center mb-3">
-                    <fmt:message key="shopkeeper.notification.title"/>
+                    <fmt:message key="shopkeeper.dashboard.title"/>
                 </h5>
             </div>
             <table class="table align-middle text-center">

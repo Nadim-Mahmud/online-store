@@ -1,11 +1,11 @@
 package net.therap.onlinestore.service;
 
 import net.therap.onlinestore.entity.Category;
-import net.therap.onlinestore.entity.Item;
-import net.therap.onlinestore.entity.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 
 /**
@@ -13,7 +13,10 @@ import java.util.List;
  * @since 3/5/23
  */
 @Service
-public class CategoryService extends BaseService {
+public class CategoryService {
+
+    @PersistenceContext
+    protected EntityManager entityManager;
 
     public List<Category> findAll() {
         return entityManager.createNamedQuery("Category.findAll", Category.class).getResultList();
@@ -23,7 +26,7 @@ public class CategoryService extends BaseService {
         return entityManager.find(Category.class, id);
     }
 
-    public boolean isCategoryNotInUse(int id){
+    public boolean isCategoryNotInUse(int id) {
         Category category = entityManager.find(Category.class, id);
 
         return category.getItemList().isEmpty();

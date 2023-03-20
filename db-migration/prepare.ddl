@@ -53,6 +53,7 @@ CREATE TABLE IF NOT EXISTS online_store.item
     availability  VARCHAR(45)   NOT NULL,
     category_id   INT           NOT NULL,
     description   VARCHAR(3000) NOT NULL,
+    image_path   VARCHAR(100) NOT NULL,
     access_status VARCHAR(45) DEFAULT 'ACTIVE',
     version       INT         DEFAULT 0,
     created_at    DATE,

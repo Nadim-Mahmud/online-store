@@ -21,6 +21,7 @@
 <div class="container">
     <c:set var="br" value="<br>" scope="page"/>
     <c:set var="ordered" value="ORDERED" scope="page"/>
+    <c:set var="canceled" value="CANCELED" scope="page"/>
     <c:set var="delivered" value="DELIVERED" scope="page"/>
     <div class="container col-md-10 mt-2">
         <div class="card">
@@ -96,7 +97,7 @@
                                             <fmt:message key="button.update"/>
                                         </button>
                                     </a>
-                                    <c:url var="cancelUrl" value="/customer/order/cancel">
+                                    <c:url var="cancelUrl" value="/customer/order/delete">
                                         <c:param name="orderId" value="${order.id}"/>
                                     </c:url>
                                     <form:form class="text-center my-0 mx-2 p-0" action="${cancelUrl}" method="post">
@@ -107,8 +108,8 @@
                                     </form:form>
                                 </div>
                             </c:if>
-                            <c:if test="${order.status == delivered}">
-                                <c:url var="cancelUrl" value="/customer/order/cancel">
+                            <c:if test="${order.status == delivered || order.status == canceled}">
+                                <c:url var="cancelUrl" value="/customer/order/delete">
                                     <c:param name="orderId" value="${order.id}"/>
                                 </c:url>
                                 <form:form class="text-center my-0 mx-2 p-0" action="${cancelUrl}" method="post">
@@ -118,7 +119,7 @@
                                     </button>
                                 </form:form>
                             </c:if>
-                            <c:if test="${order.status != ordered && order.status != delivered}">
+                            <c:if test="${order.status != ordered && order.status != delivered && order.status != canceled}">
                                 <fmt:message key="label.empty"/>
                             </c:if>
                         </td>

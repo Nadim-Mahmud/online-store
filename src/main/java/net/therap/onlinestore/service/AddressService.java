@@ -1,10 +1,11 @@
 package net.therap.onlinestore.service;
 
 import net.therap.onlinestore.entity.Address;
-import net.therap.onlinestore.entity.Category;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 
 /**
@@ -12,7 +13,10 @@ import java.util.List;
  * @since 3/5/23
  */
 @Service
-public class AddressService extends BaseService {
+public class AddressService {
+
+    @PersistenceContext
+    protected EntityManager entityManager;
 
     public List<Address> findAll() {
         return entityManager.createNamedQuery("Address.findAll", Address.class).getResultList();

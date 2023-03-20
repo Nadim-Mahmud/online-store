@@ -7,11 +7,14 @@ import org.hibernate.annotations.Where;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import static net.therap.onlinestore.constant.Constants.EMAIL_PATTERN;
 
 /**
  * @author nadimmahmud
@@ -48,7 +51,7 @@ public class User extends Persistent implements Serializable {
     private String lastName;
 
     @Size(min = 1, max = 45, message = "{input.email}")
-    @Email(message = "{input.email}")
+    @Email(regexp = EMAIL_PATTERN, flags = Pattern.Flag.CASE_INSENSITIVE, message = "{input.email}")
     @Column(name = "email")
     private String email;
 
