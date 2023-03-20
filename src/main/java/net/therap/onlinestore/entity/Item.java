@@ -24,9 +24,10 @@ import java.util.Objects;
 @Where(clause = "access_status <> 'DELETED'")
 @NamedQueries({
         @NamedQuery(name = "Item.findAll", query = "SELECT i FROM Item i"),
+        @NamedQuery(name = "Item.search", query = "SELECT i FROM Item i WHERE lower(i.name) LIKE lower(:searchKey) OR lower(i.category.name) LIKE lower(:searchKey) OR lower(i.description) LIKE lower(:searchKey)"),
         @NamedQuery(name = "Item.findAvailable", query = "SELECT i FROM Item i WHERE i.availability = 'AVAILABLE'"),
         @NamedQuery(name = "Item.findItemsByNameAndId", query = "SELECT i FROM Item i WHERE i.name = :name AND i.id != :id"),
-        @NamedQuery(name = "Item.findByCategoryId", query = "SELECT i FROM Item i WHERE i.category.id = :categoryId")
+        @NamedQuery(name = "Item.findByCategoryId", query = "SELECT i FROM Item i WHERE i.category.id = :categoryId"),
 })
 public class Item extends Persistent implements Serializable {
 
@@ -45,7 +46,7 @@ public class Item extends Persistent implements Serializable {
 
     @NotNull(message = "{input.number}")
     @Min(value = 1, message = "{input.price}")
-    @Max(value = 100000, message = "{input.price}")
+    @Max(value = 1000000, message = "{input.price}")
     @Column(name = "price")
     private double price;
 

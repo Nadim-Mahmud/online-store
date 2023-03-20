@@ -67,9 +67,6 @@ public class User extends Persistent implements Serializable {
     @Column(name = "type")
     private UserType type;
 
-    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "user")
-    private List<Address> addressList;
-
     @OneToMany(mappedBy = "user")
     private List<Order> orderList;
 
@@ -139,14 +136,6 @@ public class User extends Persistent implements Serializable {
 
     public void setType(UserType type) {
         this.type = type;
-    }
-
-    public List<Address> getAddressList() {
-        return addressList;
-    }
-
-    public void setAddressList(List<Address> addressList) {
-        this.addressList = addressList;
     }
 
     public List<Order> getOrderList() {

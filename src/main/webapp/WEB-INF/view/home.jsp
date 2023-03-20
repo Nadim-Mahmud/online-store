@@ -24,32 +24,40 @@
 <c:set var="color" value="" scope="page"/>
 <jsp:include page="navbar.jsp"/>
 <div class="container">
-    <div class="col-md-4 mt-3">
-        <form action="" method="get">
-            <div class="input-group">
-                <select name="categoryId" id="categoryId" class="form-control">
-                    <option value="" ${categoryId == null ? 'selected' : ''}>-- Select Category --</option>
-                    <c:forEach items="${categoryList}" var="category">
-                        <option value="${category.id}" ${categoryId == category.id ? 'selected' : ''}>
-                            <c:out value="${category.name}"/>
-                        </option>
-                    </c:forEach>
-                </select>
-                <select name="tagId" id="tagId" class="form-control">
-                    <option value="" ${tagId == null ? 'selected' : ''}>-- Select Tag --</option>
-                    <c:forEach items="${tagList}" var="tag">
-                        <option value="${tag.id}" ${tagId == tag.id ? 'selected' : ''}>
-                            <c:out value="${tag.name}"/>
-                        </option>
-                    </c:forEach>
-                </select>
-                <div class="input-group-addon input-group-button">
-                    <button type="submit" class="btn btn-primary">Filter</button>
+    <div class="d-flex justify-content-between">
+        <div class="col-md-4 mt-3">
+            <form action="" method="get">
+                <div class="input-group">
+                    <select name="categoryId" id="categoryId" class="form-control">
+                        <option value="" ${categoryId == null ? 'selected' : ''}>-- Select Category --</option>
+                        <c:forEach items="${categoryList}" var="category">
+                            <option value="${category.id}" ${categoryId == category.id ? 'selected' : ''}>
+                                <c:out value="${category.name}"/>
+                            </option>
+                        </c:forEach>
+                    </select>
+                    <select name="tagId" id="tagId" class="form-control">
+                        <option value="" ${tagId == null ? 'selected' : ''}>-- Select Tag --</option>
+                        <c:forEach items="${tagList}" var="tag">
+                            <option value="${tag.id}" ${tagId == tag.id ? 'selected' : ''}>
+                                <c:out value="${tag.name}"/>
+                            </option>
+                        </c:forEach>
+                    </select>
+                    <div class="input-group-addon input-group-button">
+                        <button type="submit" class="btn btn-primary">Filter</button>
+                    </div>
                 </div>
-            </div>
-        </form>
+            </form>
+        </div>
+        <div class="col-md-4 mt-3">
+            <form class="d-flex" action="/item/search" method="get">
+                <input name="searchKey" id="searchKey" class="form-control me-2" placeholder="Search" aria-label="Search" value="${searchKey}">
+                <button class="btn btn-primary" type="submit">Search</button>
+            </form>
+        </div>
     </div>
-    <div class="row mt-3">
+    <div class="row mt-3 item-list">
         <c:forEach items="${itemList}" var="item">
             <div class="col-md-3 p-1">
                 <div class="card shadow-sm p-3 mb-1 bg-body-tertiary rounded">
@@ -82,6 +90,8 @@
         </c:forEach>
     </div>
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<script src="${pageContext.request.contextPath}/assets/js/ajax.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
         crossorigin="anonymous">

@@ -19,12 +19,18 @@
 </head>
 <body>
 <%@ include file="navbar.jsp" %>
+<c:set var="illegalAccess" value="illegalAccess"/>
 <div class="container p-3 text-center">
     <img src="${pageContext.request.contextPath}/assets/images/exclamation-triangle-fill.svg" class="img-fluid">
     <c:choose>
         <c:when test="${errorCode == 404}">
             <h1 class="display-3">
                 <fmt:message key="error.404"/>
+            </h1>
+        </c:when>
+        <c:when test="${errorCode == illegalAccess}">
+            <h1 class="display-3">
+                <fmt:message key="error.illegalaccess"/>
             </h1>
         </c:when>
         <c:otherwise>

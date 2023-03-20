@@ -48,27 +48,33 @@ public class ItemService extends BaseService {
         return entityManager.find(Item.class, id);
     }
 
-    public List<Item> filter(String categoryId, String tagId){
-        List<Item>itemListByCategory = new ArrayList<>();
-        List<Item>itemListByTag = new ArrayList<>();
+    public List<Item> search(String searchKey) {
+        return entityManager.createNamedQuery("Item.search", Item.class)
+                .setParameter("searchKey", "%" + searchKey + "%")
+                .getResultList();
+    }
 
-        if(isNull(categoryId) && isNull(tagId)){
+    public List<Item> filter(String categoryId, String tagId) {
+        List<Item> itemListByCategory = new ArrayList<>();
+        List<Item> itemListByTag = new ArrayList<>();
+
+        if ((isNull(categoryId) || categoryId.isEmpty()) && (isNull(tagId) || tagId.isEmpty())) {
             return findAll();
         }
 
-        if(nonNull(categoryId) && !categoryId.isEmpty()){
+        if (nonNull(categoryId) && !categoryId.isEmpty()) {
             itemListByCategory = findByCategory(Integer.parseInt(categoryId));
 
-            if(isNull(tagId) || tagId.isEmpty()){
+            if (isNull(tagId) || tagId.isEmpty()) {
                 return itemListByCategory;
             }
         }
 
-        if(nonNull(tagId) && !tagId.isEmpty()){
+        if (nonNull(tagId) && !tagId.isEmpty()) {
             Tag tag = tagService.findById(Integer.parseInt(tagId));
             itemListByTag = tag.getItemList();
 
-            if(isNull(categoryId) || categoryId.isEmpty()){
+            if (isNull(categoryId) || categoryId.isEmpty()) {
                 return itemListByTag;
             }
         }

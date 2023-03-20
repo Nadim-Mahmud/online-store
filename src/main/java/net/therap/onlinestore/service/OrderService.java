@@ -86,6 +86,10 @@ public class OrderService extends BaseService {
             return true;
         }
 
+        if (!OrderStatus.ORDERED.equals(order.getStatus())) {
+            return false;
+        }
+
         return !entityManager.createNamedQuery("Order.findOrderByOrderIdAndUserId", Order.class)
                 .setParameter("userId", user.getId())
                 .setParameter("orderId", order.getId())

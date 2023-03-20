@@ -32,7 +32,6 @@ import static net.therap.onlinestore.constant.Constants.*;
 @Controller
 public class AuthenticationController {
 
-    private static final String HOME_VIEW = "home";
     private static final String LOGIN = "login";
     private static final String LOGIN_URL = "login-page";
     private static final String LOGIN_VIEW = "login-page";
@@ -41,29 +40,9 @@ public class AuthenticationController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private ItemService itemService;
-
-    @Autowired
-    private CategoryService categoryService;
-
-    @Autowired
-    private TagService tagService;
-
     @InitBinder
     public void initBinder(WebDataBinder webDataBinder) {
         webDataBinder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
-    }
-
-    @GetMapping(HOME_URL)
-    public String showHome(@RequestParam(value = CATEGORY_ID, required = false) String categoryId, @RequestParam(value = TAG_ID, required = false) String tagId, ModelMap modelMap) {
-        modelMap.put(CATEGORY_LIST, categoryService.findAll());
-        modelMap.put(TAG_LIST, tagService.findAll());
-        modelMap.put(ITEM_LIST, itemService.filter(categoryId, tagId));
-        modelMap.put(CATEGORY_ID, categoryId);
-        modelMap.put(TAG_ID, tagId);
-
-        return HOME_VIEW;
     }
 
     @GetMapping(LOGIN_URL)

@@ -31,3 +31,27 @@ function loadItemsByCategory(value) {
         }
     );
 }
+
+function onSearchClick(){
+    const value = $("#searchInput").val();
+    console.log(value);
+
+    let request = $.ajax({
+        url: "/item/search?searchKey=" + value,
+        type: "GET",
+        dataType: "json"
+    });
+
+    request.done(function (data){
+        console.log(data);
+        loadHomeItemsFromJson(data);
+    })
+
+    request.fail(function (jqXHR, textStatus) {
+        console.log("request failed");
+    })
+}
+
+function loadHomeItemsFromJson(data){
+    $("#item-list").empty();
+}

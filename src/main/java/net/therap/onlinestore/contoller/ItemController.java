@@ -25,6 +25,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import static java.util.Objects.nonNull;
 import static net.therap.onlinestore.constant.Constants.*;
@@ -34,7 +35,7 @@ import static net.therap.onlinestore.constant.Constants.*;
  * @since 3/7/23
  */
 @Controller
-@RequestMapping({ADMIN_BASE_URL, CUSTOMER_BASE_URL})
+@RequestMapping({ADMIN_BASE_URL})
 @SessionAttributes(ITEM)
 public class ItemController {
 
@@ -46,8 +47,6 @@ public class ItemController {
     private static final String ITEM_FORM_VIEW = "item-form";
     private static final String ITEM_ID_PARAM = "itemId";
     private static final String ITEM_DELETE_URL = "item/delete";
-    private static final String ITEM_CATEGORY_ID = "item/{categoryId}";
-    private static final String CATEGORY_ID = "categoryId";
 
     @Autowired
     private ItemService itemService;
@@ -128,12 +127,6 @@ public class ItemController {
         redirectAttributes.addFlashAttribute(SUCCESS, messageSource.getMessage("success.delete", null, Locale.getDefault()));
 
         return REDIRECT + ITEM_REDIRECT_URL;
-    }
-
-    @GetMapping(ITEM_CATEGORY_ID)
-    @ResponseBody
-    public List<Item> getItemById(@PathVariable(CATEGORY_ID) int categoryId) {
-        return itemService.findByCategory(categoryId);
     }
 
     private void setupReferenceDataItemForm(ModelMap modelMap) {

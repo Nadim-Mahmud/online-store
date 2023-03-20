@@ -27,8 +27,6 @@ import static net.therap.onlinestore.constant.Constants.HOME_URL;
 @RequestMapping(DELIVERY_BASE_URL)
 public class DeliveryController {
 
-    private static final String HOME_URL = "/";
-    private static final String HOME_VIEW = "home";
     private static final String READY_ORDER_URL = "ready-order";
     private static final String DELIVERY_ORDER_VIEW = "delivery-order-list";
     private static final String DELIVERY_ORDER_URL = "delivery-list";
@@ -36,27 +34,7 @@ public class DeliveryController {
     private static final String DELIVERY_HISTORY = "deliveryHistory";
 
     @Autowired
-    private ItemService itemService;
-
-    @Autowired
     private OrderService orderService;
-
-    @Autowired
-    private CategoryService categoryService;
-
-    @Autowired
-    private TagService tagService;
-
-    @GetMapping(HOME_URL)
-    public String showHome(@RequestParam(value = CATEGORY_ID, required = false) String categoryId, @RequestParam(value = TAG_ID, required = false) String tagId, ModelMap modelMap) {
-        modelMap.put(CATEGORY_LIST, categoryService.findAll());
-        modelMap.put(TAG_LIST, tagService.findAll());
-        modelMap.put(ITEM_LIST, itemService.filter(categoryId, tagId));
-        modelMap.put(CATEGORY_ID, categoryId);
-        modelMap.put(TAG_ID, tagId);
-
-        return HOME_VIEW;
-    }
 
     @GetMapping(READY_ORDER_URL)
     public String showReadyOrdersList(ModelMap modelMap) {

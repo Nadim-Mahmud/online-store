@@ -42,12 +42,12 @@ public class Order extends Persistent implements Serializable {
     @Column(name = "status")
     private OrderStatus status;
 
+    @Transient
+    private double price;
+
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "address")
     private Address address;
-
-    @Transient
-    private double price;
 
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "order", orphanRemoval = true)
     private List<OrderItem> orderItemList;

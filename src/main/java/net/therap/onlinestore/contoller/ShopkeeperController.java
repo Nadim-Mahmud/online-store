@@ -24,32 +24,11 @@ import static net.therap.onlinestore.constant.Constants.*;
 @RequestMapping(SHOPKEEPER)
 public class ShopkeeperController {
 
-    private static final String HOME_VIEW = "home";
     private static final String SHOPKEEPER_NOTIFICATION_URL = "notification";
     private static final String SHOPKEEPER_NOTIFICATION_VIEW = "shopkeeper-notification";
 
     @Autowired
-    private ItemService itemService;
-
-    @Autowired
     private OrderService orderService;
-
-    @Autowired
-    private CategoryService categoryService;
-
-    @Autowired
-    private TagService tagService;
-
-    @GetMapping(HOME_URL)
-    public String showHome(@RequestParam(value = CATEGORY_ID, required = false) String categoryId, @RequestParam(value = TAG_ID, required = false) String tagId, ModelMap modelMap) {
-        modelMap.put(CATEGORY_LIST, categoryService.findAll());
-        modelMap.put(TAG_LIST, tagService.findAll());
-        modelMap.put(ITEM_LIST, itemService.filter(categoryId, tagId));
-        modelMap.put(CATEGORY_ID, categoryId);
-        modelMap.put(TAG_ID, tagId);
-
-        return HOME_VIEW;
-    }
 
     @GetMapping(SHOPKEEPER_NOTIFICATION_URL)
     public String showShopkeeperNotification(@SessionAttribute(ACTIVE_USER) User user, ModelMap modelMap) {
