@@ -28,11 +28,6 @@
                 <fmt:message key="error.404"/>
             </h1>
         </c:when>
-        <c:when test="${errorCode == illegalAccess}">
-            <h1 class="display-3">
-                <fmt:message key="error.illegalaccess"/>
-            </h1>
-        </c:when>
         <c:otherwise>
             <h1 class="display-3">
                 <fmt:message key="error.unknown"/>

@@ -19,7 +19,7 @@ public class OrderService {
     private final OrderHelper orderHelper;
 
     @PersistenceContext
-    protected EntityManager entityManager;
+    private EntityManager entityManager;
 
     public OrderService() {
         orderHelper = new OrderHelper();

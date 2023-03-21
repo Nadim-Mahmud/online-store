@@ -16,7 +16,7 @@ import java.util.List;
 public class TagService {
 
     @PersistenceContext
-    protected EntityManager entityManager;
+    private EntityManager entityManager;
 
     public List<Tag> findAll() {
         return entityManager.createNamedQuery("Tag.findAll", Tag.class).getResultList();

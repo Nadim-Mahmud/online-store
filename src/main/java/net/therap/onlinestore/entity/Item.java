@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.ResultCheckStyle;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -50,7 +51,10 @@ public class Item extends Persistent implements Serializable {
     @Column(name = "price")
     private double price;
 
-    @NotNull(message = "{input.number}")
+    @Transient
+    @JsonIgnore
+    private MultipartFile image;
+
     @Column(name = "image_path")
     private String imagePath;
 
@@ -148,6 +152,14 @@ public class Item extends Persistent implements Serializable {
 
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
+    }
+
+    public MultipartFile getImage() {
+        return image;
+    }
+
+    public void setImage(MultipartFile image) {
+        this.image = image;
     }
 
     @JsonIgnore

@@ -16,7 +16,7 @@ import java.util.List;
 public class CategoryService {
 
     @PersistenceContext
-    protected EntityManager entityManager;
+    private EntityManager entityManager;
 
     public List<Category> findAll() {
         return entityManager.createNamedQuery("Category.findAll", Category.class).getResultList();

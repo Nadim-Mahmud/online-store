@@ -27,7 +27,7 @@
                 <h5 class="text-center mb-3">
                     <fmt:message key="item.form.title"/>
                 </h5>
-                <form:form action="/admin/item/save" modelAttribute="item" method="post">
+                <form:form action="/admin/item/save" modelAttribute="item" method="post" enctype="multipart/form-data">
                     <div class="mb-3">
                         <label for="name" class="form-label required-fields">
                             <fmt:message key="label.name"/>
@@ -43,11 +43,11 @@
                         <form:errors path="price" cssClass="text-danger"/>
                     </div>
                     <div class="mb-3">
-                        <label for="imagePath" class="form-label required-fields">
+                        <label for="image" class="form-label required-fields">
                             <fmt:message key="label.image"/>
                         </label>
-                        <form:input type="file" path="imagePath" class="form-control"/>
-                        <form:errors path="imagePath" cssClass="text-danger"/>
+                        <form:input type="file" path="image" class="form-control"/>
+                        <form:errors path="image" cssClass="text-danger"/>
                     </div>
                     <div class="mb-3">
                         <label for="category" class="form-label required-fields">

@@ -3,12 +3,16 @@ package net.therap.onlinestore.service;
 import net.therap.onlinestore.entity.Item;
 import net.therap.onlinestore.entity.Tag;
 import net.therap.onlinestore.helper.ItemHelper;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.servlet.ServletContext;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +29,10 @@ public class ItemService {
     private final ItemHelper itemHelper;
 
     @PersistenceContext
-    protected EntityManager entityManager;
+    private EntityManager entityManager;
+
+    @Autowired
+    private ServletContext servletContext;
 
     @Autowired
     TagService tagService;
@@ -36,6 +43,13 @@ public class ItemService {
 
     public List<Item> findAll() {
         return entityManager.createNamedQuery("Item.findAll", Item.class).getResultList();
+    }
+
+    public List<Item> findPaginated(int start, int limit) {
+        return entityManager.createNamedQuery("Item.findAll", Item.class)
+                .setFirstResult(start)
+                .setMaxResults(limit)
+                .getResultList();
     }
 
     public List<Item> findByCategory(int categoryId) {
@@ -94,6 +108,19 @@ public class ItemService {
 
     @Transactional
     public Item saveOrUpdate(Item item) throws Exception {
+
+        if (nonNull(item.getImage()) || !item.getImage().isEmpty()) {
+            String filename = servletContext.getRealPath("/") + "resources/images/"
+                    + item.getName().replace(' ', '_') + "." + FilenameUtils.getExtension(item.getImage().getOriginalFilename());
+
+            try {
+                item.getImage().transferTo(new File(filename));
+            } catch (IOException e) {
+                throw e;
+            }
+
+            item.setImagePath(filename);
+        }
 
         if (item.isNew()) {
             entityManager.persist(item);

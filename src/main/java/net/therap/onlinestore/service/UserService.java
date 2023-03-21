@@ -22,7 +22,7 @@ import java.util.Objects;
 public class UserService {
 
     @PersistenceContext
-    protected EntityManager entityManager;
+    private EntityManager entityManager;
 
     public List<User> findAll() {
         return entityManager.createNamedQuery("User.findAll", User.class).getResultList();

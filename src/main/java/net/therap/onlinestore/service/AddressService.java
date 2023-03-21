@@ -16,7 +16,7 @@ import java.util.List;
 public class AddressService {
 
     @PersistenceContext
-    protected EntityManager entityManager;
+    private EntityManager entityManager;
 
     public List<Address> findAll() {
         return entityManager.createNamedQuery("Address.findAll", Address.class).getResultList();
