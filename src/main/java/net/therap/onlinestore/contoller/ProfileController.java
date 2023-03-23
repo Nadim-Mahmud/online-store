@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import net.therap.onlinestore.exception.IllegalAccessException;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.Locale;
 
@@ -84,6 +85,23 @@ public class ProfileController {
         return REGISTRATION_FORM_VIEW;
     }
 
+    @GetMapping(UPDATE_PASSWORD_URL)
+    public String showPasswordUpdatePage(ModelMap modelMap, @SessionAttribute(ACTIVE_USER) User user) {
+        Password password = new Password();
+        password.setStoredUserPassword(user.getPassword());
+        modelMap.put(PASSWORD, password);
+
+        return UPDATE_PASSWORD_VIEW;
+    }
+
+    @GetMapping(UPDATE_PROFILE_URL)
+    String updateProfileFrom(@SessionAttribute(ACTIVE_USER) User user, ModelMap modelMap) {
+        modelMap.put(USER, userService.findById(user.getId()));
+        modelMap.put(PROFILE_UPDATE_PAGE, true);
+
+        return UPDATE_PROFILE_VIEW;
+    }
+
     @PostMapping(REGISTRATION_FORM_SAVE_URL)
     public String saveCustomer(@Valid @ModelAttribute(CUSTOMER) User customer,
                                BindingResult bindingResult,
@@ -105,19 +123,11 @@ public class ProfileController {
         return REDIRECT + REGISTRATION_FORM_REDIRECT_URL;
     }
 
-    @GetMapping(UPDATE_PASSWORD_URL)
-    public String showPasswordUpdatePage(ModelMap modelMap, @SessionAttribute(ACTIVE_USER) User user) {
-        Password password = new Password();
-        password.setStoredUserPassword(user.getPassword());
-        modelMap.put(PASSWORD, password);
-
-        return UPDATE_PASSWORD_VIEW;
-    }
-
     @PostMapping(SAVE_PASSWORD_URL)
     String savePassword(@SessionAttribute(ACTIVE_USER) User user,
                         @Valid @ModelAttribute(PASSWORD) Password password,
-                        BindingResult bindingResult) throws Exception {
+                        BindingResult bindingResult,
+                        HttpSession httpSession) throws Exception {
 
         if (bindingResult.hasErrors()) {
             return UPDATE_PASSWORD_VIEW;
@@ -125,23 +135,17 @@ public class ProfileController {
 
         user.setPassword(Encryption.getPBKDF2(password.getNewPassword()));
         userService.saveOrUpdate(user);
+        httpSession.setAttribute(ACTIVE_USER, userService.findById(user.getId()));
 
         return REDIRECT;
-    }
-
-    @GetMapping(UPDATE_PROFILE_URL)
-    String updateProfileFrom(@SessionAttribute(ACTIVE_USER) User user, ModelMap modelMap) {
-        modelMap.put(USER, userService.findById(user.getId()));
-        modelMap.put(PROFILE_UPDATE_PAGE, true);
-
-        return UPDATE_PROFILE_VIEW;
     }
 
     @PostMapping(SAVE_PROFILE_URL)
     String updateProfile(@SessionAttribute(ACTIVE_USER) User activeUser,
                          @Valid @ModelAttribute(USER) User user,
                          BindingResult bindingResult,
-                         RedirectAttributes redirectAttributes) throws Exception {
+                         RedirectAttributes redirectAttributes,
+                         HttpSession httpSession) throws Exception {
 
         if (activeUser.getId() != user.getId()) {
             throw new IllegalAccessException();
@@ -152,6 +156,7 @@ public class ProfileController {
         }
 
         userService.saveOrUpdate(user);
+        httpSession.setAttribute(ACTIVE_USER, userService.findById(user.getId()));
 
         redirectAttributes.addFlashAttribute(SUCCESS, messageSource.getMessage("success.profile.updated", null, Locale.getDefault()));
 

@@ -12,7 +12,6 @@ public interface Constants {
     String EMAIL_PATTERN = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}";
     String CELL_NO_PATTERN = "01([0-9]){9,9}";
     String PASSWORD_PATTERN = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,}$";
-    String IMAGES_DIR = "/home/nadimmahmud/Nadim/resources/";
     String ACTIVE_USER = "activeUser";
     String USER = "user";
     String USER_LIST = "userList";

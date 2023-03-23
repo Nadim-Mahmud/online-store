@@ -25,7 +25,6 @@ import java.util.Objects;
 @Where(clause = "access_status <> 'DELETED'")
 @NamedQueries({
         @NamedQuery(name = "Item.findAll", query = "SELECT i FROM Item i ORDER BY i.name ASC"),
-        @NamedQuery(name = "Item.findAllCount", query = "SELECT COUNT(i) FROM Item i ORDER BY i.name ASC"),
         @NamedQuery(name = "Item.search", query = "SELECT i FROM Item i WHERE LOWER(i.name) LIKE LOWER(:searchKey) OR LOWER(i.category.name) LIKE LOWER(:searchKey) OR LOWER(i.description) LIKE LOWER(:searchKey) ORDER BY i.name ASC"),
         @NamedQuery(name = "Item.findAvailable", query = "SELECT i FROM Item i WHERE i.availability = 'AVAILABLE' ORDER BY i.name ASC"),
         @NamedQuery(name = "Item.findItemsByNameAndId", query = "SELECT i FROM Item i WHERE i.name = :name AND i.id != :id"),

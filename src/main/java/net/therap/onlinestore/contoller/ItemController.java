@@ -117,6 +117,18 @@ public class ItemController {
         return ITEM_FORM_VIEW;
     }
 
+    @GetMapping(ITEM_CATEGORY_ID)
+    @ResponseBody
+    public List<Item> getItemByCategoryId(@PathVariable(CATEGORY_ID) int categoryId) {
+        return itemService.findByCategory(categoryId);
+    }
+
+    @GetMapping(value = ITEM_IMAGE, produces = MediaType.IMAGE_JPEG_VALUE)
+    @ResponseBody
+    public byte[] getImageByItemId(@RequestParam(ITEM_ID) int itemId) throws IOException {
+        return fIleService.getImageByItemId(itemId);
+    }
+
     @PostMapping(ITEM_FORM_SAVE_URL)
     public String saveOrUpdateItem(@SessionAttribute(ACTIVE_USER) User user,
                                    @Valid @ModelAttribute(ITEM) Item item,
@@ -149,18 +161,6 @@ public class ItemController {
         redirectAttributes.addFlashAttribute(SUCCESS, messageSource.getMessage("success.delete", null, Locale.getDefault()));
 
         return REDIRECT + ITEM_REDIRECT_URL;
-    }
-
-    @GetMapping(ITEM_CATEGORY_ID)
-    @ResponseBody
-    public List<Item> getItemByCategoryId(@PathVariable(CATEGORY_ID) int categoryId) {
-        return itemService.findByCategory(categoryId);
-    }
-
-    @GetMapping(value = ITEM_IMAGE, produces = MediaType.IMAGE_JPEG_VALUE)
-    @ResponseBody
-    public byte[] getImageByItemId(@RequestParam(ITEM_ID) int itemId) throws IOException {
-        return fIleService.getImageByItemId(itemId);
     }
 
     private void setupReferenceDataItemForm(ModelMap modelMap) {

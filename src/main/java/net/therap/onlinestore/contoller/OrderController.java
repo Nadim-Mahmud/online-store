@@ -3,6 +3,7 @@ package net.therap.onlinestore.contoller;
 import net.therap.onlinestore.entity.*;
 import net.therap.onlinestore.exception.IllegalAccessException;
 import net.therap.onlinestore.formatter.ItemFormatter;
+import net.therap.onlinestore.formatter.StringToIntgerFormatter;
 import net.therap.onlinestore.helper.AccessCheckHelper;
 import net.therap.onlinestore.service.CategoryService;
 import net.therap.onlinestore.service.ItemService;
@@ -70,10 +71,14 @@ public class OrderController {
     @Autowired
     private ItemFormatter itemFormatter;
 
+    @Autowired
+    private StringToIntgerFormatter stringToIntgerFormatter;
+
     @InitBinder
     public void initBinder(WebDataBinder webDataBinder) {
         webDataBinder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
         webDataBinder.addCustomFormatter(itemFormatter);
+        webDataBinder.addCustomFormatter(stringToIntgerFormatter, "quantity");
     }
 
     @GetMapping(ORDER_FORM_URL)
@@ -96,6 +101,24 @@ public class OrderController {
         modelMap.put(NAV_ITEM, ORDER_FORM);
 
         return ORDER_FORM_VIEW;
+    }
+
+    @GetMapping(NEXT_PAGE)
+    public String showAddressPage(@SessionAttribute(ORDER) Order order,
+                                  ModelMap modelMap,
+                                  RedirectAttributes redirectAttributes) {
+
+        if (order.getOrderItemList().isEmpty()) {
+            redirectAttributes.addFlashAttribute(EMPTY_LIST, EMPTY_LIST);
+
+            return REDIRECT + NEW_ORDER_REDIRECT_URL;
+        }
+
+        Address address = order.isNew() ? new Address() : order.getAddress();
+        modelMap.put(ADDRESS, address);
+        modelMap.put(NAV_ITEM, ORDER_FORM);
+
+        return ADDRESS_VIEW;
     }
 
     @PostMapping(ADD_ORDER_ITEM_URL)
@@ -121,7 +144,6 @@ public class OrderController {
             return ITEM_DETAILS_VIEW;
         }
 
-        modelMap.put(ITEM_LIST, itemService.findAvailableItems());
         modelMap.put(ORDER_ITEM_LIST, order.getOrderItemList());
         modelMap.put(NAV_ITEM, ORDER_FORM);
         modelMap.put(CATEGORY_LIST, categoryService.findAll());
@@ -135,24 +157,6 @@ public class OrderController {
         order.removeOrderItem(new OrderItem(orderItemId));
 
         return REDIRECT + NEW_ORDER_REDIRECT_URL;
-    }
-
-    @GetMapping(NEXT_PAGE)
-    public String showAddressPage(@SessionAttribute(ORDER) Order order,
-                                  ModelMap modelMap,
-                                  RedirectAttributes redirectAttributes) {
-
-        if (order.getOrderItemList().isEmpty()) {
-            redirectAttributes.addFlashAttribute(EMPTY_LIST, EMPTY_LIST);
-
-            return REDIRECT + NEW_ORDER_REDIRECT_URL;
-        }
-
-        Address address = order.isNew() ? new Address() : order.getAddress();
-        modelMap.put(ADDRESS, address);
-        modelMap.put(NAV_ITEM, ORDER_FORM);
-
-        return ADDRESS_VIEW;
     }
 
     @PostMapping(ORDER_FORM_SAVE_URL)

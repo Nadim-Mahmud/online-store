@@ -6,7 +6,10 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NegativeOrZero;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.Objects;
 
@@ -36,6 +39,7 @@ public class OrderItem extends Persistent {
     private Date acceptedAt;
 
     @Min(value = 1, message = "{input.quantity}")
+    @Max(value = 500, message = "{input.quantity}")
     @Column(name = "quantity")
     private int quantity;
 

@@ -8,6 +8,7 @@ import net.therap.onlinestore.service.CategoryService;
 import net.therap.onlinestore.service.ItemService;
 import net.therap.onlinestore.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -79,7 +80,6 @@ public class HomeController {
         }
 
         int start = PaginationHelper.calculateStartPage(pageStartValue, pageType);
-
         modelMap.put(CATEGORY_LIST, categoryService.findAll());
         modelMap.put(TAG_LIST, tagService.findAll());
         modelMap.put(ITEM_LIST, itemService.search(searchKey, start, ITEM_PER_PAGE));

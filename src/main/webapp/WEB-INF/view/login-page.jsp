@@ -29,7 +29,7 @@
                 <div class="login">
                     <div class="row justify-content-center">
                         <div class="col">
-                            <img src="${pageContext.request.contextPath}/assets/images/therap.png"
+                            <img src="${pageContext.request.contextPath}/assets/images/shop.png"
                                  class="rounded mx-auto d-block">
                         </div>
                         <div class="col">

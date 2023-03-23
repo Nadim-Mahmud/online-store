@@ -3,6 +3,7 @@ package net.therap.onlinestore.service;
 import net.therap.onlinestore.entity.Item;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
@@ -13,7 +14,6 @@ import java.io.IOException;
 import java.util.Objects;
 
 import static java.util.Objects.nonNull;
-import static net.therap.onlinestore.constant.Constants.IMAGES_DIR;
 
 /**
  * @author nadimmahmud
@@ -22,7 +22,11 @@ import static net.therap.onlinestore.constant.Constants.IMAGES_DIR;
 @Service
 public class FIleService {
 
-    private static final String PLACE_HOLDER_IMAGE = "placeholder.png";
+    @Value("${item.image.directory}")
+    private String imageDirectory;
+
+    @Value("${item.image.placeholder.image}")
+    private String placeHolderImageName;
 
     @Autowired
     private ItemService itemService;
@@ -30,7 +34,7 @@ public class FIleService {
     public void saveItemImage(Item item) throws IOException {
 
         if (nonNull(item.getImage()) && !item.getImage().isEmpty()) {
-            String filename = IMAGES_DIR + item.getName().replace(' ', '_') + "." + FilenameUtils.getExtension(item.getImage().getOriginalFilename());
+            String filename = imageDirectory + item.getName().replace(' ', '_') + "." + FilenameUtils.getExtension(item.getImage().getOriginalFilename());
 
             try {
                 item.getImage().transferTo(new File(filename));
@@ -44,7 +48,7 @@ public class FIleService {
 
     public byte[] getImageByItemId(int itemId) {
         String imagePath = itemService.findById(itemId).getImagePath();
-        String placeHolderImage = IMAGES_DIR + PLACE_HOLDER_IMAGE;
+        String placeHolderImage = imageDirectory + placeHolderImageName;
 
         if (Objects.isNull(imagePath)) {
             imagePath = placeHolderImage;
