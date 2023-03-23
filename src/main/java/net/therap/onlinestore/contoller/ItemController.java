@@ -1,9 +1,11 @@
 package net.therap.onlinestore.contoller;
 
 import net.therap.onlinestore.entity.*;
+import net.therap.onlinestore.exception.IllegalAccessException;
 import net.therap.onlinestore.formatter.CategoryFormatter;
 import net.therap.onlinestore.formatter.TagFormatter;
 import net.therap.onlinestore.helper.AccessCheckHelper;
+import net.therap.onlinestore.helper.ItemHelper;
 import net.therap.onlinestore.service.CategoryService;
 import net.therap.onlinestore.service.FIleService;
 import net.therap.onlinestore.service.ItemService;
@@ -107,9 +109,11 @@ public class ItemController {
     }
 
     @GetMapping(ITEM_FORM_URL)
-    public String showItemForm(@RequestParam(value = ITEM_ID_PARAM, required = false) String itemId,
-                               ModelMap modelMap) {
+    public String showItemForm(@SessionAttribute(value = ACTIVE_USER) User user,
+                               @RequestParam(value = ITEM_ID_PARAM, required = false) String itemId,
+                               ModelMap modelMap) throws IllegalAccessException {
         Item item = nonNull(itemId) ? itemService.findById(Integer.parseInt(itemId)) : new Item();
+        AccessCheckHelper.check(user, AccessType.LOAD_FORM, item);
         modelMap.put(ITEM, item);
         setupReferenceDataItemForm(modelMap);
 

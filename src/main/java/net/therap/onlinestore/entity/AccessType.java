@@ -11,5 +11,6 @@ public enum AccessType {
     UPDATE,
     DELETE,
     CANCEL,
-    ACCEPT
+    ACCEPT,
+    LOAD_FORM,
 }

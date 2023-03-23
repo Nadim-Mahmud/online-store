@@ -95,3 +95,5 @@ CREATE TABLE IF NOT EXISTS online_store.order_item
     FOREIGN KEY (item_id) REFERENCES online_store.item (id) ON DELETE CASCADE,
     FOREIGN KEY (order_id) REFERENCES online_store.order_table (id) ON DELETE CASCADE
 );
+
+alter table address alter column note drop not null;

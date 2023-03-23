@@ -33,7 +33,7 @@ function loadItemsByCategory(value) {
 }
 
 $(document).ready(function () {
-    $('#item-table, #category-table, #tag-table, #user-table').DataTable({
+    $('#item-table, #category-table, #tag-table, #user-table, #admin-order-table').DataTable({
         pagingType: 'full_numbers',
     });
 });

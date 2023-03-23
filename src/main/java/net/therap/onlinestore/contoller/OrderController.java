@@ -4,6 +4,7 @@ import net.therap.onlinestore.entity.*;
 import net.therap.onlinestore.exception.IllegalAccessException;
 import net.therap.onlinestore.formatter.ItemFormatter;
 import net.therap.onlinestore.helper.AccessCheckHelper;
+import net.therap.onlinestore.helper.OrderHelper;
 import net.therap.onlinestore.service.CategoryService;
 import net.therap.onlinestore.service.ItemService;
 import net.therap.onlinestore.service.OrderService;
@@ -30,10 +31,12 @@ import static net.therap.onlinestore.constant.Constants.*;
  * @since 3/8/23
  */
 @Controller
-@RequestMapping({CUSTOMER_BASE_URL, SHOPKEEPER_BASE_URL, DELIVERY_BASE_URL})
+@RequestMapping({ADMIN_BASE_URL, CUSTOMER_BASE_URL, SHOPKEEPER_BASE_URL, DELIVERY_BASE_URL})
 @SessionAttributes(ORDER)
 public class OrderController {
 
+    private static final String ALL_ORDER = "all-order";
+    private static final String ADMIN_ORDER_LIST = "admin-order-list";
     private static final String NEW_ORDER_REDIRECT_URL = "customer/order";
     private static final String ORDER_FORM_URL = "order";
     private static final String ORDER_FORM_VIEW = "order/order-form";
@@ -68,12 +71,25 @@ public class OrderController {
     private CategoryService categoryService;
 
     @Autowired
+    private OrderHelper orderHelper;
+
+    @Autowired
     private ItemFormatter itemFormatter;
 
     @InitBinder
     public void initBinder(WebDataBinder webDataBinder) {
         webDataBinder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
         webDataBinder.addCustomFormatter(itemFormatter);
+    }
+
+    @GetMapping(ALL_ORDER)
+    public String showAllOrder(@SessionAttribute(ACTIVE_USER) User user,
+                               ModelMap modelMap) throws IllegalAccessException {
+        orderHelper.allOrderAccess(user);
+        modelMap.put(ORDER_LIST, orderService.findAll());
+        modelMap.put(ALL_ORDER, ALL_ORDER);
+
+        return ADMIN_ORDER_LIST;
     }
 
     @GetMapping(ORDER_FORM_URL)
@@ -84,9 +100,7 @@ public class OrderController {
         order = Objects.nonNull(orderId) ? orderService.findById(Integer.parseInt(orderId)) :
                 (Objects.nonNull(order) ? order : new Order());
 
-        if (!orderService.isAccessible(user, order)) {
-            throw new IllegalAccessException();
-        }
+        orderHelper.orderFormAccess(user, order);
 
         modelMap.put(ORDER, order);
         modelMap.put(ORDER_ITEM_LIST, order.getOrderItemList());
@@ -99,9 +113,11 @@ public class OrderController {
     }
 
     @GetMapping(NEXT_PAGE)
-    public String showAddressPage(@SessionAttribute(ORDER) Order order,
+    public String showAddressPage(@SessionAttribute(ACTIVE_USER) User user,
+                                  @SessionAttribute(ORDER) Order order,
                                   ModelMap modelMap,
-                                  RedirectAttributes redirectAttributes) {
+                                  RedirectAttributes redirectAttributes) throws IllegalAccessException {
+        orderHelper.orderFormAccess(user, order);
 
         if (order.getOrderItemList().isEmpty()) {
             redirectAttributes.addFlashAttribute(EMPTY_LIST, EMPTY_LIST);
@@ -117,11 +133,13 @@ public class OrderController {
     }
 
     @PostMapping(ADD_ORDER_ITEM_URL)
-    public String addOrderItem(@SessionAttribute(ORDER) Order order,
+    public String addOrderItem(@SessionAttribute(ACTIVE_USER) User user,
+                               @SessionAttribute(ORDER) Order order,
                                @RequestParam(value = DETAILS_PAGE, required = false) String detailsPage,
                                @Valid @ModelAttribute(ORDER_ITEM) OrderItem orderItem,
                                BindingResult bindingResult,
-                               ModelMap modelMap) {
+                               ModelMap modelMap) throws IllegalAccessException {
+        orderHelper.orderFormAccess(user, order);
         OrderItemValidator.validate(order.getOrderItemList(), orderItem, bindingResult);
 
         if (!bindingResult.hasErrors()) {
@@ -147,8 +165,10 @@ public class OrderController {
     }
 
     @PostMapping(REMOVE_ORDER_ITEM_URL)
-    public String removeOrderItem(@SessionAttribute(ORDER) Order order,
-                                  @RequestParam(ORDER_ITEM_ID) int orderItemId) {
+    public String removeOrderItem(@SessionAttribute(ACTIVE_USER) User user,
+                                  @SessionAttribute(ORDER) Order order,
+                                  @RequestParam(ORDER_ITEM_ID) int orderItemId) throws IllegalAccessException {
+        orderHelper.orderFormAccess(user, order);
         order.removeOrderItem(new OrderItem(orderItemId));
 
         return REDIRECT + NEW_ORDER_REDIRECT_URL;
@@ -161,6 +181,7 @@ public class OrderController {
                                     BindingResult bindingResult,
                                     SessionStatus sessionStatus,
                                     RedirectAttributes redirectAttributes) throws Exception {
+        orderHelper.orderFormAccess(user, order);
 
         if (bindingResult.hasErrors()) {
             return ADDRESS_VIEW;

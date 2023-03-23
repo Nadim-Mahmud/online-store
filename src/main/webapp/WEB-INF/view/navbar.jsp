@@ -19,6 +19,7 @@ Date: 12/7/22
     <c:set var="navItemList" value="item" scope="page"/>
     <c:set var="navCategory" value="category" scope="page"/>
     <c:set var="navTag" value="tag" scope="page"/>
+    <c:set var="navAllOrder" value="all-order" scope="page"/>
     <c:set var="navNotification" value="notification" scope="page"/>
     <c:set var="navReadyOrder" value="readyOrder" scope="page"/>
     <c:set var="navDeliveryList" value="deliveryList" scope="page"/>
@@ -53,6 +54,11 @@ Date: 12/7/22
                     <li class="nav-item">
                         <a class="nav-link active underline-hover" aria-current="page" href="/admin/tag">
                                 ${navItem == navTag ? '<b>Tag</b>' : 'Tag'}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active underline-hover" aria-current="page" href="/admin/all-order">
+                                ${navItem == navAllOrder ? '<b>All Order</b>' : 'All Order'}
                         </a>
                     </li>
                 </c:if>

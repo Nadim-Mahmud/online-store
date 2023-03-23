@@ -34,7 +34,7 @@ public class AccessCheckHelper {
 
         if (entity instanceof Item) {
 
-            if ((AccessType.SAVE.equals(access) || AccessType.DELETE.equals(access)) && !UserType.ADMIN.equals(user.getType())) {
+            if ((AccessType.LOAD_FORM.equals(access) || AccessType.SAVE.equals(access) || AccessType.DELETE.equals(access)) && !UserType.ADMIN.equals(user.getType())) {
                 throw new IllegalAccessException();
             }
         }
