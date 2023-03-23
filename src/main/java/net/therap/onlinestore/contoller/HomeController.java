@@ -1,6 +1,5 @@
 package net.therap.onlinestore.contoller;
 
-import net.therap.onlinestore.entity.Item;
 import net.therap.onlinestore.entity.PaginationPageType;
 import net.therap.onlinestore.helper.ItemHelper;
 import net.therap.onlinestore.helper.PaginationHelper;
@@ -8,7 +7,6 @@ import net.therap.onlinestore.service.CategoryService;
 import net.therap.onlinestore.service.ItemService;
 import net.therap.onlinestore.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -54,10 +52,10 @@ public class HomeController {
     }
 
     @GetMapping(HOME_URL)
-    public String showHome(@RequestParam(value = PAGE_TYPE, required = false) PaginationPageType pageType,
-                           @RequestParam(value = PAGE_START_VALUE, required = false) String pageStartValue,
-                           @RequestParam(value = CATEGORY_ID, required = false) String categoryId,
-                           @RequestParam(value = TAG_ID, required = false) String tagId, ModelMap modelMap) {
+    public String showHomePage(@RequestParam(value = PAGE_TYPE, required = false) PaginationPageType pageType,
+                               @RequestParam(value = PAGE_START_VALUE, required = false) String pageStartValue,
+                               @RequestParam(value = CATEGORY_ID, required = false) String categoryId,
+                               @RequestParam(value = TAG_ID, required = false) String tagId, ModelMap modelMap) {
         int start = PaginationHelper.calculateStartPage(pageStartValue, pageType);
         modelMap.put(CATEGORY_LIST, categoryService.findAll());
         modelMap.put(TAG_LIST, tagService.findAll());

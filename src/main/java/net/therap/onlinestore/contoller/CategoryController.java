@@ -31,10 +31,10 @@ public class CategoryController {
 
     private static final String CATEGORY_REDIRECT_URL = "admin/category";
     private static final String CATEGORY_URL = "category";
-    private static final String CATEGORY_VIEW = "category-list";
+    private static final String CATEGORY_VIEW = "category/category-list";
     private static final String CATEGORY_FORM_URL = "category/form";
     private static final String CATEGORY_FORM_SAVE_URL = "category/save";
-    private static final String CATEGORY_FORM_VIEW = "category-form";
+    private static final String CATEGORY_FORM_VIEW = "category/category-form";
     private static final String CATEGORY_ID_PARAM = "categoryId";
     private static final String CATEGORY_DELETE_URL = "category/delete";
 

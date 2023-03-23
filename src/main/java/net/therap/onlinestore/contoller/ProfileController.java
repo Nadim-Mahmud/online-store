@@ -17,7 +17,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import net.therap.onlinestore.exception.IllegalAccessException;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -36,15 +35,15 @@ public class ProfileController {
 
     private static final String REGISTRATION_FORM_REDIRECT_URL = "login-page";
     private static final String REGISTRATION_FORM_URL = "registration";
-    private static final String REGISTRATION_FORM_VIEW = "registration-form";
+    private static final String REGISTRATION_FORM_VIEW = "profile/registration-form";
     private static final String REGISTRATION_FORM_SAVE_URL = "registration/save";
 
     private static final String UPDATE_PASSWORD_URL = "update-password";
-    private static final String UPDATE_PASSWORD_VIEW = "password-form";
+    private static final String UPDATE_PASSWORD_VIEW = "profile/password-form";
     private static final String SAVE_PASSWORD_URL = "/update-password/update";
 
     private static final String UPDATE_PROFILE_URL = "update-profile";
-    private static final String UPDATE_PROFILE_VIEW = "profile-update-form";
+    private static final String UPDATE_PROFILE_VIEW = "profile/profile-update-form";
     private static final String SAVE_PROFILE_URL = "/update-profile/update";
 
     @Autowired
@@ -127,7 +126,8 @@ public class ProfileController {
     String savePassword(@SessionAttribute(ACTIVE_USER) User user,
                         @Valid @ModelAttribute(PASSWORD) Password password,
                         BindingResult bindingResult,
-                        HttpSession httpSession) throws Exception {
+                        HttpSession httpSession,
+                        RedirectAttributes redirectAttributes) throws Exception {
 
         if (bindingResult.hasErrors()) {
             return UPDATE_PASSWORD_VIEW;
@@ -136,8 +136,9 @@ public class ProfileController {
         user.setPassword(Encryption.getPBKDF2(password.getNewPassword()));
         userService.saveOrUpdate(user);
         httpSession.setAttribute(ACTIVE_USER, userService.findById(user.getId()));
+        redirectAttributes.addFlashAttribute(SUCCESS, messageSource.getMessage("success.password.updated", null, Locale.getDefault()));
 
-        return REDIRECT;
+        return REDIRECT + UPDATE_PASSWORD_URL;
     }
 
     @PostMapping(SAVE_PROFILE_URL)
@@ -157,9 +158,8 @@ public class ProfileController {
 
         userService.saveOrUpdate(user);
         httpSession.setAttribute(ACTIVE_USER, userService.findById(user.getId()));
-
         redirectAttributes.addFlashAttribute(SUCCESS, messageSource.getMessage("success.profile.updated", null, Locale.getDefault()));
 
-        return REDIRECT;
+        return REDIRECT + UPDATE_PROFILE_URL;
     }
 }

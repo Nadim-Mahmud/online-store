@@ -11,7 +11,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Objects;
 
-import static net.therap.onlinestore.constant.Constants.*;
+import static net.therap.onlinestore.constant.Constants.ACTIVE_USER;
 
 /**
  * @author nadimmahmud

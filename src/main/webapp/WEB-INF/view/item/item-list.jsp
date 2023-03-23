@@ -1,6 +1,6 @@
 <%--
   User: nadimmahmud
-  Since: 1/18/23
+  Since: 1/19/23
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
@@ -12,7 +12,7 @@
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <title>
-        <fmt:message key="category.list.page.title"/>
+        <fmt:message key="item.list.page.title"/>
     </title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -22,39 +22,39 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css"/>
 </head>
 <body>
-
-<jsp:include page="navbar.jsp"/>
+<jsp:include page="../navbar.jsp"/>
 <div class="container">
     <div class="d-flex justify-content-end mt-3 mb-1">
-        <form:form class="m-0" action="${pageContext.request.contextPath}/admin/category/form" method="get">
+        <form:form class="m-0" action="${pageContext.request.contextPath}/admin/item/form" method="get">
             <button class="btn btn-success btn-sm">
-                <fmt:message key="button.add.category"/>
+                <fmt:message key="button.add.item"/>
             </button>
         </form:form>
     </div>
-    <div class="text-center">
-        <c:if test="${success != null}">
-            <p class="text-success">
-                &check; ${success}!
-            </p>
-        </c:if>
-        <c:if test="${failed != null}">
-            <p class="text-danger">
-                &cross; ${failed}
-            </p>
-        </c:if>
-    </div>
-    <table id="category-table" class="table table-hover table-sm align-middle text-center">
+    <%@ include file="../message-view.jsp" %>
+    <table id="item-table" class="table table-hover table-sm align-middle text-center">
         <thead class="table-head bg-primary bg-opacity-50">
         <tr>
             <th scope="col" class="text-center">
                 <fmt:message key="label.serial"/>
             </th>
             <th scope="col" class="text-center">
+                <fmt:message key="label.item"/>
+            </th>
+            <th scope="col" class="text-center">
+                <fmt:message key="label.price"/>
+            </th>
+            <th scope="col" class="text-center">
                 <fmt:message key="label.category"/>
             </th>
             <th scope="col" class="text-center">
-                <fmt:message key="label.itemList"/>
+                <fmt:message key="label.tag.list"/>
+            </th>
+            <th scope="col" class="text-center">
+                <fmt:message key="label.availability"/>
+            </th>
+            <th scope="col" class="text-center">
+                <fmt:message key="label.description"/>
             </th>
             <th scope="col" class="text-center">
                 <fmt:message key="label.action"/>
@@ -62,36 +62,48 @@
         </tr>
         </thead>
         <tbody>
-        <c:forEach items="${categoryList}" var="category" varStatus="categoryStat">
+        <c:forEach items="${itemList}" var="item" varStatus="itemStat">
             <tr>
                 <td class="text-center">
-                    <c:out value="${categoryStat.count}"/>
+                    <c:out value="${itemStat.count}"/>
                 </td>
                 <td class="text-center">
-                    <c:out value="${category.name}"/>
+                    <c:out value="${item.name}"/>
                 </td>
                 <td class="text-center">
-                    <c:if test="${category.itemList.size() == 0}">
+                    <c:out value="${item.price}"/>
+                </td>
+                <td class="text-center">
+                    <c:out value="${item.category.name}"/>
+                </td>
+                <td class="text-center">
+                    <c:if test="${item.tagList.size() == 0}">
                         <fmt:message key="label.empty"/>
                     </c:if>
                     <ul>
-                        <c:forEach items="${category.itemList}" var="item">
-                            <li><c:out value="${item.name}"/></li>
+                        <c:forEach items="${item.tagList}" var="tag">
+                            <li><c:out value="${tag.name}"/></li>
                         </c:forEach>
                     </ul>
                 </td>
+                <td class="text-center">
+                    <c:out value="${item.availability.label}"/>
+                </td>
+                <td class="text-center">
+                    <c:out value="${item.description}"/>
+                </td>
                 <td>
                     <div class="d-flex justify-content-center my-1">
-                        <c:url var="updateUrl" value="${pageContext.request.contextPath}/admin/category/form">
-                            <c:param name="categoryId" value="${category.id}"/>
+                        <c:url var="updateUrl" value="${pageContext.request.contextPath}/admin/item/form">
+                            <c:param name="itemId" value="${item.id}"/>
                         </c:url>
                         <a class="text-center my-0 mx-2 p-0" href="${updateUrl}">
                             <button class="btn btn-outline-primary center btn-sm">
                                 <fmt:message key="button.update"/>
                             </button>
                         </a>
-                        <c:url var="deleteUrl" value="${pageContext.request.contextPath}/admin/category/delete">
-                            <c:param name="categoryId" value="${category.id}"/>
+                        <c:url var="deleteUrl" value="${pageContext.request.contextPath}/admin/item/delete">
+                            <c:param name="itemId" value="${item.id}"/>
                         </c:url>
                         <form:form class="text-center my-0 mx-2 p-0" action="${deleteUrl}" method="post">
                             <button class="btn btn-outline-danger center btn-sm"
@@ -105,7 +117,6 @@
         </c:forEach>
         </tbody>
     </table>
-
 </div>
 <script type="text/javascript"
         src="https://code.jquery.com/jquery-3.5.1.js">

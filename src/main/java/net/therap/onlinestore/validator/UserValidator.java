@@ -41,7 +41,6 @@ public class UserValidator implements Validator {
         }
 
         if (Objects.nonNull(user.getPassword()) && !user.getPassword().equals(user.getConfirmPassword()) && user.isNew()) {
-            errors.rejectValue("password", "input.password.confirm");
             errors.rejectValue("confirmPassword", "input.password.confirm");
         }
     }

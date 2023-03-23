@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/style.css">
 </head>
 <body>
-<%@ include file="navbar.jsp" %>
+<%@ include file="../navbar.jsp" %>
 <div class="container">
     <div class="container col-md-5 mt-2">
         <div class="card">
@@ -28,13 +28,6 @@
                     <fmt:message key="address.form.title"/>
                 </h5>
                 <form:form class="m-0 p - 0 " action="/customer/order/save" modelAttribute="address" method="post">
-                    <div class="mb-3">
-                        <label for="title" class="form-label required-fields">
-                            <fmt:message key="label.title"/>
-                        </label>
-                        <form:input path="title" class="form-control"/>
-                        <form:errors path="title" cssClass="text-danger"/>
-                    </div>
                     <div class="mb-3">
                         <label for="address" class="form-label required-fields">
                             <fmt:message key="label.address"/>

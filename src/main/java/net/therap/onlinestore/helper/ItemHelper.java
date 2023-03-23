@@ -4,7 +4,6 @@ import net.therap.onlinestore.entity.Item;
 import net.therap.onlinestore.entity.Tag;
 import net.therap.onlinestore.service.ItemService;
 import net.therap.onlinestore.service.TagService;
-import org.hibernate.dialect.TimesTenDialect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

@@ -31,10 +31,10 @@ public class TagController {
 
     private static final String TAG_REDIRECT_URL = "admin/tag";
     private static final String TAG_URL = "tag";
-    private static final String TAG_VIEW = "tag-list";
+    private static final String TAG_VIEW = "tag/tag-list";
     private static final String TAG_FORM_URL = "tag/form";
     private static final String TAG_FORM_SAVE_URL = "tag/save";
-    private static final String TAG_FORM_VIEW = "tag-form";
+    private static final String TAG_FORM_VIEW = "tag/tag-form";
     private static final String TAG_ID_PARAM = "tagId";
     private static final String TAG_DELETE_URL = "tag/delete";
 

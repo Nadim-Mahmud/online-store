@@ -2,10 +2,8 @@ package net.therap.onlinestore.command;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 
-import static net.therap.onlinestore.constant.Constants.PASSWORD;
 import static net.therap.onlinestore.constant.Constants.PASSWORD_PATTERN;
 
 /**
@@ -18,14 +16,14 @@ public class Password implements Serializable {
 
     private String storedUserPassword;
 
-    @NotNull(message = "{input.text}")
+    @NotNull(message = "{input.password}")
     private String oldPassword;
 
-    @NotNull(message = "{input.text}")
+    @NotNull
     @Pattern(regexp = PASSWORD_PATTERN, message = "{input.password}")
     private String newPassword;
 
-    @NotNull(message = "{input.text}")
+    @NotNull(message = "{input.password}")
     private String confirmPassword;
 
     public String getStoredUserPassword() {

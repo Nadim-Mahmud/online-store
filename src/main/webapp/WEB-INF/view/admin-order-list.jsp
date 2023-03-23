@@ -23,18 +23,7 @@
     <c:set var="ordered" value="ORDERED" scope="page"/>
     <div class="container col-md-10 mt-2">
         <div class="card">
-            <div class="text-center">
-                <c:if test="${success != null}">
-                    <p class="text-success">
-                        &check; ${success}!
-                    </p>
-                </c:if>
-                <c:if test="${failed != null}">
-                    <p class="text-danger">
-                        &cross; ${failed}
-                    </p>
-                </c:if>
-            </div>
+            <%@ include file="message-view.jsp"%>
             <div class="card-body">
                 <h5 class="text-center mb-3">
                     <fmt:message key="order.ready.title"/>

@@ -1,8 +1,6 @@
 package net.therap.onlinestore.formatter;
 
-import net.therap.onlinestore.entity.Category;
 import net.therap.onlinestore.entity.Tag;
-import net.therap.onlinestore.service.CategoryService;
 import net.therap.onlinestore.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.Formatter;

@@ -13,12 +13,12 @@ import java.util.List;
 @Component
 public class OrderHelper {
 
-    public List<Order> calculatePriceOfOrderList(List<Order> orderList){
+    public List<Order> calculatePriceOfOrderList(List<Order> orderList) {
 
-        for (Order order : orderList){
+        for (Order order : orderList) {
             double price = 0;
 
-            for (OrderItem orderItem : order.getOrderItemList()){
+            for (OrderItem orderItem : order.getOrderItemList()) {
                 price += orderItem.getItem().getPrice() * orderItem.getQuantity();
             }
 

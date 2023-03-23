@@ -19,23 +19,12 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/style.css">
 </head>
 <body>
-<%@ include file="navbar.jsp" %>
+<%@ include file="../navbar.jsp" %>
 <div class="container">
     <div class="container col-md-5 mt-2">
         <div class="card">
             <div class="card-body">
-                <div class="text-center">
-                    <c:if test="${success != null}">
-                        <p class="text-success">
-                            &check; ${success}!
-                        </p>
-                    </c:if>
-                    <c:if test="${failed != null}">
-                        <p class="text-danger">
-                            &cross; ${failed}
-                        </p>
-                    </c:if>
-                </div>
+                <%@ include file="../message-view.jsp" %>
                 <div class="card shadow-sm mb-1 bg-body-tertiary rounded">
                     <img src="/item/image?itemId=${item.id}" class="card-img-top" alt="image">
                     <div class="card-body">
@@ -45,15 +34,23 @@
                                     <c:param name="detailsPage" value="${true}"/>
                                     <c:param name="itemId" value="${item.id}"/>
                                 </c:url>
-                                <form:form class="d-flex m-2" modelAttribute="orderItem" action="${addItemUrl}"
+                                <form:form class="m-2" modelAttribute="orderItem" action="${addItemUrl}"
                                            method="post">
-                                    <form:input path="item" type="hidden" value="${item.id}"/>
-                                    <form:input class="form-control me-2" placeholder="Quantity" aria-label="Quantity"
-                                                path="quantity"/>
-                                    <form:errors path="quantity" cssClass="text-danger"/>
-                                    <button class="btn btn-success btn-sm text-nowrap" type="submit">
-                                        <fmt:message key="button.add.to.cart"/>
-                                    </button>
+                                    <div class="d-flex ">
+                                        <form:input path="item" type="hidden" value="${item.id}"/>
+                                        <form:input class="form-control me-2" placeholder="Quantity"
+                                                    aria-label="Quantity"
+                                                    path="quantity"/>
+                                        <button class="btn btn-success btn-sm text-nowrap" type="submit">
+                                            <fmt:message key="button.add.to.cart"/>
+                                        </button>
+                                    </div>
+                                    <div>
+                                        <form:errors path="item" cssClass="text-danger"/>
+                                    </div>
+                                    <div>
+                                        <form:errors path="quantity" cssClass="text-danger"/>
+                                    </div>
                                 </form:form>
                             </div>
                         </c:if>

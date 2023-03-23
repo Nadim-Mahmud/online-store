@@ -18,7 +18,6 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import net.therap.onlinestore.exception.IllegalAccessException;
 
 import javax.validation.Valid;
 import java.security.NoSuchAlgorithmException;
@@ -43,10 +42,10 @@ public class UserController {
     private static final String DELIVERYMAN_REDIRECT_URL = "admin/deliveryMan/list";
     private static final String CUSTOMER_REDIRECT_URL = "admin/customer/list";
     private static final String USER_URL = "{user-type}/list";
-    private static final String USER_VIEW = "user-list";
+    private static final String USER_VIEW = "user/user-list";
     private static final String USER_FORM_URL = "user/form";
     private static final String USER_FORM_SAVE_URL = "user/save";
-    private static final String USER_FORM_VIEW = "user-form";
+    private static final String USER_FORM_VIEW = "user/user-form";
     private static final String USER_ID_PARAM = "userId";
     private static final String USER_TYPE_PATH_VAR = "user-type";
     private static final String USER_DELETE_URL = "user/delete";

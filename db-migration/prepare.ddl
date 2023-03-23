@@ -16,7 +16,6 @@ CREATE TABLE IF NOT EXISTS online_store.store_user
 CREATE TABLE IF NOT EXISTS online_store.address
 (
     id            INT         NOT NULL PRIMARY KEY,
-    title         VARCHAR(45) NOT NULL,
     address       VARCHAR(45) NOT NULL,
     note          VARCHAR(200),
     access_status VARCHAR(45) DEFAULT 'ACTIVE',

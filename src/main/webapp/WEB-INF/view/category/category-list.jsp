@@ -12,7 +12,7 @@
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <title>
-        <fmt:message key="tag.list.page.title"/>
+        <fmt:message key="category.list.page.title"/>
     </title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -23,30 +23,24 @@
 </head>
 <body>
 
-<jsp:include page="navbar.jsp"/>
+<jsp:include page="../navbar.jsp"/>
 <div class="container">
     <div class="d-flex justify-content-end mt-3 mb-1">
-        <form:form class="m-0" action="${pageContext.request.contextPath}/admin/tag/form" method="get">
+        <form:form class="m-0" action="${pageContext.request.contextPath}/admin/category/form" method="get">
             <button class="btn btn-success btn-sm">
-                <fmt:message key="button.add.tag"/>
+                <fmt:message key="button.add.category"/>
             </button>
         </form:form>
     </div>
-    <div class="text-center">
-        <c:if test="${success != null}">
-            <p class="text-success">
-                &check; ${success}!
-            </p>
-        </c:if>
-    </div>
-    <table id="tag-table" class="table table-hover table-sm align-middle text-center">
+    <%@ include file="../message-view.jsp" %>
+    <table id="category-table" class="table table-hover table-sm align-middle text-center">
         <thead class="table-head bg-primary bg-opacity-50">
         <tr>
             <th scope="col" class="text-center">
                 <fmt:message key="label.serial"/>
             </th>
             <th scope="col" class="text-center">
-                <fmt:message key="label.tag"/>
+                <fmt:message key="label.category"/>
             </th>
             <th scope="col" class="text-center">
                 <fmt:message key="label.itemList"/>
@@ -57,36 +51,36 @@
         </tr>
         </thead>
         <tbody>
-        <c:forEach items="${tagList}" var="tag" varStatus="tagStat">
+        <c:forEach items="${categoryList}" var="category" varStatus="categoryStat">
             <tr>
                 <td class="text-center">
-                    <c:out value="${tagStat.count}"/>
+                    <c:out value="${categoryStat.count}"/>
                 </td>
                 <td class="text-center">
-                    <c:out value="${tag.name}"/>
+                    <c:out value="${category.name}"/>
                 </td>
                 <td class="text-center">
-                    <c:if test="${tag.itemList.size() == 0}">
+                    <c:if test="${category.itemList.size() == 0}">
                         <fmt:message key="label.empty"/>
                     </c:if>
                     <ul>
-                        <c:forEach items="${tag.itemList}" var="item">
+                        <c:forEach items="${category.itemList}" var="item">
                             <li><c:out value="${item.name}"/></li>
                         </c:forEach>
                     </ul>
                 </td>
                 <td>
                     <div class="d-flex justify-content-center my-1">
-                        <c:url var="updateUrl" value="${pageContext.request.contextPath}/admin/tag/form">
-                            <c:param name="tagId" value="${tag.id}"/>
+                        <c:url var="updateUrl" value="${pageContext.request.contextPath}/admin/category/form">
+                            <c:param name="categoryId" value="${category.id}"/>
                         </c:url>
                         <a class="text-center my-0 mx-2 p-0" href="${updateUrl}">
                             <button class="btn btn-outline-primary center btn-sm">
                                 <fmt:message key="button.update"/>
                             </button>
                         </a>
-                        <c:url var="deleteUrl" value="${pageContext.request.contextPath}/admin/tag/delete">
-                            <c:param name="tagId" value="${tag.id}"/>
+                        <c:url var="deleteUrl" value="${pageContext.request.contextPath}/admin/category/delete">
+                            <c:param name="categoryId" value="${category.id}"/>
                         </c:url>
                         <form:form class="text-center my-0 mx-2 p-0" action="${deleteUrl}" method="post">
                             <button class="btn btn-outline-danger center btn-sm"

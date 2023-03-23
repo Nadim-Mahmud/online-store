@@ -3,7 +3,6 @@ package net.therap.onlinestore.contoller;
 import net.therap.onlinestore.entity.*;
 import net.therap.onlinestore.exception.IllegalAccessException;
 import net.therap.onlinestore.formatter.ItemFormatter;
-import net.therap.onlinestore.formatter.StringToIntgerFormatter;
 import net.therap.onlinestore.helper.AccessCheckHelper;
 import net.therap.onlinestore.service.CategoryService;
 import net.therap.onlinestore.service.ItemService;
@@ -37,24 +36,24 @@ public class OrderController {
 
     private static final String NEW_ORDER_REDIRECT_URL = "customer/order";
     private static final String ORDER_FORM_URL = "order";
-    private static final String ORDER_FORM_VIEW = "order-form";
+    private static final String ORDER_FORM_VIEW = "order/order-form";
     private static final String ADD_ORDER_ITEM_URL = "add-item";
     private static final String ORDER_FORM_SAVE_URL = "order/save";
     private static final String ORDER_ID_PARAM = "orderId";
     private static final String REMOVE_ORDER_ITEM_URL = "items/remove";
     private static final String ORDER_ITEM_ID = "orderItemId";
     private static final String NEXT_PAGE = "order/address";
-    private static final String ADDRESS_VIEW = "address-form";
+    private static final String ADDRESS_VIEW = "order/address-form";
 
     private static final String REDIRECT_ORDER_LIST_URL = "customer/order-list";
     private static final String ORDER_READY = "order/ready";
     private static final String ORDER_DELETE_URL = "order/delete";
     private static final String ORDER_CANCEL_URL = "order/cancel";
     private static final String ACCEPT_READY_ORDER = "ready-order/accept";
-    private static final String REDIRECT_READY_ORDER_URL = "delivery/ready-order";
+    private static final String REDIRECT_READY_ORDER_URL = "delivery/";
     private static final String DELIVER_ACCEPTED_ORDER = "delivered";
     private static final String REDIRECT_DELIVERY_ORDER_URL = "delivery/delivery-list";
-    private static final String ITEM_DETAILS_VIEW = "item-details";
+    private static final String ITEM_DETAILS_VIEW = "item/item-details";
 
     @Autowired
     private MessageSource messageSource;
@@ -71,14 +70,10 @@ public class OrderController {
     @Autowired
     private ItemFormatter itemFormatter;
 
-    @Autowired
-    private StringToIntgerFormatter stringToIntgerFormatter;
-
     @InitBinder
     public void initBinder(WebDataBinder webDataBinder) {
         webDataBinder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
         webDataBinder.addCustomFormatter(itemFormatter);
-        webDataBinder.addCustomFormatter(stringToIntgerFormatter, "quantity");
     }
 
     @GetMapping(ORDER_FORM_URL)
@@ -123,8 +118,8 @@ public class OrderController {
 
     @PostMapping(ADD_ORDER_ITEM_URL)
     public String addOrderItem(@SessionAttribute(ORDER) Order order,
-                               @Valid @ModelAttribute(ORDER_ITEM) OrderItem orderItem,
                                @RequestParam(value = DETAILS_PAGE, required = false) String detailsPage,
+                               @Valid @ModelAttribute(ORDER_ITEM) OrderItem orderItem,
                                BindingResult bindingResult,
                                ModelMap modelMap) {
         OrderItemValidator.validate(order.getOrderItemList(), orderItem, bindingResult);

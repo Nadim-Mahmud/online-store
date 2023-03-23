@@ -23,18 +23,7 @@
     <c:set var="ordered" value="ORDERED" scope="page"/>
     <div class="container col-md-10 mt-2">
         <div class="card">
-            <div class="text-center">
-                <c:if test="${success != null}">
-                    <p class="text-success">
-                        &check; ${success}!
-                    </p>
-                </c:if>
-                <c:if test="${failed != null}">
-                    <p class="text-danger">
-                        &cross; ${failed}
-                    </p>
-                </c:if>
-            </div>
+            <%@ include file="message-view.jsp"%>
             <div class="card-body">
                 <h5 class="text-center mb-3">
                     <fmt:message key="order.ready.title"/>
@@ -91,10 +80,10 @@
                         <td>
                             <div class="d-flex justify-content-center my-1">
                                 <c:if test="${button == navReadyOrder}">
-                                    <c:url var="accept" value="/delivery/ready-order/accept">
+                                    <c:url var="acceptUrl" value="/delivery/ready-order/accept">
                                         <c:param name="orderId" value="${order.id}"/>
                                     </c:url>
-                                    <form:form class="text-center my-0 mx-2 p-0" action="${accept}" method="post">
+                                    <form:form class="text-center my-0 mx-2 p-0" action="${acceptUrl}" method="post">
                                         <button class="btn btn-outline-primary center btn-sm"
                                                 onclick="return confirm('Pick this order?')">
                                             <fmt:message key="button.pick"/>

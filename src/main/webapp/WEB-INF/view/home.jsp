@@ -53,9 +53,11 @@
         <div class="col-md-4">
             <form class="d-flex m-0" action="/item/search" method="get">
                 <input name="searchKey" id="searchKey" class="form-control me-2"
-                       placeholder="Search: name, category, description"
+                       placeholder="Search: name, description"
                        aria-label="Search" value="${searchKey}">
-                <button class="btn btn-primary" type="submit">Search</button>
+                <button class="btn btn-primary" type="submit">
+                    <fmt:message key="button.search"/>
+                </button>
             </form>
         </div>
     </div>
@@ -63,7 +65,10 @@
         <c:forEach items="${itemList}" var="item">
             <div class="col-md-3 p-1">
                 <div class="card shadow-sm mb-1 bg-body-tertiary rounded">
-                    <img src="/item/image?itemId=${item.id}" class="card-img-top" width="200px" height="200px"
+                    <c:url var="imageUrl" value="/item/image">
+                        <c:param name="itemId" value="${item.id}"/>
+                    </c:url>
+                    <img src="${imageUrl}" class="card-img-top" width="200px" height="200px"
                          alt="image">
                     <div class="card-body">
                         <h5 class="card-title">${item.name}</h5>
@@ -90,7 +95,9 @@
                         <c:url var="itemUrl" value="/item/details">
                             <c:param name="itemId" value="${item.id}"/>
                         </c:url>
-                        <a href="${itemUrl}" class="btn btn-primary">Details Page</a>
+                        <a href="${itemUrl}" class="btn btn-primary">
+                            <fmt:message key="button.details"/>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -112,7 +119,9 @@
         <nav aria-label="Page navigation example">
             <ul class="pagination">
                 <li class="page-item"><a class="page-link" href="${previousPageUrl}">Previous</a></li>
-                <li class="page-item"><a class="page-link" href="${nextPageUrl}">Next</a></li>
+                <c:if test="${!(empty itemList)}">
+                    <li class="page-item"><a class="page-link" href="${nextPageUrl}">Next</a></li>
+                </c:if>
             </ul>
         </nav>
     </div>

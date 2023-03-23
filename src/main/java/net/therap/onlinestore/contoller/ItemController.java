@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
@@ -42,14 +41,14 @@ public class ItemController {
 
     private static final String ITEM_REDIRECT_URL = "admin/item";
     private static final String ITEM_URL = "item";
-    private static final String ITEM_VIEW = "item-list";
+    private static final String ITEM_VIEW = "item/item-list";
     private static final String ITEM_FORM_URL = "item/form";
     private static final String ITEM_FORM_SAVE_URL = "item/save";
-    private static final String ITEM_FORM_VIEW = "item-form";
+    private static final String ITEM_FORM_VIEW = "item/item-form";
     private static final String ITEM_ID_PARAM = "itemId";
     private static final String ITEM_DELETE_URL = "item/delete";
     private static final String ITEM_DETAILS_URL = "/item/details";
-    private static final String ITEM_DETAILS_VIEW = "item-details";
+    private static final String ITEM_DETAILS_VIEW = "item/item-details";
     private static final String ITEM_CATEGORY_ID = "item/{categoryId}";
     private static final String ITEM_IMAGE = "item/image";
     private static final String ITEM_ID = "itemId";

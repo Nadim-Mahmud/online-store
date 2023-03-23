@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class UserTypeHelper {
 
-    public static List<UserType> getUserTypeSelectList(){
+    public static List<UserType> getUserTypeSelectList() {
         List<UserType> userTypeList = new java.util.ArrayList<>(Arrays.asList(UserType.values()));
         userTypeList.removeIf(s -> s.equals(UserType.ADMIN));
 

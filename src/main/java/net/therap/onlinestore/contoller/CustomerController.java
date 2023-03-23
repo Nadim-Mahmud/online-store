@@ -1,14 +1,14 @@
 package net.therap.onlinestore.contoller;
 
 import net.therap.onlinestore.entity.User;
-import net.therap.onlinestore.service.CategoryService;
-import net.therap.onlinestore.service.ItemService;
 import net.therap.onlinestore.service.OrderService;
-import net.therap.onlinestore.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import static net.therap.onlinestore.constant.Constants.*;
 

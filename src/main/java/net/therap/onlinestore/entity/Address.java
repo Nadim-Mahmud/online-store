@@ -32,11 +32,6 @@ public class Address extends Persistent implements Serializable {
 
     @NotNull(message = "{input.text}")
     @Size(min = 1, max = 45, message = "{input.text}")
-    @Column(name = "title")
-    private String title;
-
-    @NotNull(message = "{input.text}")
-    @Size(min = 1, max = 45, message = "{input.text}")
     @Column(name = "address")
     private String address;
 
@@ -56,14 +51,6 @@ public class Address extends Persistent implements Serializable {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public String getAddress() {

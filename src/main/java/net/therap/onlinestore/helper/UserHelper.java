@@ -13,7 +13,7 @@ public class UserHelper {
 
     public static boolean isInvalidPassword(String cell) {
 
-        if(Objects.isNull(cell)){
+        if (Objects.isNull(cell)) {
             return true;
         }
 

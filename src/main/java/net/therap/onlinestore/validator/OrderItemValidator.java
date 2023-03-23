@@ -21,7 +21,7 @@ public class OrderItemValidator {
         }
 
         if (orderItemList.contains(orderItem)) {
-            errors.rejectValue("item", "select.duplicate");
+            errors.rejectValue("item", "select.item.exists");
         }
     }
 }

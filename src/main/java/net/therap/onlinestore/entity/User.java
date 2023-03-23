@@ -14,7 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static net.therap.onlinestore.constant.Constants.*;
+import static net.therap.onlinestore.constant.Constants.CELL_NO_PATTERN;
+import static net.therap.onlinestore.constant.Constants.EMAIL_PATTERN;
 
 /**
  * @author nadimmahmud
@@ -59,7 +60,7 @@ public class User extends Persistent implements Serializable {
     @Pattern(regexp = CELL_NO_PATTERN, message = "{input.cell}")
     private String cell;
 
-    @NotNull(message = "{input.text}")
+    @NotNull(message = "{input.password}")
     @Column(name = "password")
     private String password;
 

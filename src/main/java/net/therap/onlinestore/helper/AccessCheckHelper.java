@@ -2,7 +2,6 @@ package net.therap.onlinestore.helper;
 
 import net.therap.onlinestore.entity.*;
 import net.therap.onlinestore.exception.IllegalAccessException;
-import net.therap.onlinestore.service.OrderService;
 
 /**
  * @author nadimmahmud
@@ -12,29 +11,22 @@ public class AccessCheckHelper {
 
     public static void check(User user, AccessType access, Persistent entity) throws IllegalAccessException {
 
-        if (UserType.DELIVERYMAN.equals(user.getType())) {
-
-            if (!AccessType.UPDATE.equals(access) || !(entity instanceof Order) || AccessType.DELETE.equals(access)) {
-                throw new IllegalAccessException();
-            }
-
+        if (entity instanceof Order) {
             Order order = (Order) entity;
 
-            if (!OrderStatus.PICKED.equals(order.getStatus()) && !OrderStatus.DELIVERED.equals(order.getStatus())) {
-                throw new IllegalAccessException();
-            }
+            if (UserType.DELIVERYMAN.equals(user.getType())) {
 
-        } else if (UserType.SHOPKEEPER.equals(user.getType())) {
+                if (!AccessType.UPDATE.equals(access) || AccessType.DELETE.equals(access)) {
+                    throw new IllegalAccessException();
+                }
 
-            if (!(entity instanceof Order)) {
-                throw new IllegalAccessException();
-            }
+                if (!OrderStatus.PICKED.equals(order.getStatus()) && !OrderStatus.DELIVERED.equals(order.getStatus())) {
+                    throw new IllegalAccessException();
+                }
 
-            Order order = (Order) entity;
+            } else if (UserType.SHOPKEEPER.equals(user.getType())) {
 
-            if (AccessType.UPDATE.equals(access)) {
-
-                if (!OrderStatus.READY.equals(order.getStatus())) {
+                if (AccessType.UPDATE.equals(access) && !OrderStatus.READY.equals(order.getStatus())) {
                     throw new IllegalAccessException();
                 }
             }

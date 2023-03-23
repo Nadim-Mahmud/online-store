@@ -1,6 +1,6 @@
 <%--
   User: nadimmahmud
-  Since: 1/19/23
+  Since: 3/6/23
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
@@ -12,7 +12,7 @@
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <title>
-        <fmt:message key="item.list.page.title"/>
+        <fmt:message key="user.list.page.title"/>
     </title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -22,50 +22,53 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css"/>
 </head>
 <body>
-<jsp:include page="navbar.jsp"/>
+<c:set var="shopkeeper" value="shopkeeper" scope="page"/>
+<c:set var="deliveryMan" value="deliveryMan" scope="page"/>
+<c:set var="customer" value="customer" scope="page"/>
+<jsp:include page="../navbar.jsp"/>
 <div class="container">
     <div class="d-flex justify-content-end mt-3 mb-1">
-        <form:form class="m-0" action="${pageContext.request.contextPath}/admin/item/form" method="get">
+        <form:form class="m-0" action="${pageContext.request.contextPath}/admin/user/form" method="get">
             <button class="btn btn-success btn-sm">
-                <fmt:message key="button.add.item"/>
+                <fmt:message key="button.add.user"/>
             </button>
         </form:form>
     </div>
-    <div class="text-center">
-        <c:if test="${success != null}">
-            <p class="text-success">
-                &check; ${success}!
-            </p>
-        </c:if>
-        <c:if test="${failed != null}">
-            <p class="text-danger">
-                &cross; ${failed}
-            </p>
-        </c:if>
+    <div class="d-flex justify-content-start mt-3 mb-1">
+        <a class="m-0" href="${pageContext.request.contextPath}/admin/shopkeeper/list">
+            <button class="btn ${userType == shopkeeper ? 'btn-primary' : 'btn-outline-primary'} btn-sm">
+                <fmt:message key="shopkeeper"/>
+            </button>
+        </a>
+        <a class="m-0" href="${pageContext.request.contextPath}/admin/deliveryMan/list">
+            <button class="btn ${userType == deliveryMan ? 'btn-primary' : 'btn-outline-primary'} btn-sm mx-2">
+                <fmt:message key="deliveryman"/>
+            </button>
+        </a>
+        <a class="m-0" href="${pageContext.request.contextPath}/admin/customer/list">
+            <button class="btn ${userType == customer ? 'btn-primary' : 'btn-outline-primary'} btn-sm">
+                <fmt:message key="customer"/>
+            </button>
+        </a>
     </div>
-    <table id="item-table" class="table table-hover table-sm align-middle text-center">
+    <%@ include file="../message-view.jsp"%>
+    <table id="user-table" class="table table-hover table-sm align-middle text-center">
         <thead class="table-head bg-primary bg-opacity-50">
         <tr>
             <th scope="col" class="text-center">
                 <fmt:message key="label.serial"/>
             </th>
             <th scope="col" class="text-center">
-                <fmt:message key="label.item"/>
+                <fmt:message key="label.firstName"/>
             </th>
             <th scope="col" class="text-center">
-                <fmt:message key="label.price"/>
+                <fmt:message key="label.lastName"/>
             </th>
             <th scope="col" class="text-center">
-                <fmt:message key="label.category"/>
+                <fmt:message key="label.email"/>
             </th>
             <th scope="col" class="text-center">
-                <fmt:message key="label.tag.list"/>
-            </th>
-            <th scope="col" class="text-center">
-                <fmt:message key="label.availability"/>
-            </th>
-            <th scope="col" class="text-center">
-                <fmt:message key="label.description"/>
+                <fmt:message key="label.cell"/>
             </th>
             <th scope="col" class="text-center">
                 <fmt:message key="label.action"/>
@@ -73,48 +76,35 @@
         </tr>
         </thead>
         <tbody>
-        <c:forEach items="${itemList}" var="item" varStatus="itemStat">
+        <c:forEach items="${userList}" var="user" varStatus="shopkeeperStat">
             <tr>
                 <td class="text-center">
-                    <c:out value="${itemStat.count}"/>
+                    <c:out value="${shopkeeperStat.count}"/>
                 </td>
                 <td class="text-center">
-                    <c:out value="${item.name}"/>
+                    <c:out value="${user.firstName}"/>
                 </td>
                 <td class="text-center">
-                    <c:out value="${item.price}"/>
+                    <c:out value="${user.lastName}"/>
                 </td>
                 <td class="text-center">
-                    <c:out value="${item.category.name}"/>
+                    <c:out value="${user.email}"/>
                 </td>
                 <td class="text-center">
-                    <c:if test="${item.tagList.size() == 0}">
-                        <fmt:message key="label.empty"/>
-                    </c:if>
-                    <ul>
-                        <c:forEach items="${item.tagList}" var="tag">
-                            <li><c:out value="${tag.name}"/></li>
-                        </c:forEach>
-                    </ul>
-                </td>
-                <td class="text-center">
-                    <c:out value="${item.availability.label}"/>
-                </td>
-                <td class="text-center">
-                    <c:out value="${item.description}"/>
+                    <c:out value="${user.cell}"/>
                 </td>
                 <td>
                     <div class="d-flex justify-content-center my-1">
-                        <c:url var="updateUrl" value="${pageContext.request.contextPath}/admin/item/form">
-                            <c:param name="itemId" value="${item.id}"/>
+                        <c:url var="updateUrl" value="${pageContext.request.contextPath}/admin/user/form">
+                            <c:param name="userId" value="${user.id}"/>
                         </c:url>
                         <a class="text-center my-0 mx-2 p-0" href="${updateUrl}">
                             <button class="btn btn-outline-primary center btn-sm">
                                 <fmt:message key="button.update"/>
                             </button>
                         </a>
-                        <c:url var="deleteUrl" value="${pageContext.request.contextPath}/admin/item/delete">
-                            <c:param name="itemId" value="${item.id}"/>
+                        <c:url var="deleteUrl" value="${pageContext.request.contextPath}/admin/user/delete">
+                            <c:param name="userId" value="${user.id}"/>
                         </c:url>
                         <form:form class="text-center my-0 mx-2 p-0" action="${deleteUrl}" method="post">
                             <button class="btn btn-outline-danger center btn-sm"
@@ -128,6 +118,7 @@
         </c:forEach>
         </tbody>
     </table>
+
 </div>
 <script type="text/javascript"
         src="https://code.jquery.com/jquery-3.5.1.js">
@@ -142,4 +133,3 @@
 </script>
 </body>
 </html>
-
