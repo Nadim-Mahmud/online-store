@@ -2,22 +2,13 @@ package net.therap.onlinestore.service;
 
 import net.therap.onlinestore.entity.Item;
 import net.therap.onlinestore.entity.Tag;
-import net.therap.onlinestore.helper.ItemHelper;
-import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.servlet.ServletContext;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-
-import static java.util.Objects.isNull;
-import static java.util.Objects.nonNull;
 
 /**
  * @author nadimmahmud
@@ -26,26 +17,17 @@ import static java.util.Objects.nonNull;
 @Service
 public class ItemService {
 
-    private final ItemHelper itemHelper;
-
     @PersistenceContext
     private EntityManager entityManager;
 
     @Autowired
-    private ServletContext servletContext;
-
-    @Autowired
-    TagService tagService;
-
-    public ItemService() {
-        this.itemHelper = new ItemHelper();
-    }
+    private FIleService fIleService;
 
     public List<Item> findAll() {
         return entityManager.createNamedQuery("Item.findAll", Item.class).getResultList();
     }
 
-    public List<Item> findPaginated(int start, int limit) {
+    public List<Item> findAllPaginated(int start, int limit) {
         return entityManager.createNamedQuery("Item.findAll", Item.class)
                 .setFirstResult(start)
                 .setMaxResults(limit)
@@ -58,6 +40,31 @@ public class ItemService {
                 .getResultList();
     }
 
+    public List<Item> findByCategoryPaginated(int categoryId, int start, int limit) {
+        return entityManager.createNamedQuery("Item.findByCategoryId", Item.class)
+                .setParameter("categoryId", categoryId)
+                .setFirstResult(start)
+                .setMaxResults(limit)
+                .getResultList();
+    }
+
+    public List<Item> findByTagPaginated(Tag tag, int start, int limit) {
+        return entityManager.createNamedQuery("Item.findByTag", Item.class)
+                .setParameter("tag", tag)
+                .setFirstResult(start)
+                .setMaxResults(limit)
+                .getResultList();
+    }
+
+    public List<Item> findByTagAndCategoryIdPaginated(Tag tag, int categoryId, int start, int limit) {
+        return entityManager.createNamedQuery("Item.findByTagAndCategoryId", Item.class)
+                .setParameter("tag", tag)
+                .setParameter("categoryId", categoryId)
+                .setFirstResult(start)
+                .setMaxResults(limit)
+                .getResultList();
+    }
+
     public List<Item> findAvailableItems() {
         return entityManager.createNamedQuery("Item.findAvailable", Item.class)
                 .getResultList();
@@ -67,38 +74,12 @@ public class ItemService {
         return entityManager.find(Item.class, id);
     }
 
-    public List<Item> search(String searchKey) {
+    public List<Item> search(String searchKey, int start, int limit) {
         return entityManager.createNamedQuery("Item.search", Item.class)
                 .setParameter("searchKey", "%" + searchKey + "%")
+                .setFirstResult(start)
+                .setMaxResults(limit)
                 .getResultList();
-    }
-
-    public List<Item> filter(String categoryId, String tagId) {
-        List<Item> itemListByCategory = new ArrayList<>();
-        List<Item> itemListByTag = new ArrayList<>();
-
-        if ((isNull(categoryId) || categoryId.isEmpty()) && (isNull(tagId) || tagId.isEmpty())) {
-            return findAll();
-        }
-
-        if (nonNull(categoryId) && !categoryId.isEmpty()) {
-            itemListByCategory = findByCategory(Integer.parseInt(categoryId));
-
-            if (isNull(tagId) || tagId.isEmpty()) {
-                return itemListByCategory;
-            }
-        }
-
-        if (nonNull(tagId) && !tagId.isEmpty()) {
-            Tag tag = tagService.findById(Integer.parseInt(tagId));
-            itemListByTag = tag.getItemList();
-
-            if (isNull(categoryId) || categoryId.isEmpty()) {
-                return itemListByTag;
-            }
-        }
-
-        return itemHelper.intersectItemList(itemListByCategory, itemListByTag);
     }
 
     @Transactional
@@ -108,19 +89,7 @@ public class ItemService {
 
     @Transactional
     public Item saveOrUpdate(Item item) throws Exception {
-
-        if (nonNull(item.getImage()) || !item.getImage().isEmpty()) {
-            String filename = servletContext.getRealPath("/") + "resources/images/"
-                    + item.getName().replace(' ', '_') + "." + FilenameUtils.getExtension(item.getImage().getOriginalFilename());
-
-            try {
-                item.getImage().transferTo(new File(filename));
-            } catch (IOException e) {
-                throw e;
-            }
-
-            item.setImagePath(filename);
-        }
+        fIleService.saveItemImage(item);
 
         if (item.isNew()) {
             entityManager.persist(item);

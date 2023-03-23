@@ -15,7 +15,6 @@ public class Credentials implements Serializable {
 
     @NotNull(message = "{input.text}")
     @Size(min = 1, max = 50, message = "{input.text}")
-    @Email
     private String email;
 
     @NotNull(message = "{input.text}")

@@ -26,7 +26,7 @@
 <div class="container">
     <div class="d-flex justify-content-between mt-3">
         <div class="col-md-4">
-            <form class="m-0" action="" method="get">
+            <form class="m-0" action="/" method="get">
                 <div class="input-group">
                     <select name="categoryId" id="categoryId" class="form-control">
                         <option value="" ${categoryId == null ? 'selected' : ''}>-- Select Category --</option>
@@ -52,7 +52,8 @@
         </div>
         <div class="col-md-4">
             <form class="d-flex m-0" action="/item/search" method="get">
-                <input name="searchKey" id="searchKey" class="form-control me-2" placeholder="Search"
+                <input name="searchKey" id="searchKey" class="form-control me-2"
+                       placeholder="Search: name, category, description"
                        aria-label="Search" value="${searchKey}">
                 <button class="btn btn-primary" type="submit">Search</button>
             </form>
@@ -61,10 +62,11 @@
     <div class="row mt-3 item-list">
         <c:forEach items="${itemList}" var="item">
             <div class="col-md-3 p-1">
-                <div class="card shadow-sm p-3 mb-1 bg-body-tertiary rounded">
-                    <img src="${item.imagePath}" class="card-img-top" alt="...">
+                <div class="card shadow-sm mb-1 bg-body-tertiary rounded">
+                    <img src="/item/image?itemId=${item.id}" class="card-img-top" width="200px" height="200px"
+                         alt="image">
                     <div class="card-body">
-                        <h5 class="card-title text-center">${item.name}</h5>
+                        <h5 class="card-title">${item.name}</h5>
                         <hr>
                         <p class="m-0">
                             <fmt:message key="label.category.colon"/>
@@ -85,11 +87,34 @@
                             </c:forEach>
                         </p>
                         <hr>
-                        <p class="card-text">${item.description}</p>
+                        <c:url var="itemUrl" value="/item/details">
+                            <c:param name="itemId" value="${item.id}"/>
+                        </c:url>
+                        <a href="${itemUrl}" class="btn btn-primary">Details Page</a>
                     </div>
                 </div>
             </div>
         </c:forEach>
+        <c:url var="nextPageUrl" value="${searchKey == null ? '/' : '/item/search'}">
+            <c:param name="pageStartValue" value="${pageStartValue}"/>
+            <c:param name="categoryId" value="${categoryId}"/>
+            <c:param name="tagId" value="${tagId}"/>
+            <c:param name="searchKey" value="${searchKey}"/>
+            <c:param name="pageType" value="NEXT_PAGE"/>
+        </c:url>
+        <c:url var="previousPageUrl" value="${searchKey == null ? '/' : '/item/search'}">
+            <c:param name="categoryId" value="${categoryId}"/>
+            <c:param name="tagId" value="${tagId}"/>
+            <c:param name="searchKey" value="${searchKey}"/>
+            <c:param name="pageStartValue" value="${pageStartValue}"/>
+            <c:param name="pageType" value="PREVIOUS_PAGE"/>
+        </c:url>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <li class="page-item"><a class="page-link" href="${previousPageUrl}">Previous</a></li>
+                <li class="page-item"><a class="page-link" href="${nextPageUrl}">Next</a></li>
+            </ul>
+        </nav>
     </div>
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>

@@ -1,6 +1,7 @@
 package net.therap.onlinestore.contoller;
 
 import net.therap.onlinestore.entity.*;
+import net.therap.onlinestore.exception.IllegalAccessException;
 import net.therap.onlinestore.formatter.ItemFormatter;
 import net.therap.onlinestore.helper.AccessCheckHelper;
 import net.therap.onlinestore.service.CategoryService;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import net.therap.onlinestore.exception.IllegalAccessException;
 
 import javax.validation.Valid;
 import java.util.Locale;
@@ -53,7 +53,7 @@ public class OrderController {
     private static final String REDIRECT_READY_ORDER_URL = "delivery/ready-order";
     private static final String DELIVER_ACCEPTED_ORDER = "delivered";
     private static final String REDIRECT_DELIVERY_ORDER_URL = "delivery/delivery-list";
-    private static final String REDIRECT_SHOPKEEPER_NOTIFICATION_URL = "shopkeeper/notification";
+    private static final String ITEM_DETAILS_VIEW = "item-details";
 
     @Autowired
     private MessageSource messageSource;
@@ -101,12 +101,24 @@ public class OrderController {
     @PostMapping(ADD_ORDER_ITEM_URL)
     public String addOrderItem(@SessionAttribute(ORDER) Order order,
                                @Valid @ModelAttribute(ORDER_ITEM) OrderItem orderItem,
+                               @RequestParam(value = DETAILS_PAGE, required = false) String detailsPage,
                                BindingResult bindingResult,
                                ModelMap modelMap) {
         OrderItemValidator.validate(order.getOrderItemList(), orderItem, bindingResult);
 
         if (!bindingResult.hasErrors()) {
             order.addOrderItem(orderItem);
+        }
+
+        if (Objects.nonNull(detailsPage)) {
+
+            if (bindingResult.hasErrors()) {
+                modelMap.put(FAILED, messageSource.getMessage("failed.add.item", null, Locale.getDefault()));
+            } else {
+                modelMap.put(SUCCESS, messageSource.getMessage("success.add", null, Locale.getDefault()));
+            }
+
+            return ITEM_DETAILS_VIEW;
         }
 
         modelMap.put(ITEM_LIST, itemService.findAvailableItems());

@@ -152,6 +152,7 @@ public class ProfileController {
         }
 
         userService.saveOrUpdate(user);
+
         redirectAttributes.addFlashAttribute(SUCCESS, messageSource.getMessage("success.profile.updated", null, Locale.getDefault()));
 
         return REDIRECT;

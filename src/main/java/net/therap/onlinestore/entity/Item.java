@@ -24,11 +24,14 @@ import java.util.Objects;
 @SQLDelete(sql = "UPDATE item SET access_status = 'DELETED' WHERE id = ? AND version = ?", check = ResultCheckStyle.COUNT)
 @Where(clause = "access_status <> 'DELETED'")
 @NamedQueries({
-        @NamedQuery(name = "Item.findAll", query = "SELECT i FROM Item i"),
-        @NamedQuery(name = "Item.search", query = "SELECT i FROM Item i WHERE lower(i.name) LIKE lower(:searchKey) OR lower(i.category.name) LIKE lower(:searchKey) OR lower(i.description) LIKE lower(:searchKey)"),
-        @NamedQuery(name = "Item.findAvailable", query = "SELECT i FROM Item i WHERE i.availability = 'AVAILABLE'"),
+        @NamedQuery(name = "Item.findAll", query = "SELECT i FROM Item i ORDER BY i.name ASC"),
+        @NamedQuery(name = "Item.findAllCount", query = "SELECT COUNT(i) FROM Item i ORDER BY i.name ASC"),
+        @NamedQuery(name = "Item.search", query = "SELECT i FROM Item i WHERE LOWER(i.name) LIKE LOWER(:searchKey) OR LOWER(i.category.name) LIKE LOWER(:searchKey) OR LOWER(i.description) LIKE LOWER(:searchKey) ORDER BY i.name ASC"),
+        @NamedQuery(name = "Item.findAvailable", query = "SELECT i FROM Item i WHERE i.availability = 'AVAILABLE' ORDER BY i.name ASC"),
         @NamedQuery(name = "Item.findItemsByNameAndId", query = "SELECT i FROM Item i WHERE i.name = :name AND i.id != :id"),
-        @NamedQuery(name = "Item.findByCategoryId", query = "SELECT i FROM Item i WHERE i.category.id = :categoryId"),
+        @NamedQuery(name = "Item.findByCategoryId", query = "SELECT i FROM Item i WHERE i.category.id = :categoryId ORDER BY i.name ASC"),
+        @NamedQuery(name = "Item.findByTag", query = "SELECT i FROM Item i WHERE :tag MEMBER OF i.tagList ORDER BY i.name ASC"),
+        @NamedQuery(name = "Item.findByTagAndCategoryId", query = "SELECT i FROM Item i WHERE :tag MEMBER OF i.tagList AND i.category.id = :categoryId ORDER BY i.name ASC"),
 })
 public class Item extends Persistent implements Serializable {
 

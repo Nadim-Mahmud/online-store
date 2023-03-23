@@ -6,9 +6,13 @@ package net.therap.onlinestore.constant;
  */
 public interface Constants {
 
+    int ITEM_PER_PAGE = 8;
     String REDIRECT = "redirect:/";
     String DATE_PATTERN = "yyyy-MM-dd";
     String EMAIL_PATTERN = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}";
+    String CELL_NO_PATTERN = "01([0-9]){9,9}";
+    String PASSWORD_PATTERN = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,}$";
+    String IMAGES_DIR = "/home/nadimmahmud/Nadim/resources/";
     String ACTIVE_USER = "activeUser";
     String USER = "user";
     String USER_LIST = "userList";
@@ -48,7 +52,7 @@ public interface Constants {
     String INVALID_LOGIN = "invalidLogin";
     String SUCCESS = "success";
     String FAILED = "failed";
-    String NOTIFICATION = "notification";
+    String PAGE_START_VALUE = "pageStartValue";
     String EMPTY_LIST = "emptyList";
     String BUTTON = "button";
     String HOME_URL = "/";

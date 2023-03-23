@@ -36,8 +36,8 @@ public class UserValidator implements Validator {
             errors.rejectValue("email", "input.email.duplicate");
         }
 
-        if (UserHelper.isInvalidCellNumber(user.getCell())) {
-            errors.rejectValue("cell", "input.cell");
+        if (user.isNew() && UserHelper.isInvalidPassword(user.getPassword())) {
+            errors.rejectValue("password", "input.password");
         }
 
         if (Objects.nonNull(user.getPassword()) && !user.getPassword().equals(user.getConfirmPassword()) && user.isNew()) {

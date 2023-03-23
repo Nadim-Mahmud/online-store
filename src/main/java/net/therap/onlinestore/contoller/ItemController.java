@@ -1,19 +1,18 @@
 package net.therap.onlinestore.contoller;
 
-import net.therap.onlinestore.entity.AccessType;
-import net.therap.onlinestore.entity.Availability;
-import net.therap.onlinestore.entity.Item;
-import net.therap.onlinestore.entity.User;
+import net.therap.onlinestore.entity.*;
 import net.therap.onlinestore.formatter.CategoryFormatter;
 import net.therap.onlinestore.formatter.TagFormatter;
 import net.therap.onlinestore.helper.AccessCheckHelper;
 import net.therap.onlinestore.service.CategoryService;
+import net.therap.onlinestore.service.FIleService;
 import net.therap.onlinestore.service.ItemService;
 import net.therap.onlinestore.service.TagService;
 import net.therap.onlinestore.validator.ItemValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.context.MessageSource;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -22,8 +21,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.io.IOException;
+import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import static java.util.Objects.nonNull;
 import static net.therap.onlinestore.constant.Constants.*;
@@ -33,8 +36,8 @@ import static net.therap.onlinestore.constant.Constants.*;
  * @since 3/7/23
  */
 @Controller
-@RequestMapping({ADMIN_BASE_URL})
-@SessionAttributes(ITEM)
+@RequestMapping({BASE_URL, ADMIN_BASE_URL, CUSTOMER_BASE_URL})
+@SessionAttributes({ITEM, ORDER})
 public class ItemController {
 
     private static final String ITEM_REDIRECT_URL = "admin/item";
@@ -45,6 +48,11 @@ public class ItemController {
     private static final String ITEM_FORM_VIEW = "item-form";
     private static final String ITEM_ID_PARAM = "itemId";
     private static final String ITEM_DELETE_URL = "item/delete";
+    private static final String ITEM_DETAILS_URL = "/item/details";
+    private static final String ITEM_DETAILS_VIEW = "item-details";
+    private static final String ITEM_CATEGORY_ID = "item/{categoryId}";
+    private static final String ITEM_IMAGE = "item/image";
+    private static final String ITEM_ID = "itemId";
 
     @Autowired
     private ItemService itemService;
@@ -54,6 +62,9 @@ public class ItemController {
 
     @Autowired
     private TagService tagService;
+
+    @Autowired
+    private FIleService fIleService;
 
     @Autowired
     private CategoryFormatter categoryFormatter;
@@ -67,7 +78,7 @@ public class ItemController {
     @Autowired
     private MessageSource messageSource;
 
-    @InitBinder
+    @InitBinder(ITEM)
     public void initBinder(WebDataBinder webDataBinder) {
         webDataBinder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
         webDataBinder.addCustomFormatter(categoryFormatter);
@@ -81,6 +92,19 @@ public class ItemController {
         modelMap.put(NAV_ITEM, ITEM);
 
         return ITEM_VIEW;
+    }
+
+    @GetMapping(ITEM_DETAILS_URL)
+    public String getItemDetails(@SessionAttribute(value = ORDER, required = false) Order order,
+                                 @RequestParam(ITEM_ID) int itemId, ModelMap modelMap) {
+        modelMap.put(ITEM, itemService.findById(itemId));
+        modelMap.put(ORDER_ITEM, new OrderItem());
+
+        if (Objects.isNull(order)) {
+            modelMap.put(ORDER, new Order());
+        }
+
+        return ITEM_DETAILS_VIEW;
     }
 
     @GetMapping(ITEM_FORM_URL)
@@ -125,6 +149,18 @@ public class ItemController {
         redirectAttributes.addFlashAttribute(SUCCESS, messageSource.getMessage("success.delete", null, Locale.getDefault()));
 
         return REDIRECT + ITEM_REDIRECT_URL;
+    }
+
+    @GetMapping(ITEM_CATEGORY_ID)
+    @ResponseBody
+    public List<Item> getItemByCategoryId(@PathVariable(CATEGORY_ID) int categoryId) {
+        return itemService.findByCategory(categoryId);
+    }
+
+    @GetMapping(value = ITEM_IMAGE, produces = MediaType.IMAGE_JPEG_VALUE)
+    @ResponseBody
+    public byte[] getImageByItemId(@RequestParam(ITEM_ID) int itemId) throws IOException {
+        return fIleService.getImageByItemId(itemId);
     }
 
     private void setupReferenceDataItemForm(ModelMap modelMap) {

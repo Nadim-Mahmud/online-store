@@ -43,7 +43,7 @@
                         <form:errors path="price" cssClass="text-danger"/>
                     </div>
                     <div class="mb-3">
-                        <label for="image" class="form-label required-fields">
+                        <label for="image" class="form-label">
                             <fmt:message key="label.image"/>
                         </label>
                         <form:input type="file" path="image" class="form-control"/>
@@ -65,7 +65,7 @@
                                          itemValue="id" class="form-check-input ms-2 me-2"/>
                     </div>
                     <div class="mb-3">
-                        <label for="availability" class="form-label">
+                        <label for="availability" class="form-label required-fields">
                             <fmt:message key="label.availability.colon"/>
                         </label>
                         <form:radiobuttons path="availability" items="${availabilityList}" itemLabel="label"
