@@ -19,7 +19,7 @@ public class Password implements Serializable {
     @NotNull(message = "{input.password}")
     private String oldPassword;
 
-    @NotNull
+    @NotNull(message = "{input.password}")
     @Pattern(regexp = PASSWORD_PATTERN, message = "{input.password}")
     private String newPassword;
 

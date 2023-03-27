@@ -1,6 +1,9 @@
 package net.therap.onlinestore.contoller;
 
 import net.therap.onlinestore.entity.Category;
+import net.therap.onlinestore.entity.User;
+import net.therap.onlinestore.exception.IllegalAccessException;
+import net.therap.onlinestore.helper.CategoryHelper;
 import net.therap.onlinestore.service.CategoryService;
 import net.therap.onlinestore.validator.CategoryValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +50,9 @@ public class CategoryController {
     @Autowired
     private MessageSource messageSource;
 
+    @Autowired
+    private CategoryHelper categoryHelper;
+
     @InitBinder(CATEGORY)
     public void initBinder(WebDataBinder webDataBinder) {
         webDataBinder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
@@ -54,7 +60,11 @@ public class CategoryController {
     }
 
     @GetMapping(CATEGORY_URL)
-    public String showCategory(ModelMap modelMap) {
+    public String showCategory(@SessionAttribute(value = ACTIVE_USER, required = false) User user,
+                               ModelMap modelMap) throws IllegalAccessException {
+
+        categoryHelper.checkAccess(user);
+
         modelMap.put(CATEGORY_LIST, categoryService.findAll());
         modelMap.put(NAV_ITEM, CATEGORY);
 
@@ -62,8 +72,12 @@ public class CategoryController {
     }
 
     @GetMapping(CATEGORY_FORM_URL)
-    public String showCategoryForm(@RequestParam(value = CATEGORY_ID_PARAM, required = false) String categoryId,
-                                   ModelMap modelMap) {
+    public String showCategoryForm(@SessionAttribute(value = ACTIVE_USER, required = false) User user,
+                                   @RequestParam(value = CATEGORY_ID_PARAM, required = false) String categoryId,
+                                   ModelMap modelMap) throws IllegalAccessException {
+
+        categoryHelper.checkAccess(user);
+
         Category category = nonNull(categoryId) ? categoryService.findById(Integer.parseInt(categoryId)) : new Category();
         modelMap.put(CATEGORY, category);
         modelMap.put(NAV_ITEM, CATEGORY);
@@ -72,13 +86,14 @@ public class CategoryController {
     }
 
     @PostMapping(CATEGORY_FORM_SAVE_URL)
-    public String saveOrUpdateCategory(
-            @Valid @ModelAttribute(CATEGORY) Category category,
-            BindingResult bindingResult,
-            ModelMap modelMap,
-            SessionStatus sessionStatus,
-            RedirectAttributes redirectAttributes
-    ) throws Exception {
+    public String saveOrUpdateCategory(@SessionAttribute(value = ACTIVE_USER, required = false) User user,
+                                       @Valid @ModelAttribute(CATEGORY) Category category,
+                                       BindingResult bindingResult,
+                                       ModelMap modelMap,
+                                       SessionStatus sessionStatus,
+                                       RedirectAttributes redirectAttributes) throws Exception {
+
+        categoryHelper.checkAccess(user);
 
         if (bindingResult.hasErrors()) {
             modelMap.put(NAV_ITEM, CATEGORY);
@@ -95,8 +110,11 @@ public class CategoryController {
     }
 
     @PostMapping(CATEGORY_DELETE_URL)
-    public String deleteCategory(@RequestParam(CATEGORY_ID_PARAM) int categoryId,
+    public String deleteCategory(@SessionAttribute(value = ACTIVE_USER, required = false) User user,
+                                 @RequestParam(CATEGORY_ID_PARAM) int categoryId,
                                  RedirectAttributes redirectAttributes) throws Exception {
+
+        categoryHelper.checkAccess(user);
 
         if (categoryService.isCategoryNotInUse(categoryId)) {
             categoryService.delete(categoryId);

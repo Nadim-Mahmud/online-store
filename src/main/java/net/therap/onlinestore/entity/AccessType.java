@@ -7,10 +7,14 @@ package net.therap.onlinestore.entity;
 public enum AccessType {
 
     READ,
+    VIEW_ALL,
     SAVE,
     UPDATE,
     DELETE,
     CANCEL,
     ACCEPT,
-    LOAD_FORM,
+    FORM_LOAD,
+    MARK_ORDER_READY,
+    ACCEPT_READY_ORDER,
+    SET_ORDER_DELIVERED
 }

@@ -1,6 +1,9 @@
 package net.therap.onlinestore.contoller;
 
 import net.therap.onlinestore.entity.Tag;
+import net.therap.onlinestore.entity.User;
+import net.therap.onlinestore.exception.IllegalAccessException;
+import net.therap.onlinestore.formatter.TagHelper;
 import net.therap.onlinestore.service.TagService;
 import net.therap.onlinestore.validator.TagValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +50,9 @@ public class TagController {
     @Autowired
     private MessageSource messageSource;
 
+    @Autowired
+    private TagHelper tagHelper;
+
     @InitBinder(TAG)
     public void initBinder(WebDataBinder webDataBinder) {
         webDataBinder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
@@ -54,7 +60,11 @@ public class TagController {
     }
 
     @GetMapping(TAG_URL)
-    public String showTag(ModelMap modelMap) {
+    public String showTag(@SessionAttribute(value = ACTIVE_USER, required = false) User activeUser,
+                          ModelMap modelMap) throws IllegalAccessException {
+
+        tagHelper.checkAccess(activeUser);
+
         modelMap.put(TAG_LIST, tagService.findAll());
         modelMap.put(NAV_ITEM, TAG);
 
@@ -62,8 +72,11 @@ public class TagController {
     }
 
     @GetMapping(TAG_FORM_URL)
-    public String showTagForm(@RequestParam(value = TAG_ID_PARAM, required = false) String tagId,
-                              ModelMap modelMap) {
+    public String showTagForm(@SessionAttribute(value = ACTIVE_USER, required = false) User activeUser,
+                              @RequestParam(value = TAG_ID_PARAM, required = false) String tagId, ModelMap modelMap) throws IllegalAccessException {
+
+        tagHelper.checkAccess(activeUser);
+
         Tag tag = nonNull(tagId) ? tagService.findById(Integer.parseInt(tagId)) : new Tag();
         modelMap.put(TAG, tag);
         modelMap.put(NAV_ITEM, TAG);
@@ -72,13 +85,14 @@ public class TagController {
     }
 
     @PostMapping(TAG_FORM_SAVE_URL)
-    public String saveOrUpdateTag(
-            @Valid @ModelAttribute(TAG) Tag tag,
-            BindingResult bindingResult,
-            ModelMap modelMap,
-            SessionStatus sessionStatus,
-            RedirectAttributes redirectAttributes
-    ) throws Exception {
+    public String saveOrUpdateTag(@SessionAttribute(value = ACTIVE_USER, required = false) User activeUser,
+                                  @Valid @ModelAttribute(TAG) Tag tag,
+                                  BindingResult bindingResult,
+                                  ModelMap modelMap,
+                                  SessionStatus sessionStatus,
+                                  RedirectAttributes redirectAttributes) throws Exception {
+
+        tagHelper.checkAccess(activeUser);
 
         if (bindingResult.hasErrors()) {
             modelMap.put(NAV_ITEM, TAG);
@@ -95,8 +109,11 @@ public class TagController {
     }
 
     @PostMapping(TAG_DELETE_URL)
-    public String deleteTag(@RequestParam(TAG_ID_PARAM) int tagId,
-                            RedirectAttributes redirectAttributes) throws Exception {
+    public String deleteTag(@SessionAttribute(value = ACTIVE_USER, required = false) User activeUser,
+                            @RequestParam(TAG_ID_PARAM) int tagId, RedirectAttributes redirectAttributes) throws Exception {
+
+        tagHelper.checkAccess(activeUser);
+
         tagService.delete(tagId);
         redirectAttributes.addFlashAttribute(SUCCESS, messageSource.getMessage("success.delete", null, Locale.getDefault()));
 

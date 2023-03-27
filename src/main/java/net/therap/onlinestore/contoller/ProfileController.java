@@ -4,6 +4,7 @@ import net.therap.onlinestore.command.Password;
 import net.therap.onlinestore.entity.User;
 import net.therap.onlinestore.entity.UserType;
 import net.therap.onlinestore.exception.IllegalAccessException;
+import net.therap.onlinestore.helper.ProfileHelper;
 import net.therap.onlinestore.service.UserService;
 import net.therap.onlinestore.util.Encryption;
 import net.therap.onlinestore.validator.PasswordValidator;
@@ -54,6 +55,9 @@ public class ProfileController {
 
     @Autowired
     private UserValidator userValidator;
+
+    @Autowired
+    private ProfileHelper profileHelper;
 
     @InitBinder
     public void initBinder(WebDataBinder webDataBinder) {
@@ -142,15 +146,13 @@ public class ProfileController {
     }
 
     @PostMapping(SAVE_PROFILE_URL)
-    String updateProfile(@SessionAttribute(ACTIVE_USER) User activeUser,
+    String updateProfile(@SessionAttribute(value = ACTIVE_USER, required = false) User activeUser,
                          @Valid @ModelAttribute(USER) User user,
                          BindingResult bindingResult,
                          RedirectAttributes redirectAttributes,
                          HttpSession httpSession) throws Exception {
 
-        if (activeUser.getId() != user.getId()) {
-            throw new IllegalAccessException();
-        }
+        profileHelper.checkAccess(activeUser, user);
 
         if (bindingResult.hasErrors()) {
             return UPDATE_PROFILE_VIEW;

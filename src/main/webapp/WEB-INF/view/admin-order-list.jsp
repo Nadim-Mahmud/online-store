@@ -8,7 +8,7 @@
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <title>
-        <fmt:message key="order.ready.page.title"/>
+        <fmt:message key="order.list.admin.page.title"/>
     </title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -27,10 +27,10 @@
             <%@ include file="message-view.jsp" %>
             <div class="card-body">
                 <h5 class="text-center mb-3">
-                    <fmt:message key="order.list.admin.page.title"/>
+                    <fmt:message key="order.list.admin"/>
                 </h5>
             </div>
-            <table class="admin-order-table table align-middle text-center">
+            <table id="admin-order" class="table align-middle text-center">
                 <thead>
                 <tr>
                     <th scope="col">
@@ -78,7 +78,7 @@
 <script type="text/javascript" src=
         "https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js">
 </script>
-<script src="${pageContext.request.contextPath}/assets/js/ajax.js"></script>
+<script src="${pageContext.request.contextPath}/assets/js/pagination.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
         crossorigin="anonymous">

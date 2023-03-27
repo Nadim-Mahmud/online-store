@@ -23,7 +23,7 @@
     <c:set var="ordered" value="ORDERED" scope="page"/>
     <div class="container col-md-10 mt-2">
         <div class="card">
-            <%@ include file="message-view.jsp"%>
+            <%@ include file="message-view.jsp" %>
             <div class="card-body">
                 <h5 class="text-center mb-3">
                     <fmt:message key="order.ready.title"/>
@@ -50,6 +50,11 @@
                     <th scope="col">
                         <fmt:message key="label.price"/>
                     </th>
+                    <c:if test="${navItem != navDeliveryHistory}">
+                        <th scope="col">
+                            <fmt:message key="label.action"/>
+                        </th>
+                    </c:if>
                 </tr>
                 </thead>
                 <tbody>

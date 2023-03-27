@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS online_store.item
     availability  VARCHAR(45)   NOT NULL,
     category_id   INT           NOT NULL,
     description   VARCHAR(3000) NOT NULL,
-    image_path   VARCHAR(100) NOT NULL,
+    image_path    VARCHAR(100)  NOT NULL,
     access_status VARCHAR(45) DEFAULT 'ACTIVE',
     version       INT         DEFAULT 0,
     created_at    DATE,
@@ -95,5 +95,3 @@ CREATE TABLE IF NOT EXISTS online_store.order_item
     FOREIGN KEY (item_id) REFERENCES online_store.item (id) ON DELETE CASCADE,
     FOREIGN KEY (order_id) REFERENCES online_store.order_table (id) ON DELETE CASCADE
 );
-
-alter table address alter column note drop not null;

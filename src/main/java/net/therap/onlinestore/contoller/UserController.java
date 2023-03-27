@@ -1,9 +1,10 @@
 package net.therap.onlinestore.contoller;
 
+import net.therap.onlinestore.entity.AccessType;
 import net.therap.onlinestore.entity.User;
 import net.therap.onlinestore.entity.UserType;
 import net.therap.onlinestore.exception.IllegalAccessException;
-import net.therap.onlinestore.helper.UserTypeHelper;
+import net.therap.onlinestore.helper.UserHelper;
 import net.therap.onlinestore.service.OrderService;
 import net.therap.onlinestore.service.UserService;
 import net.therap.onlinestore.util.Encryption;
@@ -20,9 +21,6 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
-import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -62,6 +60,9 @@ public class UserController {
     @Autowired
     private UserValidator userValidator;
 
+    @Autowired
+    private UserHelper userHelper;
+
     @InitBinder({USER, DELIVERYMAN})
     public void initBinder(WebDataBinder webDataBinder) {
         webDataBinder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
@@ -74,52 +75,41 @@ public class UserController {
     }
 
     @GetMapping(USER_URL)
-    String showUserList(@PathVariable(USER_TYPE_PATH_VAR) String userType, ModelMap modelMap) {
-        List<User> userList;
+    String showUserList(@SessionAttribute(ACTIVE_USER) User user,
+                        @PathVariable(USER_TYPE_PATH_VAR) String userType, ModelMap modelMap) throws IllegalAccessException {
 
-        if (DELIVERYMAN.equals(userType)) {
-            userList = userService.finByUserType(UserType.DELIVERYMAN);
-            modelMap.put(USER_TYPE, DELIVERYMAN);
-        } else if (CUSTOMER.equals(userType)) {
-            userList = userService.finByUserType(UserType.CUSTOMER);
-            modelMap.put(USER_TYPE, CUSTOMER);
-        } else {
-            userList = userService.finByUserType(UserType.SHOPKEEPER);
-            modelMap.put(USER_TYPE, SHOPKEEPER);
-        }
-
-        modelMap.put(USER_LIST, userList);
-        modelMap.put(NAV_ITEM, USER);
+        userHelper.checkAccess(user, AccessType.VIEW_ALL);
+        userHelper.populateUserListModels(modelMap, userType);
 
         return USER_VIEW;
     }
 
     @GetMapping(USER_FORM_URL)
-    String userForm(@RequestParam(value = USER_ID_PARAM, required = false) String userId,
-                    ModelMap modelMap
-    ) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    String userForm(@SessionAttribute(value = ACTIVE_USER, required = false) User activeUser,
+                    @RequestParam(value = USER_ID_PARAM, required = false) String userId, ModelMap modelMap) throws IllegalAccessException {
+
+        userHelper.checkAccess(activeUser, AccessType.FORM_LOAD);
         User user = nonNull(userId) ? userService.findById(Integer.parseInt(userId)) : new User();
         modelMap.put(USER, user);
-        setupReferenceDataUserForm(modelMap, user);
+        userHelper.populateUserFormData(modelMap, user);
 
         return USER_FORM_VIEW;
     }
 
     @PostMapping(USER_FORM_SAVE_URL)
-    public String saveOrUpdateUser(@Valid @ModelAttribute(USER) User user,
+    public String saveOrUpdateUser(@SessionAttribute(value = ACTIVE_USER, required = false) User activeUser,
+                                   @Valid @ModelAttribute(USER) User user,
                                    BindingResult bindingResult,
                                    ModelMap modelMap,
                                    SessionStatus sessionStatus,
                                    RedirectAttributes redirectAttributes) throws Exception {
 
+        userHelper.checkAccess(activeUser, AccessType.SAVE);
+
         if (bindingResult.hasErrors()) {
-            setupReferenceDataUserForm(modelMap, user);
+            userHelper.populateUserFormData(modelMap, user);
 
             return USER_FORM_VIEW;
-        }
-
-        if (UserType.ADMIN.equals(user.getType())) {
-            throw new IllegalAccessException();
         }
 
         if (user.isNew()) {
@@ -136,27 +126,16 @@ public class UserController {
     }
 
     @PostMapping(USER_DELETE_URL)
-    public String deleteUser(@RequestParam(USER_ID_PARAM) int userId, RedirectAttributes redirectAttributes) throws Exception {
-        User user = userService.findById(userId);
+    public String deleteUser(@SessionAttribute(value = ACTIVE_USER, required = false) User activeUser,
+                             @RequestParam(USER_ID_PARAM) int userId, RedirectAttributes redirectAttributes) throws Exception {
 
-        if (orderService.isUserInUse(user)) {
-            redirectAttributes.addFlashAttribute(FAILED, messageSource.getMessage("fail.delete.inUse", null, Locale.getDefault()));
-        } else {
-            userService.delete(userId);
-            redirectAttributes.addFlashAttribute(SUCCESS, messageSource.getMessage("success.delete", null, Locale.getDefault()));
-        }
+        userHelper.checkAccess(activeUser, AccessType.DELETE);
+
+        User user = userService.findById(userId);
+        userHelper.populateDeleteRedirectMessage(redirectAttributes, user, userId);
 
         return REDIRECT + (UserType.SHOPKEEPER.equals(user.getType()) ? SHOPKEEPER_REDIRECT_URL :
                 ((UserType.DELIVERYMAN.equals(user.getType())) ? DELIVERYMAN_REDIRECT_URL : CUSTOMER_REDIRECT_URL));
 
-    }
-
-    private void setupReferenceDataUserForm(ModelMap modelMap, User user) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        modelMap.put(USER_TYPE_LIST, UserTypeHelper.getUserTypeSelectList());
-        modelMap.put(NAV_ITEM, USER);
-
-        if (!user.isNew()) {
-            modelMap.put(UPDATE_PAGE, true);
-        }
     }
 }

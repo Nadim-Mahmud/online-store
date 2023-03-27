@@ -2,11 +2,7 @@ package net.therap.onlinestore.contoller;
 
 import net.therap.onlinestore.entity.*;
 import net.therap.onlinestore.exception.IllegalAccessException;
-import net.therap.onlinestore.formatter.ItemFormatter;
-import net.therap.onlinestore.helper.AccessCheckHelper;
 import net.therap.onlinestore.helper.OrderHelper;
-import net.therap.onlinestore.service.CategoryService;
-import net.therap.onlinestore.service.ItemService;
 import net.therap.onlinestore.service.OrderService;
 import net.therap.onlinestore.validator.OrderItemValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,27 +61,19 @@ public class OrderController {
     private OrderService orderService;
 
     @Autowired
-    private ItemService itemService;
-
-    @Autowired
-    private CategoryService categoryService;
-
-    @Autowired
     private OrderHelper orderHelper;
-
-    @Autowired
-    private ItemFormatter itemFormatter;
 
     @InitBinder
     public void initBinder(WebDataBinder webDataBinder) {
         webDataBinder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
-        webDataBinder.addCustomFormatter(itemFormatter);
     }
 
     @GetMapping(ALL_ORDER)
-    public String showAllOrder(@SessionAttribute(ACTIVE_USER) User user,
+    public String showAllOrder(@SessionAttribute(value = ACTIVE_USER, required = false) User user,
                                ModelMap modelMap) throws IllegalAccessException {
-        orderHelper.allOrderAccess(user);
+
+        orderHelper.checkAccess(user, AccessType.VIEW_ALL);
+
         modelMap.put(ORDER_LIST, orderService.findAll());
         modelMap.put(ALL_ORDER, ALL_ORDER);
 
@@ -93,30 +81,26 @@ public class OrderController {
     }
 
     @GetMapping(ORDER_FORM_URL)
-    public String showOrderForm(@SessionAttribute(ACTIVE_USER) User user,
+    public String showOrderForm(@SessionAttribute(value = ACTIVE_USER, required = false) User user,
                                 @SessionAttribute(value = ORDER, required = false) Order order,
                                 @RequestParam(value = ORDER_ID_PARAM, required = false) String orderId,
                                 ModelMap modelMap) throws IllegalAccessException {
+
         order = Objects.nonNull(orderId) ? orderService.findById(Integer.parseInt(orderId)) :
                 (Objects.nonNull(order) ? order : new Order());
 
         orderHelper.orderFormAccess(user, order);
-
-        modelMap.put(ORDER, order);
-        modelMap.put(ORDER_ITEM_LIST, order.getOrderItemList());
-        modelMap.put(ORDER_ITEM, new OrderItem());
-        modelMap.put(ITEM_LIST, itemService.findAll());
-        modelMap.put(CATEGORY_LIST, categoryService.findAll());
-        modelMap.put(NAV_ITEM, ORDER_FORM);
+        orderHelper.populateOrderFormModel(modelMap, order);
 
         return ORDER_FORM_VIEW;
     }
 
     @GetMapping(NEXT_PAGE)
-    public String showAddressPage(@SessionAttribute(ACTIVE_USER) User user,
+    public String showAddressPage(@SessionAttribute(value = ACTIVE_USER, required = false) User user,
                                   @SessionAttribute(ORDER) Order order,
                                   ModelMap modelMap,
                                   RedirectAttributes redirectAttributes) throws IllegalAccessException {
+
         orderHelper.orderFormAccess(user, order);
 
         if (order.getOrderItemList().isEmpty()) {
@@ -133,13 +117,15 @@ public class OrderController {
     }
 
     @PostMapping(ADD_ORDER_ITEM_URL)
-    public String addOrderItem(@SessionAttribute(ACTIVE_USER) User user,
+    public String addOrderItem(@SessionAttribute(value = ACTIVE_USER, required = false) User user,
                                @SessionAttribute(ORDER) Order order,
                                @RequestParam(value = DETAILS_PAGE, required = false) String detailsPage,
                                @Valid @ModelAttribute(ORDER_ITEM) OrderItem orderItem,
                                BindingResult bindingResult,
                                ModelMap modelMap) throws IllegalAccessException {
+
         orderHelper.orderFormAccess(user, order);
+
         OrderItemValidator.validate(order.getOrderItemList(), orderItem, bindingResult);
 
         if (!bindingResult.hasErrors()) {
@@ -157,17 +143,16 @@ public class OrderController {
             return ITEM_DETAILS_VIEW;
         }
 
-        modelMap.put(ORDER_ITEM_LIST, order.getOrderItemList());
-        modelMap.put(NAV_ITEM, ORDER_FORM);
-        modelMap.put(CATEGORY_LIST, categoryService.findAll());
+        orderHelper.populateAddOrderItemModel(modelMap, order);
 
         return ORDER_FORM_VIEW;
     }
 
     @PostMapping(REMOVE_ORDER_ITEM_URL)
-    public String removeOrderItem(@SessionAttribute(ACTIVE_USER) User user,
+    public String removeOrderItem(@SessionAttribute(value = ACTIVE_USER, required = false) User user,
                                   @SessionAttribute(ORDER) Order order,
                                   @RequestParam(ORDER_ITEM_ID) int orderItemId) throws IllegalAccessException {
+
         orderHelper.orderFormAccess(user, order);
         order.removeOrderItem(new OrderItem(orderItemId));
 
@@ -175,12 +160,13 @@ public class OrderController {
     }
 
     @PostMapping(ORDER_FORM_SAVE_URL)
-    public String saveOrUpdateOrder(@SessionAttribute(ACTIVE_USER) User user,
+    public String saveOrUpdateOrder(@SessionAttribute(value = ACTIVE_USER, required = false) User user,
                                     @SessionAttribute(ORDER) Order order,
                                     @Valid @ModelAttribute(ADDRESS) Address address,
                                     BindingResult bindingResult,
                                     SessionStatus sessionStatus,
                                     RedirectAttributes redirectAttributes) throws Exception {
+
         orderHelper.orderFormAccess(user, order);
 
         if (bindingResult.hasErrors()) {
@@ -199,45 +185,51 @@ public class OrderController {
     }
 
     @PostMapping(ORDER_READY)
-    public String markOrderReady(@SessionAttribute(ACTIVE_USER) User user,
+    public String markOrderReady(@SessionAttribute(value = ACTIVE_USER, required = false) User user,
                                  @RequestParam(ORDER_ID_PARAM) int orderId) throws Exception {
+
+        orderHelper.checkAccess(user, AccessType.MARK_ORDER_READY);
+
         Order order = orderService.findById(orderId);
         order.setStatus(OrderStatus.READY);
-        AccessCheckHelper.check(user, AccessType.UPDATE, order);
         orderService.saveOrUpdate(order);
 
         return REDIRECT;
     }
 
     @PostMapping(ACCEPT_READY_ORDER)
-    public String getAcceptReadyOrder(@SessionAttribute(ACTIVE_USER) User user,
+    public String getAcceptReadyOrder(@SessionAttribute(value = ACTIVE_USER, required = false) User user,
                                       @RequestParam(ORDER_ID_PARAM) int orderId) throws Exception {
+
+        orderHelper.checkAccess(user, AccessType.ACCEPT_READY_ORDER);
+
         Order order = orderService.findById(orderId);
         order.setStatus(OrderStatus.PICKED);
         order.setUser(user);
-        AccessCheckHelper.check(user, AccessType.UPDATE, order);
         orderService.saveOrUpdate(order);
 
         return REDIRECT + REDIRECT_READY_ORDER_URL;
     }
 
     @PostMapping(DELIVER_ACCEPTED_ORDER)
-    public String markOrderDelivered(@SessionAttribute(ACTIVE_USER) User user,
-                                     @RequestParam(ORDER_ID_PARAM) int orderId) throws Exception {
+    public String markOrderDelivered(@SessionAttribute(value = ACTIVE_USER, required = false) User user, @RequestParam(ORDER_ID_PARAM) int orderId) throws Exception {
+        orderHelper.checkAccess(user, AccessType.SET_ORDER_DELIVERED);
+
         Order order = orderService.findById(orderId);
         order.setStatus(OrderStatus.DELIVERED);
-        AccessCheckHelper.check(user, AccessType.UPDATE, order);
         orderService.saveOrUpdate(order);
 
         return REDIRECT + REDIRECT_DELIVERY_ORDER_URL;
     }
 
     @PostMapping(ORDER_DELETE_URL)
-    public String deleteOrder(@SessionAttribute(ACTIVE_USER) User user,
+    public String deleteOrder(@SessionAttribute(value = ACTIVE_USER, required = false) User user,
                               @RequestParam(ORDER_ID_PARAM) int orderId,
                               RedirectAttributes redirectAttributes) throws Exception {
+
         Order order = orderService.findById(orderId);
-        AccessCheckHelper.check(user, AccessType.DELETE, order);
+
+        orderHelper.checkOrderDeleteAccess(user, order);
 
         if (orderService.isOrderOnProcess(orderId)) {
             redirectAttributes.addFlashAttribute(FAILED, messageSource.getMessage("fail.delete.inUse", null, Locale.getDefault()));
@@ -250,11 +242,11 @@ public class OrderController {
     }
 
     @PostMapping(ORDER_CANCEL_URL)
-    public String cancelOrder(@SessionAttribute(ACTIVE_USER) User user,
+    public String cancelOrder(@SessionAttribute(value = ACTIVE_USER, required = false) User user,
                               @RequestParam(ORDER_ID_PARAM) int orderId,
                               RedirectAttributes redirectAttributes) throws Exception {
-        Order order = orderService.findById(orderId);
-        AccessCheckHelper.check(user, AccessType.CANCEL, order);
+
+        orderHelper.checkAccess(user, AccessType.CANCEL);
 
         if (orderService.isOrderOnProcess(orderId)) {
             redirectAttributes.addFlashAttribute(FAILED, messageSource.getMessage("fail.cancel.inUse", null, Locale.getDefault()));

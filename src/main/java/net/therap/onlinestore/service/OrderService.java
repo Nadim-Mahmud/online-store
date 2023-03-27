@@ -85,16 +85,7 @@ public class OrderService {
         return orderHelper.calculatePriceOfOrderList(orderList);
     }
 
-    public boolean isAccessible(User user, Order order) {
-
-        if (order.isNew()) {
-            return true;
-        }
-
-        if (!OrderStatus.ORDERED.equals(order.getStatus())) {
-            return false;
-        }
-
+    public boolean isAccessibleOrderByUser(User user, Order order) {
         return !entityManager.createNamedQuery("Order.findOrderByOrderIdAndUserId", Order.class)
                 .setParameter("userId", user.getId())
                 .setParameter("orderId", order.getId())
