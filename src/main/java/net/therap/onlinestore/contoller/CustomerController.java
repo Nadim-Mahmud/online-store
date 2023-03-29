@@ -1,7 +1,6 @@
 package net.therap.onlinestore.contoller;
 
 import net.therap.onlinestore.entity.User;
-import net.therap.onlinestore.exception.IllegalAccessException;
 import net.therap.onlinestore.helper.CustomerHelper;
 import net.therap.onlinestore.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +34,7 @@ public class CustomerController {
     private CustomerHelper customerHelper;
 
     @GetMapping(ORDER_LIST_URL)
-    public String showOrderList(@SessionAttribute(ACTIVE_USER) User user, ModelMap modelMap) throws IllegalAccessException {
+    public String showOrderList(@SessionAttribute(ACTIVE_USER) User user, ModelMap modelMap) {
         customerHelper.checkAccess(user);
 
         modelMap.put(ORDER_LIST, orderService.findActiveOrdersByCustomer(user));
@@ -45,7 +44,7 @@ public class CustomerController {
     }
 
     @GetMapping(ORDER_HISTORY_URL)
-    public String showOrderHistory(@SessionAttribute(ACTIVE_USER) User user, ModelMap modelMap) throws IllegalAccessException {
+    public String showOrderHistory(@SessionAttribute(ACTIVE_USER) User user, ModelMap modelMap) {
         customerHelper.checkAccess(user);
 
         modelMap.put(ORDER_LIST, orderService.findDeliveredOrdersByCustomer(user));

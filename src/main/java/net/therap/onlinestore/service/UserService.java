@@ -1,6 +1,7 @@
 package net.therap.onlinestore.service;
 
 import net.therap.onlinestore.command.Credentials;
+import net.therap.onlinestore.entity.AccessStatus;
 import net.therap.onlinestore.entity.User;
 import net.therap.onlinestore.entity.UserType;
 import net.therap.onlinestore.util.Encryption;
@@ -73,12 +74,14 @@ public class UserService {
 
 
     @Transactional
-    public void delete(int id) throws Exception {
-        entityManager.remove(entityManager.find(User.class, id));
+    public void delete(int id) {
+        User user = findById(id);
+        user.setAccessStatus(AccessStatus.DELETED);
+        saveOrUpdate(user);
     }
 
     @Transactional
-    public User saveOrUpdate(User user) throws Exception {
+    public User saveOrUpdate(User user) {
 
         if (user.isNew()) {
             entityManager.persist(user);

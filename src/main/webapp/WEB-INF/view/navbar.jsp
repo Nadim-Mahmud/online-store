@@ -19,7 +19,7 @@ Date: 12/7/22
     <c:set var="navItemList" value="item" scope="page"/>
     <c:set var="navCategory" value="category" scope="page"/>
     <c:set var="navTag" value="tag" scope="page"/>
-    <c:set var="navAllOrder" value="all-order" scope="page"/>
+    <c:set var="navAllOrder" value="allOrder" scope="page"/>
     <c:set var="navNotification" value="notification" scope="page"/>
     <c:set var="navReadyOrder" value="readyOrder" scope="page"/>
     <c:set var="navDeliveryList" value="deliveryList" scope="page"/>

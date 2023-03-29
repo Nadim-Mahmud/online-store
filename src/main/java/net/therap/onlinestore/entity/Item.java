@@ -11,7 +11,6 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
@@ -21,18 +20,17 @@ import java.util.Objects;
  */
 @Entity
 @Table(name = "item")
-@SQLDelete(sql = "UPDATE item SET access_status = 'DELETED' WHERE id = ? AND version = ?", check = ResultCheckStyle.COUNT)
 @Where(clause = "access_status <> 'DELETED'")
 @NamedQueries({
         @NamedQuery(name = "Item.findAll", query = "SELECT i FROM Item i ORDER BY i.name ASC"),
         @NamedQuery(name = "Item.search", query = "SELECT i FROM Item i WHERE LOWER(i.name) LIKE LOWER(:searchKey)  OR LOWER(i.description) LIKE LOWER(:searchKey) ORDER BY i.name ASC"),
         @NamedQuery(name = "Item.findAvailable", query = "SELECT i FROM Item i WHERE i.availability = 'AVAILABLE' ORDER BY i.name ASC"),
         @NamedQuery(name = "Item.findItemsByNameAndId", query = "SELECT i FROM Item i WHERE i.name = :name AND i.id != :id"),
-        @NamedQuery(name = "Item.findByCategoryId", query = "SELECT i FROM Item i WHERE i.category.id = :categoryId ORDER BY i.name ASC"),
+        @NamedQuery(name = "Item.findByCategoryId", query = "SELECT i FROM Item i WHERE i.availability = 'AVAILABLE' AND i.category.id = :categoryId ORDER BY i.name ASC"),
         @NamedQuery(name = "Item.findByTag", query = "SELECT i FROM Item i WHERE :tag MEMBER OF i.tagList ORDER BY i.name ASC"),
         @NamedQuery(name = "Item.findByTagAndCategoryId", query = "SELECT i FROM Item i WHERE :tag MEMBER OF i.tagList AND i.category.id = :categoryId ORDER BY i.name ASC"),
 })
-public class Item extends Persistent implements Serializable {
+public class Item extends Persistent {
 
     private static final long serialVersionUID = 1L;
 
@@ -75,7 +73,7 @@ public class Item extends Persistent implements Serializable {
     @Column(name = "description")
     private String description;
 
-    @ManyToMany(cascade = {CascadeType.MERGE})
+    @ManyToMany
     @JoinTable(
             name = "tag_item",
             joinColumns = @JoinColumn(name = "item_id"),

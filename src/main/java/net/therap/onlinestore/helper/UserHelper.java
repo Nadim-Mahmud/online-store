@@ -47,6 +47,13 @@ public class UserHelper {
         }
     }
 
+    public void checkUserAllowedUserType(User user) throws IllegalAccessException {
+
+        if (UserType.ADMIN.equals(user.getType()) || UserType.CUSTOMER.equals(user.getType())) {
+            throw new IllegalAccessException();
+        }
+    }
+
     public void populateUserListModels(ModelMap modelMap, String userType) {
         List<User> userList;
 
@@ -74,7 +81,7 @@ public class UserHelper {
         }
     }
 
-    public void populateDeleteRedirectMessage(RedirectAttributes redirectAttributes, User user, int userId) throws Exception {
+    public void populateDeleteRedirectMessage(RedirectAttributes redirectAttributes, User user, int userId) {
 
         if (orderService.isUserInUse(user)) {
             redirectAttributes.addFlashAttribute(FAILED, messageSource.getMessage("fail.delete.inUse", null, Locale.getDefault()));

@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 
 import static net.therap.onlinestore.constant.Constants.*;
 
@@ -62,7 +64,7 @@ public class AuthenticationController {
     @PostMapping(LOGIN)
     public String login(@Valid @ModelAttribute(CREDENTIALS) Credentials credentials,
                         ModelMap modelMap,
-                        HttpSession httpSession) throws Exception {
+                        HttpSession httpSession) throws NoSuchAlgorithmException, InvalidKeySpecException {
 
         if (userService.isValidCredential(credentials)) {
             httpSession.setAttribute(ACTIVE_USER, userService.findByEmail(credentials.getEmail()));

@@ -3,9 +3,7 @@ package net.therap.onlinestore.contoller;
 import net.therap.onlinestore.entity.AccessType;
 import net.therap.onlinestore.entity.User;
 import net.therap.onlinestore.entity.UserType;
-import net.therap.onlinestore.exception.IllegalAccessException;
 import net.therap.onlinestore.helper.UserHelper;
-import net.therap.onlinestore.service.OrderService;
 import net.therap.onlinestore.service.UserService;
 import net.therap.onlinestore.util.Encryption;
 import net.therap.onlinestore.validator.UserValidator;
@@ -21,6 +19,8 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -55,9 +55,6 @@ public class UserController {
     private UserService userService;
 
     @Autowired
-    private OrderService orderService;
-
-    @Autowired
     private UserValidator userValidator;
 
     @Autowired
@@ -67,6 +64,7 @@ public class UserController {
     public void initBinder(WebDataBinder webDataBinder) {
         webDataBinder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
         webDataBinder.addValidators(userValidator);
+        webDataBinder.setDisallowedFields("id", "access_status", "version", "created_at", "updated_at");
         User user = (User) webDataBinder.getTarget();
 
         if (Objects.nonNull(user) && !user.isNew()) {
@@ -76,7 +74,7 @@ public class UserController {
 
     @GetMapping(USER_URL)
     String showUserList(@SessionAttribute(ACTIVE_USER) User user,
-                        @PathVariable(USER_TYPE_PATH_VAR) String userType, ModelMap modelMap) throws IllegalAccessException {
+                        @PathVariable(USER_TYPE_PATH_VAR) String userType, ModelMap modelMap) {
 
         userHelper.checkAccess(user, AccessType.VIEW_ALL);
         userHelper.populateUserListModels(modelMap, userType);
@@ -86,7 +84,7 @@ public class UserController {
 
     @GetMapping(USER_FORM_URL)
     String userForm(@SessionAttribute(value = ACTIVE_USER, required = false) User activeUser,
-                    @RequestParam(value = USER_ID_PARAM, required = false) String userId, ModelMap modelMap) throws IllegalAccessException {
+                    @RequestParam(value = USER_ID_PARAM, required = false) String userId, ModelMap modelMap) {
 
         userHelper.checkAccess(activeUser, AccessType.FORM_LOAD);
         User user = nonNull(userId) ? userService.findById(Integer.parseInt(userId)) : new User();
@@ -102,9 +100,10 @@ public class UserController {
                                    BindingResult bindingResult,
                                    ModelMap modelMap,
                                    SessionStatus sessionStatus,
-                                   RedirectAttributes redirectAttributes) throws Exception {
+                                   RedirectAttributes redirectAttributes) throws NoSuchAlgorithmException, InvalidKeySpecException {
 
         userHelper.checkAccess(activeUser, AccessType.SAVE);
+        userHelper.checkUserAllowedUserType(user);
 
         if (bindingResult.hasErrors()) {
             userHelper.populateUserFormData(modelMap, user);
@@ -127,7 +126,7 @@ public class UserController {
 
     @PostMapping(USER_DELETE_URL)
     public String deleteUser(@SessionAttribute(value = ACTIVE_USER, required = false) User activeUser,
-                             @RequestParam(USER_ID_PARAM) int userId, RedirectAttributes redirectAttributes) throws Exception {
+                             @RequestParam(USER_ID_PARAM) int userId, RedirectAttributes redirectAttributes) {
 
         userHelper.checkAccess(activeUser, AccessType.DELETE);
 

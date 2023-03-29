@@ -1,7 +1,6 @@
 package net.therap.onlinestore.contoller;
 
 import net.therap.onlinestore.entity.*;
-import net.therap.onlinestore.exception.IllegalAccessException;
 import net.therap.onlinestore.helper.OrderHelper;
 import net.therap.onlinestore.service.OrderService;
 import net.therap.onlinestore.validator.OrderItemValidator;
@@ -53,6 +52,7 @@ public class OrderController {
     private static final String DELIVER_ACCEPTED_ORDER = "delivered";
     private static final String REDIRECT_DELIVERY_ORDER_URL = "delivery/delivery-list";
     private static final String ITEM_DETAILS_VIEW = "item/item-details";
+    private static final String NAV_ALL_ORDER = "allOrder";
 
     @Autowired
     private MessageSource messageSource;
@@ -66,16 +66,17 @@ public class OrderController {
     @InitBinder
     public void initBinder(WebDataBinder webDataBinder) {
         webDataBinder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
+        webDataBinder.setDisallowedFields("id", "access_status", "version", "created_at", "updated_at");
     }
 
     @GetMapping(ALL_ORDER)
     public String showAllOrder(@SessionAttribute(value = ACTIVE_USER, required = false) User user,
-                               ModelMap modelMap) throws IllegalAccessException {
+                               ModelMap modelMap) {
 
         orderHelper.checkAccess(user, AccessType.VIEW_ALL);
 
         modelMap.put(ORDER_LIST, orderService.findAll());
-        modelMap.put(ALL_ORDER, ALL_ORDER);
+        modelMap.put(NAV_ITEM, NAV_ALL_ORDER);
 
         return ADMIN_ORDER_LIST;
     }
@@ -84,7 +85,7 @@ public class OrderController {
     public String showOrderForm(@SessionAttribute(value = ACTIVE_USER, required = false) User user,
                                 @SessionAttribute(value = ORDER, required = false) Order order,
                                 @RequestParam(value = ORDER_ID_PARAM, required = false) String orderId,
-                                ModelMap modelMap) throws IllegalAccessException {
+                                ModelMap modelMap) {
 
         order = Objects.nonNull(orderId) ? orderService.findById(Integer.parseInt(orderId)) :
                 (Objects.nonNull(order) ? order : new Order());
@@ -99,7 +100,7 @@ public class OrderController {
     public String showAddressPage(@SessionAttribute(value = ACTIVE_USER, required = false) User user,
                                   @SessionAttribute(ORDER) Order order,
                                   ModelMap modelMap,
-                                  RedirectAttributes redirectAttributes) throws IllegalAccessException {
+                                  RedirectAttributes redirectAttributes) {
 
         orderHelper.orderFormAccess(user, order);
 
@@ -122,7 +123,7 @@ public class OrderController {
                                @RequestParam(value = DETAILS_PAGE, required = false) String detailsPage,
                                @Valid @ModelAttribute(ORDER_ITEM) OrderItem orderItem,
                                BindingResult bindingResult,
-                               ModelMap modelMap) throws IllegalAccessException {
+                               ModelMap modelMap) {
 
         orderHelper.orderFormAccess(user, order);
 
@@ -151,7 +152,7 @@ public class OrderController {
     @PostMapping(REMOVE_ORDER_ITEM_URL)
     public String removeOrderItem(@SessionAttribute(value = ACTIVE_USER, required = false) User user,
                                   @SessionAttribute(ORDER) Order order,
-                                  @RequestParam(ORDER_ITEM_ID) int orderItemId) throws IllegalAccessException {
+                                  @RequestParam(ORDER_ITEM_ID) int orderItemId) {
 
         orderHelper.orderFormAccess(user, order);
         order.removeOrderItem(new OrderItem(orderItemId));
@@ -165,7 +166,7 @@ public class OrderController {
                                     @Valid @ModelAttribute(ADDRESS) Address address,
                                     BindingResult bindingResult,
                                     SessionStatus sessionStatus,
-                                    RedirectAttributes redirectAttributes) throws Exception {
+                                    RedirectAttributes redirectAttributes) {
 
         orderHelper.orderFormAccess(user, order);
 
@@ -186,7 +187,7 @@ public class OrderController {
 
     @PostMapping(ORDER_READY)
     public String markOrderReady(@SessionAttribute(value = ACTIVE_USER, required = false) User user,
-                                 @RequestParam(ORDER_ID_PARAM) int orderId) throws Exception {
+                                 @RequestParam(ORDER_ID_PARAM) int orderId) {
 
         orderHelper.checkAccess(user, AccessType.MARK_ORDER_READY);
 
@@ -199,7 +200,7 @@ public class OrderController {
 
     @PostMapping(ACCEPT_READY_ORDER)
     public String getAcceptReadyOrder(@SessionAttribute(value = ACTIVE_USER, required = false) User user,
-                                      @RequestParam(ORDER_ID_PARAM) int orderId) throws Exception {
+                                      @RequestParam(ORDER_ID_PARAM) int orderId) {
 
         orderHelper.checkAccess(user, AccessType.ACCEPT_READY_ORDER);
 
@@ -212,7 +213,8 @@ public class OrderController {
     }
 
     @PostMapping(DELIVER_ACCEPTED_ORDER)
-    public String markOrderDelivered(@SessionAttribute(value = ACTIVE_USER, required = false) User user, @RequestParam(ORDER_ID_PARAM) int orderId) throws Exception {
+    public String markOrderDelivered(@SessionAttribute(value = ACTIVE_USER, required = false) User user,
+                                     @RequestParam(ORDER_ID_PARAM) int orderId) {
         orderHelper.checkAccess(user, AccessType.SET_ORDER_DELIVERED);
 
         Order order = orderService.findById(orderId);
@@ -225,7 +227,7 @@ public class OrderController {
     @PostMapping(ORDER_DELETE_URL)
     public String deleteOrder(@SessionAttribute(value = ACTIVE_USER, required = false) User user,
                               @RequestParam(ORDER_ID_PARAM) int orderId,
-                              RedirectAttributes redirectAttributes) throws Exception {
+                              RedirectAttributes redirectAttributes) {
 
         Order order = orderService.findById(orderId);
 

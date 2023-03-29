@@ -1,7 +1,6 @@
 package net.therap.onlinestore.contoller;
 
 import net.therap.onlinestore.entity.User;
-import net.therap.onlinestore.exception.IllegalAccessException;
 import net.therap.onlinestore.helper.DeliveryHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,7 +27,7 @@ public class DeliveryController {
     private DeliveryHelper deliveryHelper;
 
     @GetMapping(HOME_URL)
-    public String showReadyOrdersList(@SessionAttribute(ACTIVE_USER) User user, ModelMap modelMap) throws IllegalAccessException {
+    public String showReadyOrdersList(@SessionAttribute(ACTIVE_USER) User user, ModelMap modelMap) {
         deliveryHelper.checkAccess(user);
         deliveryHelper.populateReadyOrderListModel(modelMap);
 
@@ -36,7 +35,7 @@ public class DeliveryController {
     }
 
     @GetMapping(DELIVERY_ORDER_URL)
-    public String showDeliveryOrderList(@SessionAttribute(ACTIVE_USER) User user, ModelMap modelMap) throws IllegalAccessException {
+    public String showDeliveryOrderList(@SessionAttribute(ACTIVE_USER) User user, ModelMap modelMap) {
         deliveryHelper.checkAccess(user);
         deliveryHelper.populateDeliveryOrderListModel(modelMap, user);
 
@@ -44,7 +43,7 @@ public class DeliveryController {
     }
 
     @GetMapping(DELIVERY_HISTORY_URL)
-    public String showDeliveryOrderHistory(@SessionAttribute(ACTIVE_USER) User user, ModelMap modelMap) throws IllegalAccessException {
+    public String showDeliveryOrderHistory(@SessionAttribute(ACTIVE_USER) User user, ModelMap modelMap) {
         deliveryHelper.checkAccess(user);
         deliveryHelper.populateDeliveryHistoryModel(modelMap, user);
 

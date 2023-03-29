@@ -22,9 +22,9 @@
 <%@ include file="../navbar.jsp" %>
 <div class="container">
     <div class="container col-md-5 mt-2">
+        <%@ include file="../message-view.jsp" %>
         <div class="card">
             <div class="card-body">
-                <%@ include file="../message-view.jsp" %>
                 <div class="card shadow-sm mb-1 bg-body-tertiary rounded">
                     <img src="/item/image?itemId=${item.id}" class="card-img-top" alt="image">
                     <div class="card-body">

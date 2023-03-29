@@ -5,7 +5,6 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +14,6 @@ import java.util.List;
  */
 @Entity
 @Table(name = "order_table")
-@SQLDelete(sql = "UPDATE order_table SET access_status = 'DELETED' WHERE id = ? AND version = ?", check = ResultCheckStyle.COUNT)
 @Where(clause = "access_status <> 'DELETED'")
 @NamedQueries({
         @NamedQuery(name = "Order.findAll", query = "SELECT o FROM Order o"),
@@ -28,7 +26,7 @@ import java.util.List;
         @NamedQuery(name = "Order.findDeliveredOrderByUser", query = "SELECT o FROM Order o WHERE o.user.id = :deliveryManId AND o.status = 'DELIVERED'"),
         @NamedQuery(name = "Order.findOrderByOrderIdAndUserId", query = "SELECT o FROM Order o WHERE o.address.user.id = :userId AND o.id = :orderId")
 })
-public class Order extends Persistent implements Serializable {
+public class Order extends Persistent {
 
     private static final long serialVersionUID = 1L;
 
@@ -49,7 +47,7 @@ public class Order extends Persistent implements Serializable {
     @JoinColumn(name = "address")
     private Address address;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "order", orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "order")
     private List<OrderItem> orderItemList;
 
     @ManyToOne

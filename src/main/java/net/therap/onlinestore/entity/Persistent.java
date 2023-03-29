@@ -5,6 +5,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -12,15 +13,15 @@ import java.util.Date;
  * @since 3/4/23
  */
 @MappedSuperclass
-public class Persistent {
+public class Persistent implements Serializable {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "access_status")
     @JsonIgnore
-    private AccessStatus accessStatus;
+    protected AccessStatus accessStatus;
 
     @Version
-    @Column(name = "version", nullable = false)
+    @Column(name = "version")
     @JsonIgnore
     protected int version;
 

@@ -1,12 +1,9 @@
 package net.therap.onlinestore.contoller;
 
 import net.therap.onlinestore.exception.IllegalAccessException;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
-
-import static net.therap.onlinestore.constant.Constants.ERROR_CODE;
 
 /**
  * @author nadimmahmud

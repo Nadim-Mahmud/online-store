@@ -5,13 +5,13 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <div class="text-center">
   <c:if test="${success != null}">
-    <p class="text-success">
+    <div class="alert alert-success m-1 p-1" role="alert">
       &check; ${success}!
-    </p>
+    </div>
   </c:if>
   <c:if test="${failed != null}">
-    <p class="text-danger">
+    <div class="alert alert-danger m-1 p-1" role="alert">
       &cross; ${failed}
-    </p>
+    </div>
   </c:if>
 </div>

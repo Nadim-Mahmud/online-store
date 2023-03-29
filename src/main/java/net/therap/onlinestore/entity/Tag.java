@@ -8,7 +8,6 @@ import org.hibernate.annotations.Where;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -19,13 +18,12 @@ import java.util.Objects;
  */
 @Entity
 @Table(name = "tag")
-@SQLDelete(sql = "UPDATE tag SET access_status = 'DELETED' WHERE id = ? AND version = ?", check = ResultCheckStyle.COUNT)
 @Where(clause = "access_status <> 'DELETED'")
 @NamedQueries({
         @NamedQuery(name = "Tag.findAll", query = "SELECT t FROM Tag t"),
         @NamedQuery(name = "User.getTagByNameAndId", query = "SELECT t FROM Tag t WHERE t.name = :name AND id != :id")
 })
-public class Tag extends Persistent implements Serializable {
+public class Tag extends Persistent {
 
     private static final long serialVersionUID = 1L;
 

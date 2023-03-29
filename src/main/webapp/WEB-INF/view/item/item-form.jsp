@@ -70,7 +70,9 @@
                         </label>
                         <form:radiobuttons path="availability" items="${availabilityList}" itemLabel="label"
                                            class="form-check-input me-2 ms-2"/>
-                        <form:errors path="availability" cssClass="text-danger"/>
+                        <div>
+                            <form:errors path="availability" cssClass="text-danger"/>
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label for="description" class="form-label required-fields">

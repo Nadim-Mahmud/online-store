@@ -24,7 +24,11 @@ public class AuthenticationFilter implements Filter {
     private static final String HOME = "/";
     private static final String LOGIN = "/login";
     private static final String LOGIN_PAGE = "/login-page";
+    private static final String REGISTRATION = "/registration";
+    private static final String REGISTER = "/registration/save";
     private static final String ITEM_IMAGE_URL = "/item/image";
+    private static final String SEARCH = "/item/search";
+    private static final String ASSETS = "/assets";
     private static final String ITEM_DETAILS_URL = "/item/details";
     private static final String SHOPKEEPER_URL = "/shopkeeper/";
     private static final String DELIVERY_URL = "/delivery/";
@@ -32,7 +36,6 @@ public class AuthenticationFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-        HttpServletResponse httpServletResponse = (HttpServletResponse) response;
         String uri = httpServletRequest.getRequestURI();
         HttpSession httpSession = httpServletRequest.getSession();
         User user = (User) httpSession.getAttribute(ACTIVE_USER);
@@ -52,9 +55,10 @@ public class AuthenticationFilter implements Filter {
 
             chain.doFilter(request, response);
 
-        } else if (Arrays.asList(HOME, LOGIN, LOGIN_PAGE, ITEM_DETAILS_URL).contains(uri)
+        } else if (Arrays.asList(HOME, LOGIN, SEARCH, LOGIN_PAGE, ITEM_DETAILS_URL, REGISTRATION, REGISTER).contains(uri)
                 || uri.startsWith(ITEM_IMAGE_URL)
-                || uri.startsWith(ITEM_DETAILS_URL)) {
+                || uri.startsWith(ITEM_DETAILS_URL)
+                || uri.startsWith(ASSETS)) {
 
             chain.doFilter(request, response);
 

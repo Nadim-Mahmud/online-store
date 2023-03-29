@@ -1,5 +1,6 @@
 package net.therap.onlinestore.service;
 
+import net.therap.onlinestore.entity.AccessStatus;
 import net.therap.onlinestore.entity.Category;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,12 +34,14 @@ public class CategoryService {
     }
 
     @Transactional
-    public void delete(int id) throws Exception {
-        entityManager.remove(entityManager.find(Category.class, id));
+    public void delete(int id) {
+        Category category = findById(id);
+        category.setAccessStatus(AccessStatus.DELETED);
+        saveOrUpdate(category);
     }
 
     @Transactional
-    public Category saveOrUpdate(Category category) throws Exception {
+    public Category saveOrUpdate(Category category) {
 
         if (category.isNew()) {
             entityManager.persist(category);

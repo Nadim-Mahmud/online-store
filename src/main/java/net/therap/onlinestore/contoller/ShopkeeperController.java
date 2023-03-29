@@ -33,7 +33,7 @@ public class ShopkeeperController {
 
     @GetMapping(HOME_URL)
     public String showShopkeeperDashBoard(@SessionAttribute(value = ACTIVE_USER, required = false) User user,
-                                          ModelMap modelMap) throws IllegalAccessException {
+                                          ModelMap modelMap) {
 
         shopkeeperHelper.checkAccess(user, AccessType.VIEW_ALL);
         modelMap.put(ORDER_LIST, orderService.findOrdersByOrderStatus(OrderStatus.ORDERED));

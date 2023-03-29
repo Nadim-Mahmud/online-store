@@ -2,7 +2,6 @@ package net.therap.onlinestore.contoller;
 
 import net.therap.onlinestore.entity.Category;
 import net.therap.onlinestore.entity.User;
-import net.therap.onlinestore.exception.IllegalAccessException;
 import net.therap.onlinestore.helper.CategoryHelper;
 import net.therap.onlinestore.service.CategoryService;
 import net.therap.onlinestore.validator.CategoryValidator;
@@ -56,12 +55,13 @@ public class CategoryController {
     @InitBinder(CATEGORY)
     public void initBinder(WebDataBinder webDataBinder) {
         webDataBinder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
+        webDataBinder.setDisallowedFields("id", "access_status", "version", "created_at", "updated_at");
         webDataBinder.addValidators(categoryValidator);
     }
 
     @GetMapping(CATEGORY_URL)
     public String showCategory(@SessionAttribute(value = ACTIVE_USER, required = false) User user,
-                               ModelMap modelMap) throws IllegalAccessException {
+                               ModelMap modelMap) {
 
         categoryHelper.checkAccess(user);
 
@@ -74,7 +74,7 @@ public class CategoryController {
     @GetMapping(CATEGORY_FORM_URL)
     public String showCategoryForm(@SessionAttribute(value = ACTIVE_USER, required = false) User user,
                                    @RequestParam(value = CATEGORY_ID_PARAM, required = false) String categoryId,
-                                   ModelMap modelMap) throws IllegalAccessException {
+                                   ModelMap modelMap) {
 
         categoryHelper.checkAccess(user);
 
@@ -91,7 +91,7 @@ public class CategoryController {
                                        BindingResult bindingResult,
                                        ModelMap modelMap,
                                        SessionStatus sessionStatus,
-                                       RedirectAttributes redirectAttributes) throws Exception {
+                                       RedirectAttributes redirectAttributes) {
 
         categoryHelper.checkAccess(user);
 
@@ -112,7 +112,7 @@ public class CategoryController {
     @PostMapping(CATEGORY_DELETE_URL)
     public String deleteCategory(@SessionAttribute(value = ACTIVE_USER, required = false) User user,
                                  @RequestParam(CATEGORY_ID_PARAM) int categoryId,
-                                 RedirectAttributes redirectAttributes) throws Exception {
+                                 RedirectAttributes redirectAttributes) {
 
         categoryHelper.checkAccess(user);
 

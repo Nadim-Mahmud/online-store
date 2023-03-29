@@ -1,7 +1,6 @@
 package net.therap.onlinestore.contoller;
 
 import net.therap.onlinestore.entity.*;
-import net.therap.onlinestore.exception.IllegalAccessException;
 import net.therap.onlinestore.helper.ItemHelper;
 import net.therap.onlinestore.service.FIleService;
 import net.therap.onlinestore.service.ItemService;
@@ -68,12 +67,13 @@ public class ItemController {
     @InitBinder(ITEM)
     public void initBinder(WebDataBinder webDataBinder) {
         webDataBinder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
+        webDataBinder.setDisallowedFields("id", "access_status", "version", "created_at", "updated_at");
         webDataBinder.addValidators(itemValidator);
     }
 
     @GetMapping(ITEM_URL)
     public String showItems(@SessionAttribute(value = ACTIVE_USER, required = false) User user,
-                            ModelMap modelMap) throws IllegalAccessException {
+                            ModelMap modelMap) {
 
         itemHelper.checkAccess(user, AccessType.VIEW_ALL);
 
@@ -101,7 +101,7 @@ public class ItemController {
     @GetMapping(ITEM_FORM_URL)
     public String showItemForm(@SessionAttribute(value = ACTIVE_USER, required = false) User user,
                                @RequestParam(value = ITEM_ID_PARAM, required = false) String itemId,
-                               ModelMap modelMap) throws IllegalAccessException {
+                               ModelMap modelMap) {
 
         itemHelper.checkAccess(user, AccessType.FORM_LOAD);
 
@@ -115,7 +115,7 @@ public class ItemController {
     @GetMapping(ITEM_CATEGORY_ID)
     @ResponseBody
     public List<Item> getItemByCategoryId(@SessionAttribute(value = ACTIVE_USER, required = false) User user,
-                                          @PathVariable(CATEGORY_ID) int categoryId) throws IllegalAccessException {
+                                          @PathVariable(CATEGORY_ID) int categoryId) {
 
         itemHelper.checkAccess(user, AccessType.READ);
 
@@ -134,7 +134,7 @@ public class ItemController {
                                    BindingResult bindingResult,
                                    ModelMap modelMap,
                                    SessionStatus sessionStatus,
-                                   RedirectAttributes redirectAttributes) throws Exception {
+                                   RedirectAttributes redirectAttributes) throws IOException {
 
         itemHelper.checkAccess(user, AccessType.SAVE);
 
@@ -155,7 +155,7 @@ public class ItemController {
     @PostMapping(ITEM_DELETE_URL)
     public String deleteItem(@SessionAttribute(value = ACTIVE_USER, required = false) User user,
                              @RequestParam(ITEM_ID_PARAM) int itemId,
-                             RedirectAttributes redirectAttributes) throws Exception {
+                             RedirectAttributes redirectAttributes) throws IOException {
 
         itemHelper.checkAccess(user, AccessType.DELETE);
 

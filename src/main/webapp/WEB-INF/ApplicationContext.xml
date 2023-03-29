@@ -14,6 +14,10 @@
 
     <context:component-scan base-package="net.therap.onlinestore"/>
 
+    <mvc:resources mapping="/assets/**" location="/assets/"/>
+
+    <mvc:annotation-driven validator="validator" conversion-service="conversionService"/>
+
     <util:properties id="myProperties" location="classpath:application.properties"/>
 
     <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
@@ -29,8 +33,7 @@
         <property name="validationMessageSource" ref="messageSource"/>
     </bean>
 
-    <bean id="conversionService"
-          class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+    <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
         <property name="formatters">
             <set>
                 <bean class="net.therap.onlinestore.formatter.CategoryFormatter"/>
@@ -39,8 +42,6 @@
             </set>
         </property>
     </bean>
-
-    <mvc:annotation-driven validator="validator" conversion-service="conversionService"/>
 
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
         <property name="persistenceUnitName" value="persistence"/>
@@ -57,7 +58,7 @@
     </bean>
 
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-        <property name="maxUploadSize" value="10000000"/>
+        <property name="maxUploadSize" value="${item.image.size.max}"/>
     </bean>
 
 </beans>

@@ -97,17 +97,6 @@
                                     </form:form>
                                 </div>
                             </c:if>
-                            <c:if test="${order.status == delivered || order.status == canceled}">
-                                <c:url var="cancelUrl" value="/customer/order/delete">
-                                    <c:param name="orderId" value="${order.id}"/>
-                                </c:url>
-                                <form:form class="text-center my-0 mx-2 p-0" action="${cancelUrl}" method="post">
-                                    <button class="btn btn-outline-danger center btn-sm"
-                                            onclick="return confirm('Want to delete this order?')">
-                                        <fmt:message key="button.delete"/>
-                                    </button>
-                                </form:form>
-                            </c:if>
                             <c:if test="${order.status != ordered && order.status != delivered && order.status != canceled}">
                                 <fmt:message key="label.empty"/>
                             </c:if>

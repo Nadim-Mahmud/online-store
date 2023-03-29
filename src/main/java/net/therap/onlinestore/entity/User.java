@@ -9,7 +9,6 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -23,7 +22,6 @@ import static net.therap.onlinestore.constant.Constants.EMAIL_PATTERN;
  */
 @Entity
 @Table(name = "user_table")
-@SQLDelete(sql = "UPDATE user_table SET access_status = 'DELETED' WHERE id = ? AND version = ?", check = ResultCheckStyle.COUNT)
 @Where(clause = "access_status <> 'DELETED'")
 @NamedQueries({
         @NamedQuery(name = "User.findAll", query = "SELECT u FROM User u"),
@@ -31,7 +29,7 @@ import static net.therap.onlinestore.constant.Constants.EMAIL_PATTERN;
         @NamedQuery(name = "User.findByUserType", query = "SELECT u FROM User u WHERE u.type = :userType"),
         @NamedQuery(name = "User.getUserByNameAndId", query = "SELECT u FROM User u WHERE email = :email AND id != :id")
 })
-public class User extends Persistent implements Serializable {
+public class User extends Persistent {
 
     private static final long serialVersionUID = 1L;
 

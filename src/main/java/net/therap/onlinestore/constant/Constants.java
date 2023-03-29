@@ -8,7 +8,6 @@ public interface Constants {
 
     int ITEM_PER_PAGE = 8;
     String REDIRECT = "redirect:/";
-    String DATE_PATTERN = "yyyy-MM-dd";
     String EMAIL_PATTERN = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}";
     String CELL_NO_PATTERN = "01([0-9]){9,9}";
     String PASSWORD_PATTERN = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,}$";
@@ -16,11 +15,8 @@ public interface Constants {
     String USER = "user";
     String USER_LIST = "userList";
     String USER_TYPE_LIST = "userTypeList";
-    String ADMIN = "admin";
     String SHOPKEEPER = "shopkeeper";
-    String SHOPKEEPER_LIST = "shopkeeperList";
     String DELIVERYMAN = "deliveryMan";
-    String DELIVERYMAN_LIST = "deliveryManList";
     String CUSTOMER = "customer";
     String CATEGORY = "category";
     String CATEGORY_LIST = "categoryList";

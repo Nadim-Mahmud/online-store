@@ -2,7 +2,6 @@ package net.therap.onlinestore.contoller;
 
 import net.therap.onlinestore.entity.Tag;
 import net.therap.onlinestore.entity.User;
-import net.therap.onlinestore.exception.IllegalAccessException;
 import net.therap.onlinestore.formatter.TagHelper;
 import net.therap.onlinestore.service.TagService;
 import net.therap.onlinestore.validator.TagValidator;
@@ -56,12 +55,13 @@ public class TagController {
     @InitBinder(TAG)
     public void initBinder(WebDataBinder webDataBinder) {
         webDataBinder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
+        webDataBinder.setDisallowedFields("id", "access_status", "version", "created_at", "updated_at");
         webDataBinder.addValidators(tagValidator);
     }
 
     @GetMapping(TAG_URL)
     public String showTag(@SessionAttribute(value = ACTIVE_USER, required = false) User activeUser,
-                          ModelMap modelMap) throws IllegalAccessException {
+                          ModelMap modelMap) {
 
         tagHelper.checkAccess(activeUser);
 
@@ -73,7 +73,7 @@ public class TagController {
 
     @GetMapping(TAG_FORM_URL)
     public String showTagForm(@SessionAttribute(value = ACTIVE_USER, required = false) User activeUser,
-                              @RequestParam(value = TAG_ID_PARAM, required = false) String tagId, ModelMap modelMap) throws IllegalAccessException {
+                              @RequestParam(value = TAG_ID_PARAM, required = false) String tagId, ModelMap modelMap) {
 
         tagHelper.checkAccess(activeUser);
 
@@ -90,7 +90,7 @@ public class TagController {
                                   BindingResult bindingResult,
                                   ModelMap modelMap,
                                   SessionStatus sessionStatus,
-                                  RedirectAttributes redirectAttributes) throws Exception {
+                                  RedirectAttributes redirectAttributes) {
 
         tagHelper.checkAccess(activeUser);
 
@@ -110,7 +110,7 @@ public class TagController {
 
     @PostMapping(TAG_DELETE_URL)
     public String deleteTag(@SessionAttribute(value = ACTIVE_USER, required = false) User activeUser,
-                            @RequestParam(TAG_ID_PARAM) int tagId, RedirectAttributes redirectAttributes) throws Exception {
+                            @RequestParam(TAG_ID_PARAM) int tagId, RedirectAttributes redirectAttributes) {
 
         tagHelper.checkAccess(activeUser);
 

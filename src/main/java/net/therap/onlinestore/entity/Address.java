@@ -7,7 +7,6 @@ import org.hibernate.annotations.Where;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
 
 /**
  * @author nadimmahmud
@@ -15,12 +14,11 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name = "address")
-@SQLDelete(sql = "UPDATE address SET access_status = 'DELETED' WHERE id = ? AND version = ?", check = ResultCheckStyle.COUNT)
 @Where(clause = "access_status <> 'DELETED'")
 @NamedQueries({
         @NamedQuery(name = "Address.findAll", query = "SELECT a FROM Address a")
 })
-public class Address extends Persistent implements Serializable {
+public class Address extends Persistent {
 
     private static final long serialVersionUID = 1L;
 

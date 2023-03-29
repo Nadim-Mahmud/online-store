@@ -1,5 +1,6 @@
 package net.therap.onlinestore.service;
 
+import net.therap.onlinestore.entity.AccessStatus;
 import net.therap.onlinestore.entity.Item;
 import net.therap.onlinestore.entity.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -83,12 +85,14 @@ public class ItemService {
     }
 
     @Transactional
-    public void delete(int id) throws Exception {
-        entityManager.remove(entityManager.find(Item.class, id));
+    public void delete(int id) throws IOException {
+        Item item = findById(id);
+        item.setAccessStatus(AccessStatus.DELETED);
+        saveOrUpdate(item);
     }
 
     @Transactional
-    public Item saveOrUpdate(Item item) throws Exception {
+    public Item saveOrUpdate(Item item) throws IOException {
         fIleService.saveItemImage(item);
 
         if (item.isNew()) {

@@ -21,6 +21,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.Locale;
 
 import static net.therap.onlinestore.constant.Constants.*;
@@ -62,6 +64,7 @@ public class ProfileController {
     @InitBinder
     public void initBinder(WebDataBinder webDataBinder) {
         webDataBinder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
+        webDataBinder.setDisallowedFields("id", "access_status", "version", "created_at", "updated_at");
     }
 
     @InitBinder(PASSWORD)
@@ -108,7 +111,7 @@ public class ProfileController {
     @PostMapping(REGISTRATION_FORM_SAVE_URL)
     public String saveCustomer(@Valid @ModelAttribute(CUSTOMER) User customer,
                                BindingResult bindingResult,
-                               RedirectAttributes redirectAttributes) throws Exception {
+                               RedirectAttributes redirectAttributes) throws NoSuchAlgorithmException, InvalidKeySpecException {
 
         if (!customer.isNew()) {
             throw new IllegalAccessException();

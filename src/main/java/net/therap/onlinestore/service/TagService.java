@@ -1,5 +1,6 @@
 package net.therap.onlinestore.service;
 
+import net.therap.onlinestore.entity.AccessStatus;
 import net.therap.onlinestore.entity.Tag;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,12 +28,14 @@ public class TagService {
     }
 
     @Transactional
-    public void delete(int id) throws Exception {
-        entityManager.remove(entityManager.find(Tag.class, id));
+    public void delete(int id) {
+        Tag tag = findById(id);
+        tag.setAccessStatus(AccessStatus.DELETED);
+        saveOrUpdate(tag);
     }
 
     @Transactional
-    public Tag saveOrUpdate(Tag tag) throws Exception {
+    public Tag saveOrUpdate(Tag tag) {
 
         if (tag.isNew()) {
             entityManager.persist(tag);

@@ -17,7 +17,6 @@ import java.util.Objects;
  */
 @Entity
 @Table(name = "order_item")
-@SQLDelete(sql = "UPDATE order_item SET access_status = 'DELETED' WHERE id = ? AND version = ?", check = ResultCheckStyle.COUNT)
 @Where(clause = "access_status <> 'DELETED'")
 @NamedQueries({
         @NamedQuery(name = "OrderItem.findAll", query = "SELECT o FROM OrderItem o")

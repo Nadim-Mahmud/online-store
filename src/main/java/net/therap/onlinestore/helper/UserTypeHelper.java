@@ -13,7 +13,7 @@ public class UserTypeHelper {
 
     public static List<UserType> getUserTypeSelectList() {
         List<UserType> userTypeList = new java.util.ArrayList<>(Arrays.asList(UserType.values()));
-        userTypeList.removeIf(s -> s.equals(UserType.ADMIN));
+        userTypeList.removeIf(s -> (s.equals(UserType.ADMIN) || s.equals(UserType.CUSTOMER)));
 
         return userTypeList;
     }

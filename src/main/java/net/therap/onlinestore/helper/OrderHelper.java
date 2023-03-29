@@ -31,21 +31,6 @@ public class OrderHelper {
     @Autowired
     private OrderService orderService;
 
-    public void populateOrderFormModel(ModelMap modelMap, Order order) {
-        modelMap.put(ORDER, order);
-        modelMap.put(ORDER_ITEM_LIST, order.getOrderItemList());
-        modelMap.put(ORDER_ITEM, new OrderItem());
-        modelMap.put(ITEM_LIST, itemService.findAll());
-        modelMap.put(CATEGORY_LIST, categoryService.findAll());
-        modelMap.put(NAV_ITEM, ORDER_FORM);
-    }
-
-    public void populateAddOrderItemModel(ModelMap modelMap, Order order) {
-        modelMap.put(ORDER_ITEM_LIST, order.getOrderItemList());
-        modelMap.put(NAV_ITEM, ORDER_FORM);
-        modelMap.put(CATEGORY_LIST, categoryService.findAll());
-    }
-
     public void orderFormAccess(User user, Order order) throws IllegalAccessException {
 
         if (Objects.isNull(user) || !UserType.CUSTOMER.equals(user.getType())) {
@@ -90,6 +75,22 @@ public class OrderHelper {
 
             throw new IllegalAccessException();
         }
+    }
+
+
+    public void populateOrderFormModel(ModelMap modelMap, Order order) {
+        modelMap.put(ORDER, order);
+        modelMap.put(ORDER_ITEM_LIST, order.getOrderItemList());
+        modelMap.put(ORDER_ITEM, new OrderItem());
+        modelMap.put(ITEM_LIST, itemService.findAll());
+        modelMap.put(CATEGORY_LIST, categoryService.findAll());
+        modelMap.put(NAV_ITEM, ORDER_FORM);
+    }
+
+    public void populateAddOrderItemModel(ModelMap modelMap, Order order) {
+        modelMap.put(ORDER_ITEM_LIST, order.getOrderItemList());
+        modelMap.put(NAV_ITEM, ORDER_FORM);
+        modelMap.put(CATEGORY_LIST, categoryService.findAll());
     }
 
     public List<Order> calculatePriceOfOrderList(List<Order> orderList) {

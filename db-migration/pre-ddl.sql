@@ -92,6 +92,6 @@ CREATE TABLE IF NOT EXISTS online_store.order_item
     version       INT         DEFAULT 0,
     created_at    DATE,
     updated_at    DATE,
-    FOREIGN KEY (item_id) REFERENCES online_store.item (id) ON DELETE CASCADE,
-    FOREIGN KEY (order_id) REFERENCES online_store.order_table (id) ON DELETE CASCADE
+    FOREIGN KEY (item_id) REFERENCES online_store.item (id) ,
+    FOREIGN KEY (order_id) REFERENCES online_store.order_table (id)
 );

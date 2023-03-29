@@ -111,14 +111,14 @@ public class OrderService {
     }
 
     @Transactional
-    public void cancel(int orderId) throws Exception {
+    public void cancel(int orderId) {
         Order order = entityManager.find(Order.class, orderId);
         order.setStatus(OrderStatus.CANCELED);
         saveOrUpdate(order);
     }
 
     @Transactional
-    public void delete(int orderId) throws Exception {
+    public void delete(int orderId) {
         Order order = entityManager.find(Order.class, orderId);
         order.setAccessStatus(AccessStatus.DELETED);
 
@@ -130,7 +130,7 @@ public class OrderService {
     }
 
     @Transactional
-    public Order saveOrUpdate(Order order) throws Exception {
+    public Order saveOrUpdate(Order order) {
 
         if (order.isNew()) {
             entityManager.persist(order);
