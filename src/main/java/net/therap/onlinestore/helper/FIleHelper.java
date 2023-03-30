@@ -1,6 +1,7 @@
-package net.therap.onlinestore.service;
+package net.therap.onlinestore.helper;
 
 import net.therap.onlinestore.entity.Item;
+import net.therap.onlinestore.service.ItemService;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,7 +21,7 @@ import static java.util.Objects.nonNull;
  * @since 3/22/23
  */
 @Service
-public class FIleService {
+public class FIleHelper {
 
     @Value("${item.image.directory}")
     private String imageDirectory;

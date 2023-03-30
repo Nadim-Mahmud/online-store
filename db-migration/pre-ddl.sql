@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS online_store.store_user
+CREATE TABLE online_store.store_user
 (
     id            INT                NOT NULL PRIMARY KEY,
     first_name    VARCHAR(45)        NOT NULL,
@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS online_store.store_user
     updated_at    DATE
 );
 
-CREATE TABLE IF NOT EXISTS online_store.address
+CREATE TABLE online_store.address
 (
     id            INT         NOT NULL PRIMARY KEY,
     address       VARCHAR(45) NOT NULL,
@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS online_store.address
     updated_at    DATE
 );
 
-CREATE TABLE IF NOT EXISTS online_store.category
+CREATE TABLE online_store.category
 (
     id            INT         NOT NULL PRIMARY KEY,
     name          VARCHAR(45) NOT NULL,
@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS online_store.category
     updated_at    DATE
 );
 
-CREATE TABLE IF NOT EXISTS online_store.tag
+CREATE TABLE online_store.tag
 (
     id            INT         NOT NULL PRIMARY KEY,
     name          VARCHAR(45) NOT NULL,
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS online_store.tag
     updated_at    DATE
 );
 
-CREATE TABLE IF NOT EXISTS online_store.item
+CREATE TABLE online_store.item
 (
     id            INT           NOT NULL PRIMARY KEY,
     name          VARCHAR(45)   NOT NULL,
@@ -60,14 +60,14 @@ CREATE TABLE IF NOT EXISTS online_store.item
     FOREIGN KEY (category_id) REFERENCES online_store.category (id)
 );
 
-CREATE TABLE IF NOT EXISTS online_store.tag_item
+CREATE TABLE online_store.tag_item
 (
     tag_id  INT NOT NULL,
     item_id INT NOT NULL,
     PRIMARY KEY (tag_id, item_id)
 );
 
-CREATE TABLE IF NOT EXISTS online_store.order_table
+CREATE TABLE online_store.order_table
 (
     id            INT NOT NULL PRIMARY KEY,
     status        VARCHAR(45),
@@ -81,7 +81,7 @@ CREATE TABLE IF NOT EXISTS online_store.order_table
     FOREIGN KEY (user_id) REFERENCES online_store.store_user (id)
 );
 
-CREATE TABLE IF NOT EXISTS online_store.order_item
+CREATE TABLE online_store.order_item
 (
     id            INT NOT NULL PRIMARY KEY,
     quantity      INT,
@@ -92,6 +92,6 @@ CREATE TABLE IF NOT EXISTS online_store.order_item
     version       INT         DEFAULT 0,
     created_at    DATE,
     updated_at    DATE,
-    FOREIGN KEY (item_id) REFERENCES online_store.item (id) ,
+    FOREIGN KEY (item_id) REFERENCES online_store.item (id),
     FOREIGN KEY (order_id) REFERENCES online_store.order_table (id)
 );

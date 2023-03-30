@@ -1,10 +1,11 @@
 package net.therap.onlinestore.contoller;
 
 import net.therap.onlinestore.entity.Category;
-import net.therap.onlinestore.entity.User;
 import net.therap.onlinestore.helper.CategoryHelper;
 import net.therap.onlinestore.service.CategoryService;
+import net.therap.onlinestore.util.Util;
 import net.therap.onlinestore.validator.CategoryValidator;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.context.MessageSource;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.Locale;
 
@@ -40,6 +42,8 @@ public class CategoryController {
     private static final String CATEGORY_ID_PARAM = "categoryId";
     private static final String CATEGORY_DELETE_URL = "category/delete";
 
+    private static final org.apache.log4j.Logger logger = Logger.getLogger(CategoryController.class);
+
     @Autowired
     private CategoryService categoryService;
 
@@ -60,10 +64,9 @@ public class CategoryController {
     }
 
     @GetMapping(CATEGORY_URL)
-    public String showCategory(@SessionAttribute(value = ACTIVE_USER, required = false) User user,
-                               ModelMap modelMap) {
+    public String showCategory(ModelMap modelMap, HttpSession httpSession) {
 
-        categoryHelper.checkAccess(user);
+        categoryHelper.checkAccess(Util.getActiveUser(httpSession));
 
         modelMap.put(CATEGORY_LIST, categoryService.findAll());
         modelMap.put(NAV_ITEM, CATEGORY);
@@ -72,11 +75,11 @@ public class CategoryController {
     }
 
     @GetMapping(CATEGORY_FORM_URL)
-    public String showCategoryForm(@SessionAttribute(value = ACTIVE_USER, required = false) User user,
-                                   @RequestParam(value = CATEGORY_ID_PARAM, required = false) String categoryId,
-                                   ModelMap modelMap) {
+    public String showCategoryForm(@RequestParam(value = CATEGORY_ID_PARAM, required = false) String categoryId,
+                                   ModelMap modelMap,
+                                   HttpSession httpSession) {
 
-        categoryHelper.checkAccess(user);
+        categoryHelper.checkAccess(Util.getActiveUser(httpSession));
 
         Category category = nonNull(categoryId) ? categoryService.findById(Integer.parseInt(categoryId)) : new Category();
         modelMap.put(CATEGORY, category);
@@ -86,14 +89,14 @@ public class CategoryController {
     }
 
     @PostMapping(CATEGORY_FORM_SAVE_URL)
-    public String saveOrUpdateCategory(@SessionAttribute(value = ACTIVE_USER, required = false) User user,
-                                       @Valid @ModelAttribute(CATEGORY) Category category,
+    public String saveOrUpdateCategory(@Valid @ModelAttribute(CATEGORY) Category category,
                                        BindingResult bindingResult,
                                        ModelMap modelMap,
                                        SessionStatus sessionStatus,
+                                       HttpSession httpSession,
                                        RedirectAttributes redirectAttributes) {
 
-        categoryHelper.checkAccess(user);
+        categoryHelper.checkAccess(Util.getActiveUser(httpSession));
 
         if (bindingResult.hasErrors()) {
             modelMap.put(NAV_ITEM, CATEGORY);
@@ -104,20 +107,22 @@ public class CategoryController {
         redirectAttributes.addFlashAttribute(SUCCESS, messageSource.getMessage(
                 (category.getId() == 0) ? "success.add" : "success.update", null, Locale.getDefault()));
         categoryService.saveOrUpdate(category);
+        logger.info("Saved category " + category.getId());
         sessionStatus.setComplete();
 
         return REDIRECT + CATEGORY_REDIRECT_URL;
     }
 
     @PostMapping(CATEGORY_DELETE_URL)
-    public String deleteCategory(@SessionAttribute(value = ACTIVE_USER, required = false) User user,
-                                 @RequestParam(CATEGORY_ID_PARAM) int categoryId,
-                                 RedirectAttributes redirectAttributes) {
+    public String deleteCategory(@RequestParam(CATEGORY_ID_PARAM) int categoryId,
+                                 RedirectAttributes redirectAttributes,
+                                 HttpSession httpSession) {
 
-        categoryHelper.checkAccess(user);
+        categoryHelper.checkAccess(Util.getActiveUser(httpSession));
 
         if (categoryService.isCategoryNotInUse(categoryId)) {
             categoryService.delete(categoryId);
+            logger.info("Deleted Category " + categoryId);
             redirectAttributes.addFlashAttribute(SUCCESS, messageSource.getMessage("success.delete", null, Locale.getDefault()));
         } else {
             redirectAttributes.addFlashAttribute(FAILED, messageSource.getMessage("fail.delete.inUse", null, Locale.getDefault()));

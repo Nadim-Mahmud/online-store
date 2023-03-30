@@ -2,16 +2,16 @@ package net.therap.onlinestore.contoller;
 
 import net.therap.onlinestore.entity.AccessType;
 import net.therap.onlinestore.entity.OrderStatus;
-import net.therap.onlinestore.entity.User;
-import net.therap.onlinestore.exception.IllegalAccessException;
 import net.therap.onlinestore.helper.ShopkeeperHelper;
 import net.therap.onlinestore.service.OrderService;
+import net.therap.onlinestore.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.SessionAttribute;
+
+import javax.servlet.http.HttpSession;
 
 import static net.therap.onlinestore.constant.Constants.*;
 
@@ -32,10 +32,8 @@ public class ShopkeeperController {
     private ShopkeeperHelper shopkeeperHelper;
 
     @GetMapping(HOME_URL)
-    public String showShopkeeperDashBoard(@SessionAttribute(value = ACTIVE_USER, required = false) User user,
-                                          ModelMap modelMap) {
-
-        shopkeeperHelper.checkAccess(user, AccessType.VIEW_ALL);
+    public String showShopkeeperDashBoard(ModelMap modelMap, HttpSession httpSession) {
+        shopkeeperHelper.checkAccess(Util.getActiveUser(httpSession), AccessType.VIEW_ALL);
         modelMap.put(ORDER_LIST, orderService.findOrdersByOrderStatus(OrderStatus.ORDERED));
 
         return SHOPKEEPER_NOTIFICATION_VIEW;

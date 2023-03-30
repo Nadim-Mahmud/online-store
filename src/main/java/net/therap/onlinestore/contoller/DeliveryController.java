@@ -1,15 +1,17 @@
 package net.therap.onlinestore.contoller;
 
-import net.therap.onlinestore.entity.User;
 import net.therap.onlinestore.helper.DeliveryHelper;
+import net.therap.onlinestore.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.SessionAttribute;
 
-import static net.therap.onlinestore.constant.Constants.*;
+import javax.servlet.http.HttpSession;
+
+import static net.therap.onlinestore.constant.Constants.DELIVERY_BASE_URL;
+import static net.therap.onlinestore.constant.Constants.HOME_URL;
 
 /**
  * @author nadimmahmud
@@ -27,25 +29,25 @@ public class DeliveryController {
     private DeliveryHelper deliveryHelper;
 
     @GetMapping(HOME_URL)
-    public String showReadyOrdersList(@SessionAttribute(ACTIVE_USER) User user, ModelMap modelMap) {
-        deliveryHelper.checkAccess(user);
+    public String showReadyOrdersList(ModelMap modelMap, HttpSession httpSession) {
+        deliveryHelper.checkAccess(Util.getActiveUser(httpSession));
         deliveryHelper.populateReadyOrderListModel(modelMap);
 
         return DELIVERY_ORDER_VIEW;
     }
 
     @GetMapping(DELIVERY_ORDER_URL)
-    public String showDeliveryOrderList(@SessionAttribute(ACTIVE_USER) User user, ModelMap modelMap) {
-        deliveryHelper.checkAccess(user);
-        deliveryHelper.populateDeliveryOrderListModel(modelMap, user);
+    public String showDeliveryOrderList(ModelMap modelMap, HttpSession httpSession) {
+        deliveryHelper.checkAccess(Util.getActiveUser(httpSession));
+        deliveryHelper.populateDeliveryOrderListModel(modelMap, Util.getActiveUser(httpSession));
 
         return DELIVERY_ORDER_VIEW;
     }
 
     @GetMapping(DELIVERY_HISTORY_URL)
-    public String showDeliveryOrderHistory(@SessionAttribute(ACTIVE_USER) User user, ModelMap modelMap) {
-        deliveryHelper.checkAccess(user);
-        deliveryHelper.populateDeliveryHistoryModel(modelMap, user);
+    public String showDeliveryOrderHistory(ModelMap modelMap, HttpSession httpSession) {
+        deliveryHelper.checkAccess(Util.getActiveUser(httpSession));
+        deliveryHelper.populateDeliveryHistoryModel(modelMap, Util.getActiveUser(httpSession));
 
         return DELIVERY_ORDER_VIEW;
     }

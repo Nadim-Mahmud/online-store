@@ -3,6 +3,8 @@ package net.therap.onlinestore.contoller;
 
 import net.therap.onlinestore.command.Credentials;
 import net.therap.onlinestore.service.UserService;
+import net.therap.onlinestore.util.Util;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.stereotype.Controller;
@@ -28,10 +30,10 @@ import static net.therap.onlinestore.constant.Constants.*;
 @Controller
 public class AuthenticationController {
 
-    private static final String LOGIN = "login";
-    private static final String LOGIN_URL = "login-page";
     private static final String LOGIN_VIEW = "login-page";
     private static final String LOGOUT_URL = "logout";
+
+    private static final org.apache.log4j.Logger logger = Logger.getLogger(CategoryController.class);
 
     @Autowired
     private UserService userService;
@@ -41,7 +43,7 @@ public class AuthenticationController {
         webDataBinder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
     }
 
-    @GetMapping(LOGIN_URL)
+    @GetMapping(LOGIN_PAGE_URL)
     public String showLoginPage(ModelMap modelMap) {
         modelMap.put(CREDENTIALS, new Credentials());
         modelMap.put(LOGIN_PAGE, LOGIN_PAGE);
@@ -51,6 +53,7 @@ public class AuthenticationController {
 
     @GetMapping(LOGOUT_URL)
     public String logOut(HttpSession httpSession, Model model) {
+        logger.info("Logged out user: " + Util.getActiveUser(httpSession).getId());
         httpSession.removeAttribute(ACTIVE_USER);
         httpSession.invalidate();
 
@@ -61,7 +64,7 @@ public class AuthenticationController {
         return REDIRECT;
     }
 
-    @PostMapping(LOGIN)
+    @PostMapping(LOGIN_URL)
     public String login(@Valid @ModelAttribute(CREDENTIALS) Credentials credentials,
                         ModelMap modelMap,
                         HttpSession httpSession) throws NoSuchAlgorithmException, InvalidKeySpecException {
@@ -74,6 +77,7 @@ public class AuthenticationController {
 
         modelMap.put(LOGIN_PAGE, LOGIN_PAGE);
         modelMap.put(INVALID_LOGIN, INVALID_LOGIN);
+        logger.info("Logged in user: " + Util.getActiveUser(httpSession).getId());
 
         return LOGIN_VIEW;
     }

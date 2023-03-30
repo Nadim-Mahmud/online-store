@@ -6,7 +6,9 @@ import net.therap.onlinestore.entity.UserType;
 import net.therap.onlinestore.helper.UserHelper;
 import net.therap.onlinestore.service.UserService;
 import net.therap.onlinestore.util.Encryption;
+import net.therap.onlinestore.util.Util;
 import net.therap.onlinestore.validator.UserValidator;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.context.MessageSource;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -48,6 +51,8 @@ public class UserController {
     private static final String USER_TYPE_PATH_VAR = "user-type";
     private static final String USER_DELETE_URL = "user/delete";
 
+    private static final Logger logger = Logger.getLogger(UserController.class);
+
     @Autowired
     private MessageSource messageSource;
 
@@ -73,20 +78,22 @@ public class UserController {
     }
 
     @GetMapping(USER_URL)
-    String showUserList(@SessionAttribute(ACTIVE_USER) User user,
-                        @PathVariable(USER_TYPE_PATH_VAR) String userType, ModelMap modelMap) {
+    String showUserList(@PathVariable(USER_TYPE_PATH_VAR) String userType,
+                        ModelMap modelMap,
+                        HttpSession httpSession) {
 
-        userHelper.checkAccess(user, AccessType.VIEW_ALL);
+        userHelper.checkAccess(Util.getActiveUser(httpSession), AccessType.VIEW_ALL);
         userHelper.populateUserListModels(modelMap, userType);
 
         return USER_VIEW;
     }
 
     @GetMapping(USER_FORM_URL)
-    String userForm(@SessionAttribute(value = ACTIVE_USER, required = false) User activeUser,
-                    @RequestParam(value = USER_ID_PARAM, required = false) String userId, ModelMap modelMap) {
+    String userForm(@RequestParam(value = USER_ID_PARAM, required = false) String userId,
+                    ModelMap modelMap,
+                    HttpSession httpSession) {
 
-        userHelper.checkAccess(activeUser, AccessType.FORM_LOAD);
+        userHelper.checkAccess(Util.getActiveUser(httpSession), AccessType.FORM_LOAD);
         User user = nonNull(userId) ? userService.findById(Integer.parseInt(userId)) : new User();
         modelMap.put(USER, user);
         userHelper.populateUserFormData(modelMap, user);
@@ -95,14 +102,14 @@ public class UserController {
     }
 
     @PostMapping(USER_FORM_SAVE_URL)
-    public String saveOrUpdateUser(@SessionAttribute(value = ACTIVE_USER, required = false) User activeUser,
-                                   @Valid @ModelAttribute(USER) User user,
+    public String saveOrUpdateUser(@Valid @ModelAttribute(USER) User user,
                                    BindingResult bindingResult,
                                    ModelMap modelMap,
                                    SessionStatus sessionStatus,
+                                   HttpSession httpSession,
                                    RedirectAttributes redirectAttributes) throws NoSuchAlgorithmException, InvalidKeySpecException {
 
-        userHelper.checkAccess(activeUser, AccessType.SAVE);
+        userHelper.checkAccess(Util.getActiveUser(httpSession), AccessType.SAVE);
         userHelper.checkUserAllowedUserType(user);
 
         if (bindingResult.hasErrors()) {
@@ -116,6 +123,7 @@ public class UserController {
         }
 
         userService.saveOrUpdate(user);
+        logger.info("Saved user: " + user.getId());
         sessionStatus.setComplete();
         redirectAttributes.addFlashAttribute(SUCCESS, messageSource.getMessage(
                 (user.getId() == 0) ? "success.add" : "success.update", null, Locale.getDefault()));
@@ -125,12 +133,14 @@ public class UserController {
     }
 
     @PostMapping(USER_DELETE_URL)
-    public String deleteUser(@SessionAttribute(value = ACTIVE_USER, required = false) User activeUser,
-                             @RequestParam(USER_ID_PARAM) int userId, RedirectAttributes redirectAttributes) {
+    public String deleteUser(@RequestParam(USER_ID_PARAM) int userId,
+                             HttpSession httpSession,
+                             RedirectAttributes redirectAttributes) {
 
-        userHelper.checkAccess(activeUser, AccessType.DELETE);
+        userHelper.checkAccess(Util.getActiveUser(httpSession), AccessType.DELETE);
 
         User user = userService.findById(userId);
+        logger.info("Deleted user: " + userId);
         userHelper.populateDeleteRedirectMessage(redirectAttributes, user, userId);
 
         return REDIRECT + (UserType.SHOPKEEPER.equals(user.getType()) ? SHOPKEEPER_REDIRECT_URL :

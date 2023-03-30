@@ -1,10 +1,11 @@
 package net.therap.onlinestore.contoller;
 
 import net.therap.onlinestore.entity.Tag;
-import net.therap.onlinestore.entity.User;
-import net.therap.onlinestore.formatter.TagHelper;
+import net.therap.onlinestore.helper.TagHelper;
 import net.therap.onlinestore.service.TagService;
+import net.therap.onlinestore.util.Util;
 import net.therap.onlinestore.validator.TagValidator;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.context.MessageSource;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.Locale;
 
@@ -40,6 +42,8 @@ public class TagController {
     private static final String TAG_ID_PARAM = "tagId";
     private static final String TAG_DELETE_URL = "tag/delete";
 
+    private static final Logger logger = Logger.getLogger(TagController.class);
+
     @Autowired
     private TagService tagService;
 
@@ -60,10 +64,9 @@ public class TagController {
     }
 
     @GetMapping(TAG_URL)
-    public String showTag(@SessionAttribute(value = ACTIVE_USER, required = false) User activeUser,
-                          ModelMap modelMap) {
+    public String showTag(ModelMap modelMap, HttpSession httpSession) {
 
-        tagHelper.checkAccess(activeUser);
+        tagHelper.checkAccess(Util.getActiveUser(httpSession));
 
         modelMap.put(TAG_LIST, tagService.findAll());
         modelMap.put(NAV_ITEM, TAG);
@@ -72,10 +75,11 @@ public class TagController {
     }
 
     @GetMapping(TAG_FORM_URL)
-    public String showTagForm(@SessionAttribute(value = ACTIVE_USER, required = false) User activeUser,
-                              @RequestParam(value = TAG_ID_PARAM, required = false) String tagId, ModelMap modelMap) {
+    public String showTagForm(@RequestParam(value = TAG_ID_PARAM, required = false) String tagId,
+                              ModelMap modelMap,
+                              HttpSession httpSession) {
 
-        tagHelper.checkAccess(activeUser);
+        tagHelper.checkAccess(Util.getActiveUser(httpSession));
 
         Tag tag = nonNull(tagId) ? tagService.findById(Integer.parseInt(tagId)) : new Tag();
         modelMap.put(TAG, tag);
@@ -85,14 +89,14 @@ public class TagController {
     }
 
     @PostMapping(TAG_FORM_SAVE_URL)
-    public String saveOrUpdateTag(@SessionAttribute(value = ACTIVE_USER, required = false) User activeUser,
-                                  @Valid @ModelAttribute(TAG) Tag tag,
+    public String saveOrUpdateTag(@Valid @ModelAttribute(TAG) Tag tag,
                                   BindingResult bindingResult,
                                   ModelMap modelMap,
                                   SessionStatus sessionStatus,
+                                  HttpSession httpSession,
                                   RedirectAttributes redirectAttributes) {
 
-        tagHelper.checkAccess(activeUser);
+        tagHelper.checkAccess(Util.getActiveUser(httpSession));
 
         if (bindingResult.hasErrors()) {
             modelMap.put(NAV_ITEM, TAG);
@@ -103,18 +107,21 @@ public class TagController {
         redirectAttributes.addFlashAttribute(SUCCESS, messageSource.getMessage(
                 (tag.getId() == 0) ? "success.add" : "success.update", null, Locale.getDefault()));
         tagService.saveOrUpdate(tag);
+        logger.info("Saved tag: " + tag.getName());
         sessionStatus.setComplete();
 
         return REDIRECT + TAG_REDIRECT_URL;
     }
 
     @PostMapping(TAG_DELETE_URL)
-    public String deleteTag(@SessionAttribute(value = ACTIVE_USER, required = false) User activeUser,
-                            @RequestParam(TAG_ID_PARAM) int tagId, RedirectAttributes redirectAttributes) {
+    public String deleteTag(@RequestParam(TAG_ID_PARAM) int tagId,
+                            RedirectAttributes redirectAttributes,
+                            HttpSession httpSession) {
 
-        tagHelper.checkAccess(activeUser);
+        tagHelper.checkAccess(Util.getActiveUser(httpSession));
 
         tagService.delete(tagId);
+        logger.info("deleted tag: " + tagId);
         redirectAttributes.addFlashAttribute(SUCCESS, messageSource.getMessage("success.delete", null, Locale.getDefault()));
 
         return REDIRECT + TAG_REDIRECT_URL;

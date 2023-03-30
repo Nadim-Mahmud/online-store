@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 import static net.therap.onlinestore.constant.Constants.ACTIVE_USER;
+import static net.therap.onlinestore.constant.Constants.*;
 
 /**
  * @author nadimmahmud
@@ -20,18 +21,6 @@ import static net.therap.onlinestore.constant.Constants.ACTIVE_USER;
  */
 @WebFilter("/*")
 public class AuthenticationFilter implements Filter {
-
-    private static final String HOME = "/";
-    private static final String LOGIN = "/login";
-    private static final String LOGIN_PAGE = "/login-page";
-    private static final String REGISTRATION = "/registration";
-    private static final String REGISTER = "/registration/save";
-    private static final String ITEM_IMAGE_URL = "/item/image";
-    private static final String SEARCH = "/item/search";
-    private static final String ASSETS = "/assets";
-    private static final String ITEM_DETAILS_URL = "/item/details";
-    private static final String SHOPKEEPER_URL = "/shopkeeper/";
-    private static final String DELIVERY_URL = "/delivery/";
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
@@ -43,11 +32,11 @@ public class AuthenticationFilter implements Filter {
         if (Objects.nonNull(user)) {
             request.setAttribute(ACTIVE_USER, user);
 
-            if (UserType.SHOPKEEPER.equals(user.getType()) && uri.equals(HOME)) {
+            if (UserType.SHOPKEEPER.equals(user.getType()) && HOME_URL.equals(uri)) {
                 request.getRequestDispatcher(SHOPKEEPER_URL).forward(request, response);
 
                 return;
-            } else if (UserType.DELIVERYMAN.equals(user.getType()) && uri.equals(HOME)) {
+            } else if (UserType.DELIVERYMAN.equals(user.getType()) && HOME_URL.equals(uri)) {
                 request.getRequestDispatcher(DELIVERY_URL).forward(request, response);
 
                 return;
@@ -55,15 +44,15 @@ public class AuthenticationFilter implements Filter {
 
             chain.doFilter(request, response);
 
-        } else if (Arrays.asList(HOME, LOGIN, SEARCH, LOGIN_PAGE, ITEM_DETAILS_URL, REGISTRATION, REGISTER).contains(uri)
+        } else if (Arrays.asList(HOME_URL, LOGIN_URL, SEARCH_URL, LOGIN_PAGE_URL, ITEM_DETAILS_URL, REGISTRATION_URL, REGISTER_URL).contains(uri)
                 || uri.startsWith(ITEM_IMAGE_URL)
                 || uri.startsWith(ITEM_DETAILS_URL)
-                || uri.startsWith(ASSETS)) {
+                || uri.startsWith(ASSETS_URL)) {
 
             chain.doFilter(request, response);
 
         } else {
-            ((HttpServletResponse) response).sendRedirect(LOGIN_PAGE);
+            ((HttpServletResponse) response).sendRedirect(LOGIN_PAGE_URL);
         }
     }
 }

@@ -65,7 +65,6 @@ public class Item extends Persistent {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "category_id")
-    @NotNull(message = "{input.select}")
     private Category category;
 
     @NotNull(message = "{input.paragraph}")

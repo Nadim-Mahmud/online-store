@@ -1,4 +1,4 @@
-package net.therap.onlinestore.formatter;
+package net.therap.onlinestore.helper;
 
 import net.therap.onlinestore.entity.User;
 import net.therap.onlinestore.entity.UserType;

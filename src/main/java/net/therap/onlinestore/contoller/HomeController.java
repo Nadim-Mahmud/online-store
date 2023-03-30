@@ -42,10 +42,10 @@ public class HomeController {
     public String showHomePage(@RequestParam(value = PAGE_TYPE, required = false) PaginationPageType pageType,
                                @RequestParam(value = PAGE_START_VALUE, required = false) String pageStartValue,
                                @RequestParam(value = CATEGORY_ID, required = false) String categoryId,
-                               @RequestParam(value = TAG_ID, required = false) String tagId, ModelMap modelMap) {
+                               @RequestParam(value = TAG_ID, required = false) String tagId,
+                               ModelMap modelMap) {
 
         homeHelper.populateHomePageModel(modelMap, pageType, pageStartValue, categoryId, tagId);
-
         return HOME_VIEW;
     }
 

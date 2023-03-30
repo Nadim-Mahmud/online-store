@@ -23,4 +23,11 @@ public class ProfileHelper {
             throw new IllegalAccessException();
         }
     }
+
+    public void updateAccessBlock(User customer){
+
+        if (!customer.isNew()) {
+            throw new IllegalAccessException();
+        }
+    }
 }

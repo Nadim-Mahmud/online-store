@@ -2,6 +2,7 @@ package net.therap.onlinestore.service;
 
 import net.therap.onlinestore.entity.AccessStatus;
 import net.therap.onlinestore.entity.Category;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,7 +14,7 @@ import java.util.List;
  * @author nadimmahmud
  * @since 3/5/23
  */
-@Service
+@Repository
 public class CategoryService {
 
     @PersistenceContext

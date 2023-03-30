@@ -50,11 +50,23 @@ public interface Constants {
     String PAGE_START_VALUE = "pageStartValue";
     String EMPTY_LIST = "emptyList";
     String BUTTON = "button";
-    String HOME_URL = "/";
     String ERROR_CODE = "errorCode";
+
+    String HOME_URL = "/";
     String BASE_URL = "/*";
     String ADMIN_BASE_URL = "admin/*";
     String CUSTOMER_BASE_URL = "customer/*";
     String SHOPKEEPER_BASE_URL = "shopkeeper/*";
     String DELIVERY_BASE_URL = "delivery/*";
+
+    String LOGIN_URL = "/login";
+    String LOGIN_PAGE_URL = "/login-page";
+    String REGISTRATION_URL = "/registration";
+    String REGISTER_URL = "/registration/save";
+    String ITEM_IMAGE_URL = "/item/image";
+    String SEARCH_URL = "/item/search";
+    String ASSETS_URL = "/assets";
+    String ITEM_DETAILS_URL = "/item/details";
+    String SHOPKEEPER_URL = "/shopkeeper/";
+    String DELIVERY_URL = "/delivery/";
 }

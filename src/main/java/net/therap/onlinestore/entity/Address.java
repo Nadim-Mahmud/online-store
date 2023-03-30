@@ -34,6 +34,7 @@ public class Address extends Persistent {
     private String address;
 
     @Column(name = "note")
+    @Size(max = 200, message = "{input.note}")
     private String note;
 
     @ManyToOne

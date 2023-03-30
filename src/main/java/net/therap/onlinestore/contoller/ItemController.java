@@ -1,10 +1,15 @@
 package net.therap.onlinestore.contoller;
 
-import net.therap.onlinestore.entity.*;
+import net.therap.onlinestore.entity.AccessType;
+import net.therap.onlinestore.entity.Item;
+import net.therap.onlinestore.entity.Order;
+import net.therap.onlinestore.entity.OrderItem;
+import net.therap.onlinestore.helper.FIleHelper;
 import net.therap.onlinestore.helper.ItemHelper;
-import net.therap.onlinestore.service.FIleService;
 import net.therap.onlinestore.service.ItemService;
+import net.therap.onlinestore.util.Util;
 import net.therap.onlinestore.validator.ItemValidator;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.context.MessageSource;
@@ -17,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
@@ -41,13 +47,13 @@ public class ItemController {
     private static final String ITEM_FORM_URL = "item/form";
     private static final String ITEM_FORM_SAVE_URL = "item/save";
     private static final String ITEM_FORM_VIEW = "item/item-form";
-    private static final String ITEM_ID_PARAM = "itemId";
     private static final String ITEM_DELETE_URL = "item/delete";
-    private static final String ITEM_DETAILS_URL = "/item/details";
     private static final String ITEM_DETAILS_VIEW = "item/item-details";
     private static final String ITEM_CATEGORY_ID = "item/{categoryId}";
-    private static final String ITEM_IMAGE = "item/image";
-    private static final String ITEM_ID = "itemId";
+    private static final String ITEM_ID_PARAM = "itemId";
+
+
+    private static final Logger logger = Logger.getLogger(ItemController.class);
 
     @Autowired
     private ItemService itemService;
@@ -56,7 +62,7 @@ public class ItemController {
     private ItemHelper itemHelper;
 
     @Autowired
-    private FIleService fIleService;
+    private FIleHelper fIleService;
 
     @Autowired
     private ItemValidator itemValidator;
@@ -72,10 +78,8 @@ public class ItemController {
     }
 
     @GetMapping(ITEM_URL)
-    public String showItems(@SessionAttribute(value = ACTIVE_USER, required = false) User user,
-                            ModelMap modelMap) {
-
-        itemHelper.checkAccess(user, AccessType.VIEW_ALL);
+    public String showItems(ModelMap modelMap, HttpSession httpSession) {
+        itemHelper.checkAccess(Util.getActiveUser(httpSession), AccessType.VIEW_ALL);
 
         modelMap.put(ITEM_LIST, itemService.findAll());
         modelMap.put(NAV_ITEM, ITEM);
@@ -85,7 +89,7 @@ public class ItemController {
 
     @GetMapping(ITEM_DETAILS_URL)
     public String getItemDetails(@SessionAttribute(value = ORDER, required = false) Order order,
-                                 @RequestParam(ITEM_ID) int itemId,
+                                 @RequestParam(ITEM_ID_PARAM) int itemId,
                                  ModelMap modelMap) {
 
         modelMap.put(ITEM, itemService.findById(itemId));
@@ -99,11 +103,11 @@ public class ItemController {
     }
 
     @GetMapping(ITEM_FORM_URL)
-    public String showItemForm(@SessionAttribute(value = ACTIVE_USER, required = false) User user,
-                               @RequestParam(value = ITEM_ID_PARAM, required = false) String itemId,
-                               ModelMap modelMap) {
+    public String showItemForm(@RequestParam(value = ITEM_ID_PARAM, required = false) String itemId,
+                               ModelMap modelMap,
+                               HttpSession httpSession) {
 
-        itemHelper.checkAccess(user, AccessType.FORM_LOAD);
+        itemHelper.checkAccess(Util.getActiveUser(httpSession), AccessType.FORM_LOAD);
 
         Item item = nonNull(itemId) ? itemService.findById(Integer.parseInt(itemId)) : new Item();
         modelMap.put(ITEM, item);
@@ -114,29 +118,28 @@ public class ItemController {
 
     @GetMapping(ITEM_CATEGORY_ID)
     @ResponseBody
-    public List<Item> getItemByCategoryId(@SessionAttribute(value = ACTIVE_USER, required = false) User user,
-                                          @PathVariable(CATEGORY_ID) int categoryId) {
+    public List<Item> getItemByCategoryId(@PathVariable(CATEGORY_ID) int categoryId, HttpSession httpSession) {
 
-        itemHelper.checkAccess(user, AccessType.READ);
+        itemHelper.checkAccess(Util.getActiveUser(httpSession), AccessType.READ);
 
         return itemService.findByCategory(categoryId);
     }
 
-    @GetMapping(value = ITEM_IMAGE, produces = MediaType.IMAGE_JPEG_VALUE)
+    @GetMapping(value = ITEM_IMAGE_URL, produces = MediaType.IMAGE_JPEG_VALUE)
     @ResponseBody
-    public byte[] getImageByItemId(@RequestParam(ITEM_ID) int itemId) throws IOException {
+    public byte[] getImageByItemId(@RequestParam(ITEM_ID_PARAM) int itemId) throws IOException {
         return fIleService.getImageByItemId(itemId);
     }
 
     @PostMapping(ITEM_FORM_SAVE_URL)
-    public String saveOrUpdateItem(@SessionAttribute(value = ACTIVE_USER, required = false) User user,
-                                   @Valid @ModelAttribute(ITEM) Item item,
+    public String saveOrUpdateItem(@Valid @ModelAttribute(ITEM) Item item,
                                    BindingResult bindingResult,
                                    ModelMap modelMap,
                                    SessionStatus sessionStatus,
+                                   HttpSession httpSession,
                                    RedirectAttributes redirectAttributes) throws IOException {
 
-        itemHelper.checkAccess(user, AccessType.SAVE);
+        itemHelper.checkAccess(Util.getActiveUser(httpSession), AccessType.SAVE);
 
         if (bindingResult.hasErrors()) {
             itemHelper.populateItemFromRefData(modelMap);
@@ -147,19 +150,21 @@ public class ItemController {
         redirectAttributes.addFlashAttribute(SUCCESS, messageSource.getMessage(
                 (item.getId() == 0) ? "success.add" : "success.update", null, Locale.getDefault()));
         itemService.saveOrUpdate(item);
+        logger.info("Saved item " + item.getId());
         sessionStatus.setComplete();
 
         return REDIRECT + ITEM_REDIRECT_URL;
     }
 
     @PostMapping(ITEM_DELETE_URL)
-    public String deleteItem(@SessionAttribute(value = ACTIVE_USER, required = false) User user,
-                             @RequestParam(ITEM_ID_PARAM) int itemId,
-                             RedirectAttributes redirectAttributes) throws IOException {
+    public String deleteItem(@RequestParam(ITEM_ID_PARAM) int itemId,
+                             RedirectAttributes redirectAttributes,
+                             HttpSession httpSession) throws IOException {
 
-        itemHelper.checkAccess(user, AccessType.DELETE);
+        itemHelper.checkAccess(Util.getActiveUser(httpSession), AccessType.DELETE);
 
         itemService.delete(itemId);
+        logger.info("Deleted item " + itemId);
         redirectAttributes.addFlashAttribute(SUCCESS, messageSource.getMessage("success.delete", null, Locale.getDefault()));
 
         return REDIRECT + ITEM_REDIRECT_URL;

@@ -3,12 +3,13 @@ package net.therap.onlinestore.contoller;
 import net.therap.onlinestore.command.Password;
 import net.therap.onlinestore.entity.User;
 import net.therap.onlinestore.entity.UserType;
-import net.therap.onlinestore.exception.IllegalAccessException;
 import net.therap.onlinestore.helper.ProfileHelper;
 import net.therap.onlinestore.service.UserService;
 import net.therap.onlinestore.util.Encryption;
+import net.therap.onlinestore.util.Util;
 import net.therap.onlinestore.validator.PasswordValidator;
 import net.therap.onlinestore.validator.UserValidator;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.context.MessageSource;
@@ -37,17 +38,15 @@ import static net.therap.onlinestore.constant.Constants.*;
 public class ProfileController {
 
     private static final String REGISTRATION_FORM_REDIRECT_URL = "login-page";
-    private static final String REGISTRATION_FORM_URL = "registration";
     private static final String REGISTRATION_FORM_VIEW = "profile/registration-form";
-    private static final String REGISTRATION_FORM_SAVE_URL = "registration/save";
-
     private static final String UPDATE_PASSWORD_URL = "update-password";
     private static final String UPDATE_PASSWORD_VIEW = "profile/password-form";
     private static final String SAVE_PASSWORD_URL = "/update-password/update";
-
     private static final String UPDATE_PROFILE_URL = "update-profile";
     private static final String UPDATE_PROFILE_VIEW = "profile/profile-update-form";
     private static final String SAVE_PROFILE_URL = "/update-profile/update";
+
+    private static final Logger logger = Logger.getLogger(ProfileController.class);
 
     @Autowired
     private MessageSource messageSource;
@@ -84,7 +83,7 @@ public class ProfileController {
         webDataBinder.addValidators(userValidator);
     }
 
-    @GetMapping(REGISTRATION_FORM_URL)
+    @GetMapping(REGISTRATION_URL)
     public String showRegistrationPage(ModelMap modelMap) {
         modelMap.put(CUSTOMER, new User());
 
@@ -92,30 +91,28 @@ public class ProfileController {
     }
 
     @GetMapping(UPDATE_PASSWORD_URL)
-    public String showPasswordUpdatePage(ModelMap modelMap, @SessionAttribute(ACTIVE_USER) User user) {
+    public String showPasswordUpdatePage(ModelMap modelMap, HttpSession httpSession) {
         Password password = new Password();
-        password.setStoredUserPassword(user.getPassword());
+        password.setStoredUserPassword(Util.getActiveUser(httpSession).getPassword());
         modelMap.put(PASSWORD, password);
 
         return UPDATE_PASSWORD_VIEW;
     }
 
     @GetMapping(UPDATE_PROFILE_URL)
-    String updateProfileFrom(@SessionAttribute(ACTIVE_USER) User user, ModelMap modelMap) {
-        modelMap.put(USER, userService.findById(user.getId()));
+    String updateProfileFrom(ModelMap modelMap, HttpSession httpSession) {
+        modelMap.put(USER, userService.findById(Util.getActiveUser(httpSession).getId()));
         modelMap.put(PROFILE_UPDATE_PAGE, true);
 
         return UPDATE_PROFILE_VIEW;
     }
 
-    @PostMapping(REGISTRATION_FORM_SAVE_URL)
+    @PostMapping(REGISTER_URL)
     public String saveCustomer(@Valid @ModelAttribute(CUSTOMER) User customer,
                                BindingResult bindingResult,
                                RedirectAttributes redirectAttributes) throws NoSuchAlgorithmException, InvalidKeySpecException {
 
-        if (!customer.isNew()) {
-            throw new IllegalAccessException();
-        }
+        profileHelper.updateAccessBlock(customer);
 
         if (bindingResult.hasErrors()) {
             return REGISTRATION_FORM_VIEW;
@@ -124,6 +121,7 @@ public class ProfileController {
         customer.setPassword(Encryption.getPBKDF2(customer.getPassword()));
         customer.setType(UserType.CUSTOMER);
         userService.saveOrUpdate(customer);
+        logger.info("New customer registration: id-" + customer.getId() + " name-" + customer.getFirstName());
         redirectAttributes.addFlashAttribute(SUCCESS, messageSource.getMessage("success.registration", null, Locale.getDefault()));
 
         return REDIRECT + REGISTRATION_FORM_REDIRECT_URL;
@@ -142,6 +140,7 @@ public class ProfileController {
 
         user.setPassword(Encryption.getPBKDF2(password.getNewPassword()));
         userService.saveOrUpdate(user);
+        logger.info("Updated password user: id-" + user.getId());
         httpSession.setAttribute(ACTIVE_USER, userService.findById(user.getId()));
         redirectAttributes.addFlashAttribute(SUCCESS, messageSource.getMessage("success.password.updated", null, Locale.getDefault()));
 
@@ -149,19 +148,19 @@ public class ProfileController {
     }
 
     @PostMapping(SAVE_PROFILE_URL)
-    String updateProfile(@SessionAttribute(value = ACTIVE_USER, required = false) User activeUser,
-                         @Valid @ModelAttribute(USER) User user,
+    String updateProfile(@Valid @ModelAttribute(USER) User user,
                          BindingResult bindingResult,
                          RedirectAttributes redirectAttributes,
-                         HttpSession httpSession) throws Exception {
+                         HttpSession httpSession) {
 
-        profileHelper.checkAccess(activeUser, user);
+        profileHelper.checkAccess(Util.getActiveUser(httpSession), user);
 
         if (bindingResult.hasErrors()) {
             return UPDATE_PROFILE_VIEW;
         }
 
         userService.saveOrUpdate(user);
+        logger.info("Updated profile: id-" + user.getId());
         httpSession.setAttribute(ACTIVE_USER, userService.findById(user.getId()));
         redirectAttributes.addFlashAttribute(SUCCESS, messageSource.getMessage("success.profile.updated", null, Locale.getDefault()));
 
