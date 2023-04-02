@@ -33,6 +33,8 @@ import static net.therap.onlinestore.constant.Constants.*;
 @SessionAttributes(TAG)
 public class TagController {
 
+    private static final Logger logger = Logger.getLogger(TagController.class);
+
     private static final String TAG_REDIRECT_URL = "admin/tag";
     private static final String TAG_URL = "tag";
     private static final String TAG_VIEW = "tag/tag-list";
@@ -41,8 +43,6 @@ public class TagController {
     private static final String TAG_FORM_VIEW = "tag/tag-form";
     private static final String TAG_ID_PARAM = "tagId";
     private static final String TAG_DELETE_URL = "tag/delete";
-
-    private static final Logger logger = Logger.getLogger(TagController.class);
 
     @Autowired
     private TagService tagService;

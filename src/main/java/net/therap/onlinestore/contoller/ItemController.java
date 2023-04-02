@@ -41,6 +41,8 @@ import static net.therap.onlinestore.constant.Constants.*;
 @SessionAttributes({ITEM, ORDER})
 public class ItemController {
 
+    private static final Logger logger = Logger.getLogger(ItemController.class);
+
     private static final String ITEM_REDIRECT_URL = "admin/item";
     private static final String ITEM_URL = "item";
     private static final String ITEM_VIEW = "item/item-list";
@@ -51,9 +53,6 @@ public class ItemController {
     private static final String ITEM_DETAILS_VIEW = "item/item-details";
     private static final String ITEM_CATEGORY_ID = "item/{categoryId}";
     private static final String ITEM_ID_PARAM = "itemId";
-
-
-    private static final Logger logger = Logger.getLogger(ItemController.class);
 
     @Autowired
     private ItemService itemService;

@@ -95,3 +95,11 @@ CREATE TABLE online_store.order_item
     FOREIGN KEY (item_id) REFERENCES online_store.item (id),
     FOREIGN KEY (order_id) REFERENCES online_store.order_table (id)
 );
+
+CREATE SEQUENCE address_seq INCREMENT 1 START 1;
+CREATE SEQUENCE category_seq INCREMENT 1 START 1;
+CREATE SEQUENCE item_seq INCREMENT 1 START 1;
+CREATE SEQUENCE order_item_seq INCREMENT 1 START 1;
+CREATE SEQUENCE order_table_seq INCREMENT 1 START 1;
+CREATE SEQUENCE tag_seq INCREMENT 1 START 1;
+CREATE SEQUENCE user_seq INCREMENT 1 START 1;

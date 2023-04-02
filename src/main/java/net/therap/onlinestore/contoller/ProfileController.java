@@ -37,6 +37,8 @@ import static net.therap.onlinestore.constant.Constants.*;
 @SessionAttributes({PASSWORD, USER})
 public class ProfileController {
 
+    private static final Logger logger = Logger.getLogger(ProfileController.class);
+
     private static final String REGISTRATION_FORM_REDIRECT_URL = "login-page";
     private static final String REGISTRATION_FORM_VIEW = "profile/registration-form";
     private static final String UPDATE_PASSWORD_URL = "update-password";
@@ -45,8 +47,6 @@ public class ProfileController {
     private static final String UPDATE_PROFILE_URL = "update-profile";
     private static final String UPDATE_PROFILE_VIEW = "profile/profile-update-form";
     private static final String SAVE_PROFILE_URL = "/update-profile/update";
-
-    private static final Logger logger = Logger.getLogger(ProfileController.class);
 
     @Autowired
     private MessageSource messageSource;

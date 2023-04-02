@@ -39,6 +39,8 @@ import static net.therap.onlinestore.constant.Constants.*;
 @SessionAttributes(USER)
 public class UserController {
 
+    private static final Logger logger = Logger.getLogger(UserController.class);
+
     private static final String SHOPKEEPER_REDIRECT_URL = "admin/shopkeeper/list";
     private static final String DELIVERYMAN_REDIRECT_URL = "admin/deliveryMan/list";
     private static final String CUSTOMER_REDIRECT_URL = "admin/customer/list";
@@ -50,8 +52,6 @@ public class UserController {
     private static final String USER_ID_PARAM = "userId";
     private static final String USER_TYPE_PATH_VAR = "user-type";
     private static final String USER_DELETE_URL = "user/delete";
-
-    private static final Logger logger = Logger.getLogger(UserController.class);
 
     @Autowired
     private MessageSource messageSource;

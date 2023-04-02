@@ -30,10 +30,10 @@ import static net.therap.onlinestore.constant.Constants.*;
 @Controller
 public class AuthenticationController {
 
+    private static final org.apache.log4j.Logger logger = Logger.getLogger(CategoryController.class);
+
     private static final String LOGIN_VIEW = "login-page";
     private static final String LOGOUT_URL = "logout";
-
-    private static final org.apache.log4j.Logger logger = Logger.getLogger(CategoryController.class);
 
     @Autowired
     private UserService userService;

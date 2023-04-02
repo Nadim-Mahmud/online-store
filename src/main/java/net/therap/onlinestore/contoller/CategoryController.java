@@ -33,6 +33,8 @@ import static net.therap.onlinestore.constant.Constants.*;
 @SessionAttributes(CATEGORY)
 public class CategoryController {
 
+    private static final org.apache.log4j.Logger logger = Logger.getLogger(CategoryController.class);
+
     private static final String CATEGORY_REDIRECT_URL = "admin/category";
     private static final String CATEGORY_URL = "category";
     private static final String CATEGORY_VIEW = "category/category-list";
@@ -41,8 +43,6 @@ public class CategoryController {
     private static final String CATEGORY_FORM_VIEW = "category/category-form";
     private static final String CATEGORY_ID_PARAM = "categoryId";
     private static final String CATEGORY_DELETE_URL = "category/delete";
-
-    private static final org.apache.log4j.Logger logger = Logger.getLogger(CategoryController.class);
 
     @Autowired
     private CategoryService categoryService;

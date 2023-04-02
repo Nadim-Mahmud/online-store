@@ -33,6 +33,8 @@ import static net.therap.onlinestore.constant.Constants.*;
 @SessionAttributes(ORDER)
 public class OrderController {
 
+    private static final Logger logger = Logger.getLogger(OrderController.class);
+
     private static final String ALL_ORDER = "all-order";
     private static final String ADMIN_ORDER_LIST = "admin-order-list";
     private static final String NEW_ORDER_REDIRECT_URL = "customer/order";
@@ -56,8 +58,6 @@ public class OrderController {
     private static final String REDIRECT_DELIVERY_ORDER_URL = "delivery/delivery-list";
     private static final String ITEM_DETAILS_VIEW = "item/item-details";
     private static final String NAV_ALL_ORDER = "allOrder";
-
-    private static final Logger logger = Logger.getLogger(OrderController.class);
 
     @Autowired
     private MessageSource messageSource;
