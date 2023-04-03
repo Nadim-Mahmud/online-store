@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Objects;
 
+import static java.util.Objects.isNull;
 import static net.therap.onlinestore.constant.Constants.*;
 
 /**
@@ -46,6 +47,7 @@ public class HomeController {
                                ModelMap modelMap) {
 
         homeHelper.populateHomePageModel(modelMap, pageType, pageStartValue, categoryId, tagId);
+
         return HOME_VIEW;
     }
 
@@ -55,7 +57,7 @@ public class HomeController {
                               @RequestParam(value = SEARCH_KEY_PARAM, required = false) String searchKey,
                               ModelMap modelMap) {
 
-        if (Objects.isNull(searchKey) || searchKey.isEmpty()) {
+        if (isNull(searchKey) || searchKey.isEmpty()) {
             return REDIRECT;
         }
 

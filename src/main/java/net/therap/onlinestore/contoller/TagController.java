@@ -82,6 +82,7 @@ public class TagController {
         tagHelper.checkAccess(Util.getActiveUser(httpSession));
 
         Tag tag = nonNull(tagId) ? tagService.findById(Integer.parseInt(tagId)) : new Tag();
+
         modelMap.put(TAG, tag);
         modelMap.put(NAV_ITEM, TAG);
 
@@ -106,8 +107,11 @@ public class TagController {
 
         redirectAttributes.addFlashAttribute(SUCCESS, messageSource.getMessage(
                 (tag.getId() == 0) ? "success.add" : "success.update", null, Locale.getDefault()));
+
         tagService.saveOrUpdate(tag);
+
         logger.info("Saved tag: " + tag.getName());
+
         sessionStatus.setComplete();
 
         return REDIRECT + TAG_REDIRECT_URL;
@@ -121,7 +125,9 @@ public class TagController {
         tagHelper.checkAccess(Util.getActiveUser(httpSession));
 
         tagService.delete(tagId);
+
         logger.info("deleted tag: " + tagId);
+
         redirectAttributes.addFlashAttribute(SUCCESS, messageSource.getMessage("success.delete", null, Locale.getDefault()));
 
         return REDIRECT + TAG_REDIRECT_URL;

@@ -120,8 +120,11 @@ public class ProfileController {
 
         customer.setPassword(Encryption.getPBKDF2(customer.getPassword()));
         customer.setType(UserType.CUSTOMER);
+
         userService.saveOrUpdate(customer);
+
         logger.info("New customer registration: id-" + customer.getId() + " name-" + customer.getFirstName());
+
         redirectAttributes.addFlashAttribute(SUCCESS, messageSource.getMessage("success.registration", null, Locale.getDefault()));
 
         return REDIRECT + REGISTRATION_FORM_REDIRECT_URL;

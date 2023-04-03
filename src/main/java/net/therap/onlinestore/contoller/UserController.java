@@ -94,7 +94,9 @@ public class UserController {
                     HttpSession httpSession) {
 
         userHelper.checkAccess(Util.getActiveUser(httpSession), AccessType.FORM_LOAD);
+
         User user = nonNull(userId) ? userService.findById(Integer.parseInt(userId)) : new User();
+
         modelMap.put(USER, user);
         userHelper.populateUserFormData(modelMap, user);
 
@@ -123,7 +125,9 @@ public class UserController {
         }
 
         userService.saveOrUpdate(user);
+
         logger.info("Saved user: " + user.getId());
+
         sessionStatus.setComplete();
         redirectAttributes.addFlashAttribute(SUCCESS, messageSource.getMessage(
                 (user.getId() == 0) ? "success.add" : "success.update", null, Locale.getDefault()));
@@ -140,7 +144,9 @@ public class UserController {
         userHelper.checkAccess(Util.getActiveUser(httpSession), AccessType.DELETE);
 
         User user = userService.findById(userId);
+
         logger.info("Deleted user: " + userId);
+
         userHelper.populateDeleteRedirectMessage(redirectAttributes, user, userId);
 
         return REDIRECT + (UserType.SHOPKEEPER.equals(user.getType()) ? SHOPKEEPER_REDIRECT_URL :

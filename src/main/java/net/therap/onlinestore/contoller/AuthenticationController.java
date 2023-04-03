@@ -53,7 +53,9 @@ public class AuthenticationController {
 
     @GetMapping(LOGOUT_URL)
     public String logOut(HttpSession httpSession, Model model) {
+
         logger.info("Logged out user: " + Util.getActiveUser(httpSession).getId());
+
         httpSession.removeAttribute(ACTIVE_USER);
         httpSession.invalidate();
 
@@ -77,6 +79,7 @@ public class AuthenticationController {
 
         modelMap.put(LOGIN_PAGE, LOGIN_PAGE);
         modelMap.put(INVALID_LOGIN, INVALID_LOGIN);
+
         logger.info("Logged in user: " + Util.getActiveUser(httpSession).getId());
 
         return LOGIN_VIEW;

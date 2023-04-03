@@ -181,8 +181,11 @@ public class OrderController {
         address.setUser(Util.getActiveUser(httpSession));
         order.setAddress(address);
         order.setStatus(OrderStatus.ORDERED);
+
         orderService.saveOrUpdate(order);
+
         logger.info("Placed order for user: " + Util.getActiveUser(httpSession).getFirstName() + " OrderId: " + order.getId());
+
         sessionStatus.setComplete();
         redirectAttributes.addFlashAttribute(SUCCESS, successMessage);
 

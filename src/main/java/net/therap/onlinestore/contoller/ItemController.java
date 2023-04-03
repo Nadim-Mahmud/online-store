@@ -148,8 +148,11 @@ public class ItemController {
 
         redirectAttributes.addFlashAttribute(SUCCESS, messageSource.getMessage(
                 (item.getId() == 0) ? "success.add" : "success.update", null, Locale.getDefault()));
+
         itemService.saveOrUpdate(item);
+
         logger.info("Saved item " + item.getId());
+
         sessionStatus.setComplete();
 
         return REDIRECT + ITEM_REDIRECT_URL;
@@ -163,7 +166,9 @@ public class ItemController {
         itemHelper.checkAccess(Util.getActiveUser(httpSession), AccessType.DELETE);
 
         itemService.delete(itemId);
-        logger.info("Deleted item " + itemId);
+
+        logger.info("[Item] Deleted item id: " + itemId);
+
         redirectAttributes.addFlashAttribute(SUCCESS, messageSource.getMessage("success.delete", null, Locale.getDefault()));
 
         return REDIRECT + ITEM_REDIRECT_URL;

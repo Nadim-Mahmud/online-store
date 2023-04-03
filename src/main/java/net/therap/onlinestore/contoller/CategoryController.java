@@ -82,6 +82,7 @@ public class CategoryController {
         categoryHelper.checkAccess(Util.getActiveUser(httpSession));
 
         Category category = nonNull(categoryId) ? categoryService.findById(Integer.parseInt(categoryId)) : new Category();
+
         modelMap.put(CATEGORY, category);
         modelMap.put(NAV_ITEM, CATEGORY);
 
@@ -105,9 +106,12 @@ public class CategoryController {
         }
 
         redirectAttributes.addFlashAttribute(SUCCESS, messageSource.getMessage(
-                (category.getId() == 0) ? "success.add" : "success.update", null, Locale.getDefault()));
+                (category.isNew()) ? "success.add" : "success.update", null, Locale.getDefault()));
+
         categoryService.saveOrUpdate(category);
+
         logger.info("Saved category " + category.getId());
+
         sessionStatus.setComplete();
 
         return REDIRECT + CATEGORY_REDIRECT_URL;
@@ -122,7 +126,9 @@ public class CategoryController {
 
         if (categoryService.isCategoryNotInUse(categoryId)) {
             categoryService.delete(categoryId);
+
             logger.info("Deleted Category " + categoryId);
+
             redirectAttributes.addFlashAttribute(SUCCESS, messageSource.getMessage("success.delete", null, Locale.getDefault()));
         } else {
             redirectAttributes.addFlashAttribute(FAILED, messageSource.getMessage("fail.delete.inUse", null, Locale.getDefault()));
