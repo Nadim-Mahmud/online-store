@@ -1,5 +1,6 @@
 package net.therap.onlinestore.contoller;
 
+import net.therap.onlinestore.constant.Constants;
 import net.therap.onlinestore.helper.CustomerHelper;
 import net.therap.onlinestore.service.OrderService;
 import net.therap.onlinestore.util.Util;
@@ -12,15 +13,13 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 
 import javax.servlet.http.HttpSession;
 
-import static net.therap.onlinestore.constant.Constants.*;
-
 /**
  * @author nadimmahmud
  * @since 3/7/23
  */
 @Controller
-@RequestMapping(CUSTOMER_BASE_URL)
-@SessionAttributes(USER)
+@RequestMapping(Constants.CUSTOMER_BASE_URL)
+@SessionAttributes(Constants.USER)
 public class CustomerController {
 
     private static final String ORDER_HISTORY = "orderHistory";
@@ -38,8 +37,8 @@ public class CustomerController {
     public String showOrderList(ModelMap modelMap, HttpSession httpSession) {
         customerHelper.checkAccess(Util.getActiveUser(httpSession));
 
-        modelMap.put(ORDER_LIST, orderService.findActiveOrdersByCustomer(Util.getActiveUser(httpSession)));
-        modelMap.put(NAV_ITEM, ORDER_LIST);
+        modelMap.put(Constants.ORDER_LIST, orderService.findActiveOrdersByCustomer(Util.getActiveUser(httpSession)));
+        modelMap.put(Constants.NAV_ITEM, Constants.ORDER_LIST);
 
         return ORDER_LIST_VIEW;
     }
@@ -48,8 +47,8 @@ public class CustomerController {
     public String showOrderHistory(ModelMap modelMap, HttpSession httpSession) {
         customerHelper.checkAccess(Util.getActiveUser(httpSession));
 
-        modelMap.put(ORDER_LIST, orderService.findDeliveredOrdersByCustomer(Util.getActiveUser(httpSession)));
-        modelMap.put(NAV_ITEM, ORDER_HISTORY);
+        modelMap.put(Constants.ORDER_LIST, orderService.findDeliveredOrdersByCustomer(Util.getActiveUser(httpSession)));
+        modelMap.put(Constants.NAV_ITEM, ORDER_HISTORY);
 
         return ORDER_LIST_VIEW;
     }

@@ -1,8 +1,6 @@
 package net.therap.onlinestore.entity;
 
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.ResultCheckStyle;
-import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;

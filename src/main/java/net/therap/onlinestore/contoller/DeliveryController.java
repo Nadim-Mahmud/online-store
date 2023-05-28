@@ -1,5 +1,6 @@
 package net.therap.onlinestore.contoller;
 
+import net.therap.onlinestore.constant.Constants;
 import net.therap.onlinestore.helper.DeliveryHelper;
 import net.therap.onlinestore.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,15 +11,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
 
-import static net.therap.onlinestore.constant.Constants.DELIVERY_BASE_URL;
-import static net.therap.onlinestore.constant.Constants.HOME_URL;
-
 /**
  * @author nadimmahmud
  * @since 3/15/23
  */
 @Controller
-@RequestMapping(DELIVERY_BASE_URL)
+@RequestMapping(Constants.DELIVERY_BASE_URL)
 public class DeliveryController {
 
     private static final String DELIVERY_ORDER_VIEW = "delivery-order-list";
@@ -28,7 +26,7 @@ public class DeliveryController {
     @Autowired
     private DeliveryHelper deliveryHelper;
 
-    @GetMapping(HOME_URL)
+    @GetMapping(Constants.HOME_URL)
     public String showReadyOrdersList(ModelMap modelMap, HttpSession httpSession) {
         deliveryHelper.checkAccess(Util.getActiveUser(httpSession));
         deliveryHelper.populateReadyOrderListModel(modelMap);

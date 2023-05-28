@@ -3,7 +3,6 @@ package net.therap.onlinestore.service;
 import net.therap.onlinestore.entity.*;
 import net.therap.onlinestore.helper.OrderHelper;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;

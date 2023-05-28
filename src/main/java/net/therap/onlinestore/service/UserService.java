@@ -6,7 +6,6 @@ import net.therap.onlinestore.entity.User;
 import net.therap.onlinestore.entity.UserType;
 import net.therap.onlinestore.util.Encryption;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;

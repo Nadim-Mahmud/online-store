@@ -1,5 +1,6 @@
 package net.therap.onlinestore.contoller;
 
+import net.therap.onlinestore.constant.Constants;
 import net.therap.onlinestore.entity.Category;
 import net.therap.onlinestore.helper.CategoryHelper;
 import net.therap.onlinestore.service.CategoryService;
@@ -22,15 +23,14 @@ import javax.validation.Valid;
 import java.util.Locale;
 
 import static java.util.Objects.nonNull;
-import static net.therap.onlinestore.constant.Constants.*;
 
 /**
  * @author nadimmahmud
  * @since 3/7/23
  */
 @Controller
-@RequestMapping(ADMIN_BASE_URL)
-@SessionAttributes(CATEGORY)
+@RequestMapping(Constants.ADMIN_BASE_URL)
+@SessionAttributes(Constants.CATEGORY)
 public class CategoryController {
 
     private static final org.apache.log4j.Logger logger = Logger.getLogger(CategoryController.class);
@@ -56,7 +56,7 @@ public class CategoryController {
     @Autowired
     private CategoryHelper categoryHelper;
 
-    @InitBinder(CATEGORY)
+    @InitBinder(Constants.CATEGORY)
     public void initBinder(WebDataBinder webDataBinder) {
         webDataBinder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
         webDataBinder.setDisallowedFields("id", "access_status", "version", "created_at", "updated_at");
@@ -68,8 +68,8 @@ public class CategoryController {
 
         categoryHelper.checkAccess(Util.getActiveUser(httpSession));
 
-        modelMap.put(CATEGORY_LIST, categoryService.findAll());
-        modelMap.put(NAV_ITEM, CATEGORY);
+        modelMap.put(Constants.CATEGORY_LIST, categoryService.findAll());
+        modelMap.put(Constants.NAV_ITEM, Constants.CATEGORY);
 
         return CATEGORY_VIEW;
     }
@@ -83,14 +83,14 @@ public class CategoryController {
 
         Category category = nonNull(categoryId) ? categoryService.findById(Integer.parseInt(categoryId)) : new Category();
 
-        modelMap.put(CATEGORY, category);
-        modelMap.put(NAV_ITEM, CATEGORY);
+        modelMap.put(Constants.CATEGORY, category);
+        modelMap.put(Constants.NAV_ITEM, Constants.CATEGORY);
 
         return CATEGORY_FORM_VIEW;
     }
 
     @PostMapping(CATEGORY_FORM_SAVE_URL)
-    public String saveOrUpdateCategory(@Valid @ModelAttribute(CATEGORY) Category category,
+    public String saveOrUpdateCategory(@Valid @ModelAttribute(Constants.CATEGORY) Category category,
                                        BindingResult bindingResult,
                                        ModelMap modelMap,
                                        SessionStatus sessionStatus,
@@ -100,12 +100,12 @@ public class CategoryController {
         categoryHelper.checkAccess(Util.getActiveUser(httpSession));
 
         if (bindingResult.hasErrors()) {
-            modelMap.put(NAV_ITEM, CATEGORY);
+            modelMap.put(Constants.NAV_ITEM, Constants.CATEGORY);
 
             return CATEGORY_FORM_VIEW;
         }
 
-        redirectAttributes.addFlashAttribute(SUCCESS, messageSource.getMessage(
+        redirectAttributes.addFlashAttribute(Constants.SUCCESS, messageSource.getMessage(
                 (category.isNew()) ? "success.add" : "success.update", null, Locale.getDefault()));
 
         categoryService.saveOrUpdate(category);
@@ -114,7 +114,7 @@ public class CategoryController {
 
         sessionStatus.setComplete();
 
-        return REDIRECT + CATEGORY_REDIRECT_URL;
+        return Constants.REDIRECT + CATEGORY_REDIRECT_URL;
     }
 
     @PostMapping(CATEGORY_DELETE_URL)
@@ -129,11 +129,11 @@ public class CategoryController {
 
             logger.info("Deleted Category " + categoryId);
 
-            redirectAttributes.addFlashAttribute(SUCCESS, messageSource.getMessage("success.delete", null, Locale.getDefault()));
+            redirectAttributes.addFlashAttribute(Constants.SUCCESS, messageSource.getMessage("success.delete", null, Locale.getDefault()));
         } else {
-            redirectAttributes.addFlashAttribute(FAILED, messageSource.getMessage("fail.delete.inUse", null, Locale.getDefault()));
+            redirectAttributes.addFlashAttribute(Constants.FAILED, messageSource.getMessage("fail.delete.inUse", null, Locale.getDefault()));
         }
 
-        return REDIRECT + CATEGORY_REDIRECT_URL;
+        return Constants.REDIRECT + CATEGORY_REDIRECT_URL;
     }
 }

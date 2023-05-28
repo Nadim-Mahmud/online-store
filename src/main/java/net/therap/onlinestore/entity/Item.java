@@ -1,8 +1,6 @@
 package net.therap.onlinestore.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.hibernate.annotations.ResultCheckStyle;
-import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.springframework.web.multipart.MultipartFile;
 

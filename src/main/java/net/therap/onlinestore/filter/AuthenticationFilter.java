@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Objects;
 
-import static net.therap.onlinestore.constant.Constants.ACTIVE_USER;
 import static net.therap.onlinestore.constant.Constants.*;
 
 /**
