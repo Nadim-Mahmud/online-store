@@ -1,0 +1,5 @@
+<decorators>
+    <decorator name="base" page="/WEB-INF/view/decorator/base-layout.jsp">
+        <pattern>*</pattern>
+    </decorator>
+</decorators>
