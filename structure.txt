@@ -1,0 +1,142 @@
+./
+├── README.md
+├── build.gradle
+├── db-migration
+│   ├── dml.sql
+│   └── pre-ddl.sql
+├── run.sh
+├── settings.gradle
+├── src
+│   └── main
+│       ├── java
+│       │   └── net
+│       │       └── therap
+│       │           └── onlinestore
+│       │               ├── command
+│       │               │   ├── Credentials.java
+│       │               │   └── Password.java
+│       │               ├── constant
+│       │               │   └── Constants.java
+│       │               ├── contoller
+│       │               │   ├── AuthenticationController.java
+│       │               │   ├── CategoryController.java
+│       │               │   ├── CustomerController.java
+│       │               │   ├── DeliveryController.java
+│       │               │   ├── ErrorController.java
+│       │               │   ├── ExceptionController.java
+│       │               │   ├── HomeController.java
+│       │               │   ├── ItemController.java
+│       │               │   ├── OrderController.java
+│       │               │   ├── ProfileController.java
+│       │               │   ├── ShopkeeperController.java
+│       │               │   ├── TagController.java
+│       │               │   └── UserController.java
+│       │               ├── entity
+│       │               │   ├── AccessStatus.java
+│       │               │   ├── AccessType.java
+│       │               │   ├── Address.java
+│       │               │   ├── Availability.java
+│       │               │   ├── Category.java
+│       │               │   ├── Item.java
+│       │               │   ├── Order.java
+│       │               │   ├── OrderItem.java
+│       │               │   ├── OrderStatus.java
+│       │               │   ├── PaginationPageType.java
+│       │               │   ├── Persistent.java
+│       │               │   ├── Tag.java
+│       │               │   ├── User.java
+│       │               │   └── UserType.java
+│       │               ├── exception
+│       │               │   └── IllegalAccessException.java
+│       │               ├── filter
+│       │               │   └── AuthenticationFilter.java
+│       │               ├── formatter
+│       │               │   ├── CategoryFormatter.java
+│       │               │   ├── ItemFormatter.java
+│       │               │   └── TagFormatter.java
+│       │               ├── helper
+│       │               │   ├── CategoryHelper.java
+│       │               │   ├── CustomerHelper.java
+│       │               │   ├── DeliveryHelper.java
+│       │               │   ├── FIleHelper.java
+│       │               │   ├── HomeHelper.java
+│       │               │   ├── ItemHelper.java
+│       │               │   ├── OrderHelper.java
+│       │               │   ├── PaginationHelper.java
+│       │               │   ├── ProfileHelper.java
+│       │               │   ├── ShopkeeperHelper.java
+│       │               │   ├── TagHelper.java
+│       │               │   ├── UserHelper.java
+│       │               │   └── UserTypeHelper.java
+│       │               ├── service
+│       │               │   ├── CategoryService.java
+│       │               │   ├── ItemService.java
+│       │               │   ├── OrderService.java
+│       │               │   ├── TagService.java
+│       │               │   └── UserService.java
+│       │               ├── util
+│       │               │   ├── Encryption.java
+│       │               │   └── Util.java
+│       │               └── validator
+│       │                   ├── CategoryValidator.java
+│       │                   ├── ItemValidator.java
+│       │                   ├── OrderItemValidator.java
+│       │                   ├── PasswordValidator.java
+│       │                   ├── TagValidator.java
+│       │                   └── UserValidator.java
+│       ├── resources
+│       │   ├── META-INF
+│       │   │   └── persistence.xml
+│       │   ├── application.properties
+│       │   ├── log4j.properties
+│       │   └── messages.properties
+│       └── webapp
+│           ├── WEB-INF
+│           │   ├── ApplicationContext.xml
+│           │   ├── ServletContext.xml
+│           │   ├── decorators.xml
+│           │   ├── view
+│           │   │   ├── admin-order-list.jsp
+│           │   │   ├── category
+│           │   │   │   ├── category-form.jsp
+│           │   │   │   └── category-list.jsp
+│           │   │   ├── customer-order-list.jsp
+│           │   │   ├── decorator
+│           │   │   │   └── base-layout.jsp
+│           │   │   ├── delivery-order-list.jsp
+│           │   │   ├── error.jsp
+│           │   │   ├── home.jsp
+│           │   │   ├── item
+│           │   │   │   ├── item-details.jsp
+│           │   │   │   ├── item-form.jsp
+│           │   │   │   └── item-list.jsp
+│           │   │   ├── login-page.jsp
+│           │   │   ├── message-view.jsp
+│           │   │   ├── navbar.jsp
+│           │   │   ├── order
+│           │   │   │   ├── address-form.jsp
+│           │   │   │   └── order-form.jsp
+│           │   │   ├── profile
+│           │   │   │   ├── password-form.jsp
+│           │   │   │   ├── profile-update-form.jsp
+│           │   │   │   └── registration-form.jsp
+│           │   │   ├── shopkeeper-dashboard.jsp
+│           │   │   ├── tag
+│           │   │   │   ├── tag-form.jsp
+│           │   │   │   └── tag-list.jsp
+│           │   │   └── user
+│           │   │       ├── user-form.jsp
+│           │   │       └── user-list.jsp
+│           │   └── web.xml
+│           └── assets
+│               ├── css
+│               │   └── style.css
+│               ├── images
+│               │   ├── exclamation-triangle-fill.svg
+│               │   └── shop.png
+│               └── js
+│                   ├── ajax.js
+│                   └── pagination.js
+└── structure.txt
+
+35 directories, 105 files
