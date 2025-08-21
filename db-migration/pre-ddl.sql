@@ -1,4 +1,6 @@
-CREATE TABLE online_store.store_user
+CREATE SCHEMA IF NOT EXISTS onlinestore;
+
+CREATE TABLE onlinestore.user_table
 (
     id            INT                NOT NULL PRIMARY KEY,
     first_name    VARCHAR(45)        NOT NULL,
@@ -9,42 +11,44 @@ CREATE TABLE online_store.store_user
     type          VARCHAR(45)        NOT NULL,
     access_status VARCHAR(45) DEFAULT 'ACTIVE',
     version       INT         DEFAULT 0,
-    created_at    DATE,
-    updated_at    DATE
+    created_at    TIMESTAMP,
+    updated_at    TIMESTAMP
 );
 
-CREATE TABLE online_store.address
+CREATE TABLE onlinestore.address
 (
     id            INT         NOT NULL PRIMARY KEY,
     address       VARCHAR(45) NOT NULL,
     note          VARCHAR(200),
+    user_id       INT,
     access_status VARCHAR(45) DEFAULT 'ACTIVE',
     version       INT         DEFAULT 0,
-    created_at    DATE,
-    updated_at    DATE
+    created_at    TIMESTAMP,
+    updated_at    TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES onlinestore.store_user(id)
 );
 
-CREATE TABLE online_store.category
+CREATE TABLE onlinestore.category
 (
     id            INT         NOT NULL PRIMARY KEY,
     name          VARCHAR(45) NOT NULL,
     access_status VARCHAR(45) DEFAULT 'ACTIVE',
     version       INT         DEFAULT 0,
-    created_at    DATE,
-    updated_at    DATE
+    created_at    TIMESTAMP,
+    updated_at    TIMESTAMP
 );
 
-CREATE TABLE online_store.tag
+CREATE TABLE onlinestore.tag
 (
     id            INT         NOT NULL PRIMARY KEY,
     name          VARCHAR(45) NOT NULL,
     access_status VARCHAR(45) DEFAULT 'ACTIVE',
     version       INT         DEFAULT 0,
-    created_at    DATE,
-    updated_at    DATE
+    created_at    TIMESTAMP,
+    updated_at    TIMESTAMP
 );
 
-CREATE TABLE online_store.item
+CREATE TABLE onlinestore.item
 (
     id            INT           NOT NULL PRIMARY KEY,
     name          VARCHAR(45)   NOT NULL,
@@ -55,19 +59,19 @@ CREATE TABLE online_store.item
     image_path    VARCHAR(100)  NOT NULL,
     access_status VARCHAR(45) DEFAULT 'ACTIVE',
     version       INT         DEFAULT 0,
-    created_at    DATE,
-    updated_at    DATE,
-    FOREIGN KEY (category_id) REFERENCES online_store.category (id)
+    created_at    TIMESTAMP,
+    updated_at    TIMESTAMP,
+    FOREIGN KEY (category_id) REFERENCES onlinestore.category (id)
 );
 
-CREATE TABLE online_store.tag_item
+CREATE TABLE onlinestore.tag_item
 (
     tag_id  INT NOT NULL,
     item_id INT NOT NULL,
     PRIMARY KEY (tag_id, item_id)
 );
 
-CREATE TABLE online_store.order_table
+CREATE TABLE onlinestore.order_table
 (
     id            INT NOT NULL PRIMARY KEY,
     status        VARCHAR(45),
@@ -75,25 +79,25 @@ CREATE TABLE online_store.order_table
     user_id       INT,
     access_status VARCHAR(45) DEFAULT 'ACTIVE',
     version       INT         DEFAULT 0,
-    created_at    DATE,
-    updated_at    DATE,
-    FOREIGN KEY (address_id) REFERENCES online_store.address (id),
-    FOREIGN KEY (user_id) REFERENCES online_store.store_user (id)
+    created_at    TIMESTAMP,
+    updated_at    TIMESTAMP,
+    FOREIGN KEY (address_id) REFERENCES onlinestore.address (id),
+    FOREIGN KEY (user_id) REFERENCES onlinestore.store_user (id)
 );
 
-CREATE TABLE online_store.order_item
+CREATE TABLE onlinestore.order_item
 (
     id            INT NOT NULL PRIMARY KEY,
     quantity      INT,
-    accepted_at   DATE,
+    accepted_at   TIMESTAMP,
     item_id       INT,
     order_id      INT,
     access_status VARCHAR(45) DEFAULT 'ACTIVE',
     version       INT         DEFAULT 0,
-    created_at    DATE,
-    updated_at    DATE,
-    FOREIGN KEY (item_id) REFERENCES online_store.item (id),
-    FOREIGN KEY (order_id) REFERENCES online_store.order_table (id)
+    created_at    TIMESTAMP,
+    updated_at    TIMESTAMP,
+    FOREIGN KEY (item_id) REFERENCES onlinestore.item (id),
+    FOREIGN KEY (order_id) REFERENCES onlinestore.order_table (id)
 );
 
 CREATE SEQUENCE address_seq INCREMENT 1 START 1;

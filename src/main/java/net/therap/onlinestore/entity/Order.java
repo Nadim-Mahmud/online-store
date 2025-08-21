@@ -42,7 +42,7 @@ public class Order extends Persistent {
     private double price;
 
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name = "address")
+    @JoinColumn(name = "address_id")
     private Address address;
 
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "order")
