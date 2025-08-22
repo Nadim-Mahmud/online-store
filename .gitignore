@@ -1,5 +1,6 @@
 .gradle
 build/
+!build/libs/OnlineStore-1.0-SNAPSHOT.war
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
