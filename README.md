@@ -1,9 +1,13 @@
 # Online Store Application
 
+## Live Server
+The application is deployed and running at: [https://online-store-49w9.onrender.com/](https://online-store-49w9.onrender.com/)
+
 ## Overview
-This is an Online Store web application built using Java and the Spring Framework. The application provides functionality for customers, shopkeepers, and delivery personnel to interact with the system. It follows a layered architecture with controllers, services, DAOs, and entities. The frontend is implemented using JSP, while the backend leverages Spring MVC and Hibernate.
+This is an Online Store web application built using Java and the Spring Framework. The application provides functionality for customers, shopkeepers, and delivery personnel to interact with the system. It follows a layered architecture with controllers, services, DAOs, and entities. The frontend is implemented using JSP, while the backend leverages Spring MVC and Hibernate. The database is hosted on **Aiven PostgreSQL** for reliable cloud-based storage.
 
 ## Features
+
 ### User Authentication and Role Management
 - Secure login and registration system.
 - Role-based authentication for customers, shopkeepers, and delivery personnel.
@@ -34,12 +38,14 @@ This is an Online Store web application built using Java and the Spring Framewor
 - Role-based access control to prevent unauthorized actions.
 
 ## Technologies Used
-- **Backend:** Java, Spring Boot, Hibernate
+- **Backend:** Java, Spring MVC, Hibernate
 - **Frontend:** JSP, JavaScript, CSS
-- **Database:** SQL (MySQL/PostgreSQL)
+- **Database:** PostgreSQL hosted on **Aiven**
 - **Build Tool:** Gradle
+- **Containerization:** Docker, Tomcat
 - **Security:** Encryption utilities, authentication filters
 
+## Project Structure
 ## Project Structure
 ```
 .
