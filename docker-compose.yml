@@ -1,21 +1,4 @@
 services:
-  db:
-    image: postgres:16-alpine
-    container_name: onlinestore-postgres
-    environment:
-      POSTGRES_DB: onlinestore
-      POSTGRES_USER: nadim
-      POSTGRES_PASSWORD: store123
-    ports:
-      - "5432:5432"
-    volumes:
-      - db_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
   tomcat:
     image: tomcat:9.0-jdk8  # Tomcat version compatible with Java 8
     container_name: onlinestore-tomcat

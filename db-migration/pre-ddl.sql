@@ -25,7 +25,7 @@ CREATE TABLE onlinestore.address
     version       INT         DEFAULT 0,
     created_at    TIMESTAMP,
     updated_at    TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES onlinestore.store_user(id)
+    FOREIGN KEY (user_id) REFERENCES onlinestore.user_table(id)
 );
 
 CREATE TABLE onlinestore.category
@@ -82,7 +82,7 @@ CREATE TABLE onlinestore.order_table
     created_at    TIMESTAMP,
     updated_at    TIMESTAMP,
     FOREIGN KEY (address_id) REFERENCES onlinestore.address (id),
-    FOREIGN KEY (user_id) REFERENCES onlinestore.store_user (id)
+    FOREIGN KEY (user_id) REFERENCES onlinestore.user_table (id)
 );
 
 CREATE TABLE onlinestore.order_item
@@ -100,10 +100,10 @@ CREATE TABLE onlinestore.order_item
     FOREIGN KEY (order_id) REFERENCES onlinestore.order_table (id)
 );
 
-CREATE SEQUENCE address_seq INCREMENT 1 START 1;
-CREATE SEQUENCE category_seq INCREMENT 1 START 1;
-CREATE SEQUENCE item_seq INCREMENT 1 START 1;
-CREATE SEQUENCE order_item_seq INCREMENT 1 START 1;
-CREATE SEQUENCE order_table_seq INCREMENT 1 START 1;
-CREATE SEQUENCE tag_seq INCREMENT 1 START 1;
-CREATE SEQUENCE user_seq INCREMENT 1 START 1;
+CREATE SEQUENCE onlinestore.address_seq INCREMENT 1 START 1;
+CREATE SEQUENCE onlinestore.category_seq INCREMENT 1 START 1;
+CREATE SEQUENCE onlinestore.item_seq INCREMENT 1 START 1;
+CREATE SEQUENCE onlinestore.order_item_seq INCREMENT 1 START 1;
+CREATE SEQUENCE onlinestore.order_table_seq INCREMENT 1 START 1;
+CREATE SEQUENCE onlinestore.tag_seq INCREMENT 1 START 1;
+CREATE SEQUENCE onlinestore.user_seq INCREMENT 1 START 1;
