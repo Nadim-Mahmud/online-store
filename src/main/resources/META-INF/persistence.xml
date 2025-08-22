@@ -14,7 +14,7 @@
             <property name="hibernate.connection.url" value="jdbc:postgresql://ps-onlinestore-onlinestore-ps.g.aivencloud.com:26978/defaultdb"/>
             <property name="hibernate.default_schema" value="onlinestore"/>
             <property name="hibernate.connection.username" value="avnadmin"/>
-            <property name="hibernate.connection.password" value="AVNS_mk9M7TFfqFUwQqjbDhk"/>
+            <property name="hibernate.connection.password" value="AVNS_fXSA9iF5rljrdn6D42F"/>
             <property name="hibernate.connection.autocommit" value="true"/>
             <property name="hibernate.enable_lazy_load_no_trans" value="true"/>
             <property name="hibernate.show_sql" value="false"/>
